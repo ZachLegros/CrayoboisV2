@@ -1,0 +1,99 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  admin
+  user
+}
+
+model Profile {
+  id      String   @id @db.Uuid
+  role    Role     @default(user)
+  email   String   @unique
+  Order   Order[]
+  name    String?
+  address Address?
+
+  @@map("profile")
+}
+
+model Material {
+  id      String    @id @default(uuid()) @db.Uuid
+  name    String
+  nature  String
+  origin  String
+  type    String
+  image   String
+  price   Int
+  Product Product[]
+
+  @@map("material")
+}
+
+model Hardware {
+  id      String    @id @default(uuid()) @db.Uuid
+  name    String
+  color   String
+  image   String
+  price   Int
+  Product Product[]
+
+  @@map("hardware")
+}
+
+model Product {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String
+  description String?
+  image       String?
+  price       Int
+  quantity    Int      @default(1)
+  materialId  String   @db.Uuid
+  hardwareId  String   @db.Uuid
+  orderId     Int?
+  material    Material @relation(fields: [materialId], references: [id])
+  hardware    Hardware @relation(fields: [hardwareId], references: [id])
+  order       Order[]
+
+  @@map("product")
+}
+
+model Address {
+  id     Int     @id @default(autoincrement())
+  street String
+  city   String
+  state  String
+  zip    String
+  userId String  @unique @db.Uuid
+  user   Profile @relation(fields: [userId], references: [id])
+
+  @@map("address")
+}
+
+enum OrderStatus {
+  pending
+  fabricating
+  shipped
+}
+
+model Order {
+  id        Int         @id @default(autoincrement())
+  createdAt DateTime    @default(now())
+  shippedAt DateTime?
+  status    OrderStatus @default(pending)
+  userId    String      @db.Uuid
+  user      Profile     @relation(fields: [userId], references: [id])
+  product   Product[]
+
+  @@map("order")
+}
