@@ -1,40 +1,32 @@
-import { createClient } from '@/utils/supabase/server'
-import Link from 'next/link'
-import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
+"use client";
 
-export default async function AuthButton() {
-  const cookieStore = cookies()
-  const supabase = createClient(cookieStore)
+import { useRouter } from "next/navigation";
+import { Button } from "@nextui-org/react";
+import { useUser } from "@/app/user-provider";
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+export default function AuthButton() {
+  const router = useRouter();
+  const { user, signOut } = useUser();
 
-  const signOut = async () => {
-    'use server'
+  const handleLogin = () => {
+    router.push("/login");
+  };
 
-    const cookieStore = cookies()
-    const supabase = createClient(cookieStore)
-    await supabase.auth.signOut()
-    return redirect('/login')
-  }
+  const handleLogout = async () => {
+    await signOut();
+    router.push("/");
+  };
 
   return user ? (
     <div className="flex items-center gap-4">
-      Hey, {user.email}!
-      <form action={signOut}>
-        <button className="py-2 px-4 rounded-md no-underline bg-btn-background hover:bg-btn-background-hover">
-          Logout
-        </button>
-      </form>
+      {user.email}
+      <Button onClick={handleLogout} disableAnimation disableRipple>
+        Déconnexion
+      </Button>
     </div>
   ) : (
-    <Link
-      href="/login"
-      className="py-2 px-3 flex rounded-md no-underline bg-btn-background hover:bg-btn-background-hover"
-    >
-      Login
-    </Link>
-  )
+    <Button onClick={handleLogin} disableAnimation disableRipple>
+      Connexion
+    </Button>
+  );
 }

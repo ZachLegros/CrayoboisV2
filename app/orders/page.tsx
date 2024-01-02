@@ -9,7 +9,7 @@ export default async function Orders() {
 
   const orders = await prisma.clientOrder.findMany({
     where: {
-      userId: data.user?.id,
+      user_id: data.user?.id,
     },
     include: {
       product: {
