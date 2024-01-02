@@ -17,83 +17,86 @@ enum Role {
 }
 
 model Profile {
-  id      String   @id @db.Uuid
-  role    Role     @default(user)
-  email   String   @unique
-  Order   Order[]
-  name    String?
-  address Address?
+  id     String        @id @db.Uuid
+  role   Role          @default(user)
+  email  String        @unique
+  orders ClientOrder[]
 
   @@map("profile")
 }
 
 model Material {
-  id      String    @id @default(uuid()) @db.Uuid
-  name    String
-  nature  String
-  origin  String
-  type    String
-  image   String
-  price   Float
-  Product Product[]
+  id       String    @id @default(uuid()) @db.Uuid
+  name     String
+  nature   String
+  origin   String
+  type     String
+  image    String
+  price    Float
+  quantity Int       @default(1)
+  products  Product[]
 
   @@map("material")
 }
 
 model Hardware {
-  id      String    @id @default(uuid()) @db.Uuid
-  name    String
-  color   String
-  image   String
-  price   Float
-  Product Product[]
+  id       String    @id @default(uuid()) @db.Uuid
+  name     String
+  color    String
+  image    String
+  price    Float
+  quantity Int       @default(1)
+  products  Product[]
 
   @@map("hardware")
 }
 
 model Product {
-  id          String   @id @default(uuid()) @db.Uuid
+  id          String        @id @default(uuid()) @db.Uuid
   name        String
   description String?
   image       String?
   price       Float
-  quantity    Int      @default(1)
-  materialId  String   @db.Uuid
-  hardwareId  String   @db.Uuid
-  orderId     Int?
-  material    Material @relation(fields: [materialId], references: [id])
-  hardware    Hardware @relation(fields: [hardwareId], references: [id])
-  order       Order[]
+  quantity    Int           @default(1)
+  material_id String        @db.Uuid
+  hardware_id String        @db.Uuid
+  material    Material      @relation(fields: [material_id], references: [id])
+  hardware    Hardware      @relation(fields: [hardware_id], references: [id])
+  orders      ClientOrder[]
 
   @@map("product")
 }
 
-model Address {
-  id     Int     @id @default(autoincrement())
-  street String
-  city   String
-  state  String
-  zip    String
-  userId String  @unique @db.Uuid
-  user   Profile @relation(fields: [userId], references: [id])
+model Shipping {
+  id    Int    @id @default(autoincrement())
+  name  String
+  price Float
 
-  @@map("address")
+  @@map("shipping")
 }
 
 enum OrderStatus {
   pending
-  fabricating
   shipped
 }
 
-model Order {
-  id        Int         @id @default(autoincrement())
-  createdAt DateTime    @default(now())
-  shippedAt DateTime?
-  status    OrderStatus @default(pending)
-  userId    String      @db.Uuid
-  user      Profile     @relation(fields: [userId], references: [id])
-  product   Product[]
+model ClientOrder {
+  id              Int         @id @default(autoincrement())
+  created_at      DateTime    @default(now())
+  status          OrderStatus @default(pending)
+  payer_email     String
+  payer_name      String
+  userId          String      @db.Uuid
+  user            Profile     @relation(fields: [userId], references: [id])
+  product         Product[]
+  amount          Float
+  tax             Float
+  shipping        Float
+  address_street  String
+  address_city    String
+  address_state   String
+  address_country String
+  address_zip     String
 
-  @@map("order")
+  @@map("clientOrder")
 }
