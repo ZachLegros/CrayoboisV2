@@ -100,7 +100,7 @@ try {
       data: {
         order_no: order.order_no,
         created_at: order.createdAt,
-        userId,
+        user_id: userId,
         payer_email: order.payer_email,
         payer_name: order.name,
         status: order.status as OrderStatus,

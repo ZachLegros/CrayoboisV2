@@ -87,8 +87,8 @@ model ClientOrder {
   status          OrderStatus @default(pending)
   payer_email     String
   payer_name      String
-  userId          String?     @db.Uuid
-  user            Profile?    @relation(fields: [userId], references: [id])
+  user_id         String?     @db.Uuid
+  user            Profile?    @relation(fields: [user_id], references: [id])
   product         Product[]
   amount          Float
   tax             Float
