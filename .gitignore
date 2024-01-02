@@ -36,8 +36,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-.vscode
-
 prisma/data/*
 !prisma/data/materials.json
 !prisma/data/hardwares.json
