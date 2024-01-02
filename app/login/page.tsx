@@ -12,13 +12,14 @@ export default function Login({
     "use server";
 
     const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithOtp({
       email,
-      password,
+      options: {
+        emailRedirectTo: "http://localhost:3000/orders",
+      },
     });
 
     if (error) {
