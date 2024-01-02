@@ -34,7 +34,7 @@ model Material {
   image    String
   price    Float
   quantity Int       @default(1)
-  products  Product[]
+  products Product[]
 
   @@map("material")
 }
@@ -46,7 +46,7 @@ model Hardware {
   image    String
   price    Float
   quantity Int       @default(1)
-  products  Product[]
+  products Product[]
 
   @@map("hardware")
 }
@@ -81,13 +81,14 @@ enum OrderStatus {
 }
 
 model ClientOrder {
-  id              Int         @id @default(autoincrement())
+  id              String      @id @default(uuid()) @db.Uuid
+  order_no        Int         @unique @default(autoincrement())
   created_at      DateTime    @default(now())
   status          OrderStatus @default(pending)
   payer_email     String
   payer_name      String
-  userId          String      @db.Uuid
-  user            Profile     @relation(fields: [userId], references: [id])
+  userId          String?     @db.Uuid
+  user            Profile?    @relation(fields: [userId], references: [id])
   product         Product[]
   amount          Float
   tax             Float
