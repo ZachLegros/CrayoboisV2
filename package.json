@@ -4,7 +4,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "migrate-dev": "bunx prisma migrate dev && bun run lib/seedTriggers.ts"
+    "migrate-dev": "bunx prisma migrate dev && bun run lib/seedTriggers.ts",
+    "seed": "bunx prisma db seed"
+  },
+  "prisma": {
+    "seed": "bun run prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/client": "5.7.1",

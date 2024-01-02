@@ -37,3 +37,7 @@ yarn-error.log*
 next-env.d.ts
 
 .vscode
+
+prisma/data/*
+!prisma/data/materials.json
+!prisma/data/hardwares.json
