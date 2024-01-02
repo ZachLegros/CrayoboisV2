@@ -2,6 +2,8 @@
 import { useState } from "react";
 import { sendOtp, verifyOtp } from "./actions";
 import { useRouter } from "next/navigation";
+import { Button, Card, CardBody, CardFooter, Input } from "@nextui-org/react";
+import { useUser } from "../user-provider";
 
 const validateEmail = (email: string) => {
   return String(email)
@@ -17,6 +19,7 @@ const validateOtp = (otp: string) => {
 
 export default function LoginForm() {
   const router = useRouter();
+  const { getCurrentUser } = useUser();
   const [isLoading, setIsLoading] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
   const [email, setEmail] = useState("");
@@ -42,65 +45,58 @@ export default function LoginForm() {
     setIsLoading(false);
     if (res.error) {
       setError(res.error.message);
+      setOtpSent(false);
       return;
     }
+    getCurrentUser();
     router.push("/orders");
   };
 
   return (
     <div className="animate-in flex-1 flex flex-col w-full justify-center gap-2 text-foreground">
-      {!otpSent ? (
-        <>
-          <label className="text-md" htmlFor="email">
-            Email
-          </label>
-          <input
-            className="rounded-md px-4 py-2 bg-inherit border mb-6"
-            name="email"
-            type="email"
-            placeholder="you@example.com"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <button
-            className="bg-green-700 rounded-md px-4 py-2 text-foreground mb-2 disabled:bg-green-950 disabled:cursor-not-allowed"
-            onClick={signIn}
-            disabled={isLoading}
-          >
-            Sign In
-          </button>
-          <div className="text-sm text-center">
-            <p className="text-red-500">{error}</p>
+      <Card className="p-2">
+        <CardBody>
+          {!otpSent ? (
+            <Input
+              label="Email"
+              type="email"
+              placeholder="vous@example.com"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          ) : (
+            <Input
+              label="Code à 6 chiffres"
+              type="text"
+              placeholder="******"
+              inputMode="numeric"
+              pattern="\d*"
+              value={otp}
+              onChange={(e) => setOtp(e.target.value)}
+              required
+            />
+          )}
+        </CardBody>
+        <CardFooter>
+          <div className="flex flex-col flex-1 gap-4">
+            <Button
+              color="success"
+              onClick={!otpSent ? signIn : verify}
+              disableRipple
+              isLoading={isLoading}
+              className="w-full font-medium"
+            >
+              {!otpSent ? "Connexion" : "Vérifier le code"}
+            </Button>
+            {error && (
+              <div className="text-sm text-center">
+                <p className="font-medium text-red-500">{error}</p>
+              </div>
+            )}
           </div>
-        </>
-      ) : (
-        <>
-          <label className="text-md" htmlFor="otp">
-            OTP
-          </label>
-          <input
-            className="rounded-md px-4 py-2 bg-inherit border mb-6"
-            name="otp"
-            type="text"
-            inputMode="numeric"
-            pattern="\d*"
-            required
-            value={otp}
-            onChange={(e) => setOtp(e.target.value)}
-          />
-          <button
-            className="bg-green-700 rounded-md px-4 py-2 text-foreground mb-2"
-            onClick={verify}
-            disabled={isLoading}
-          >
-            Verify OTP
-          </button>
-          <div className="text-sm text-center">
-            <p className="text-red-500">{error}</p>
-          </div>
-        </>
-      )}
+        </CardFooter>
+      </Card>
     </div>
   );
 }
