@@ -98,7 +98,7 @@ try {
     // create order and products
     const createdOrder = await prisma.clientOrder.create({
       data: {
-        id: order.id,
+        order_no: order.order_no,
         created_at: order.createdAt,
         userId,
         payer_email: order.payer_email,
