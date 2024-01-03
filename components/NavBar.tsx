@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  Navbar,
-  NavbarContent,
-  NavbarItem,
-  Link as NextUILink,
-  Button,
-} from "@nextui-org/react";
+import { Navbar, NavbarContent, NavbarItem, Link as NextUILink } from "@nextui-org/react";
 import AuthButton from "./AuthButton";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
