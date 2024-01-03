@@ -1,13 +1,21 @@
 "use client";
 
 import { Breadcrumbs } from "@/components/Breadcrumbs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Materials from "./materials";
 import { Hardware, Material } from "@prisma/client";
+import { useCustomOrderStore } from "./store";
 
 export default function OrderBuilder(props: { materials: Material[]; hardwares: Hardware[] }) {
-  const { materials } = props;
+  const { materials, hardwares } = props;
+  const { setMaterials, setHardwares } = useCustomOrderStore();
   const [currentStep, setCurrentStep] = useState(0);
+
+  useEffect(() => {
+    setMaterials(materials);
+    setHardwares(hardwares);
+  }, [materials, hardwares]);
+
   return (
     <div className="flex flex-col w-full gap-4">
       <Breadcrumbs
