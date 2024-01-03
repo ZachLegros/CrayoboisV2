@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbo",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "migrate-dev": "bunx prisma migrate dev && bun run lib/seedTriggers.ts",
     "seed": "bunx prisma db seed",
@@ -30,7 +30,6 @@
     "typescript": "5.1.3"
   },
   "devDependencies": {
-    "@types/next": "^9.0.0",
     "@types/node": "20.3.1",
     "@types/react": "18.2.8",
     "@types/react-dom": "18.2.5",
