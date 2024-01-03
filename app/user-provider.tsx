@@ -56,11 +56,13 @@ export default function UserProvider(props: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
-    const isUser = async () => {
-      const currentSesson = await getCurrentSession();
-      if (currentSesson) await getCurrentUser();
+    const fetchUser = async () => {
+      const currentSession = await getCurrentSession();
+      if (currentSession) await getCurrentUser();
     };
-    isUser();
+    if (!user) {
+      fetchUser();
+    }
   }, []);
 
   return (
