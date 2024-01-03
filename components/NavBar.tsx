@@ -1,13 +1,23 @@
 "use client";
 
-import { Navbar, NavbarContent, NavbarItem, Link as NextUILink } from "@nextui-org/react";
-import AuthButton from "./AuthButton";
+import { useState } from "react";
+import {
+  Navbar,
+  NavbarContent,
+  NavbarItem,
+  NavbarMenu,
+  NavbarMenuItem,
+  NavbarMenuToggle,
+  Link as NextUILink,
+} from "@nextui-org/react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import LogoLight from "@/images/logo-light.svg";
+import AuthButton from "./AuthButton";
+import Logo from "./Logo";
 
 export default function NavBar() {
   const pathname = usePathname();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const items = [
     {
@@ -25,15 +35,22 @@ export default function NavBar() {
   ];
 
   return (
-    <Navbar>
+    <Navbar maxWidth="xl" onMenuOpenChange={setIsMenuOpen} isBlurred={false} isBordered>
+      <NavbarContent className="sm:hidden" justify="start">
+        <NavbarMenuToggle
+          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+          className="sm:hidden"
+        />
+      </NavbarContent>
+      <NavbarContent className="sm:hidden" justify="center">
+        <Logo className="mr-4" />
+      </NavbarContent>
       <NavbarContent className="hidden sm:flex gap-4" justify="start">
-        <NextUILink as={Link} color="foreground" href="/" className="mr-4">
-          <LogoLight className="h-[50px]" />
-        </NextUILink>
+        <Logo className="hidden sm:flex mr-4" />
         {items.map((item, index) => {
           const isActive = item.link === pathname;
           return (
-            <NavbarItem key={index} isActive={isActive}>
+            <NavbarItem key={`${item.title}-${index}`} isActive={isActive}>
               <NextUILink
                 as={Link}
                 className={
@@ -50,10 +67,30 @@ export default function NavBar() {
         })}
       </NavbarContent>
       <NavbarContent justify="end">
-        <NavbarItem className="hidden lg:flex">
+        <NavbarItem>
           <AuthButton />
         </NavbarItem>
       </NavbarContent>
+      <NavbarMenu>
+        {items.map((item, index) => {
+          const isActive = item.link === pathname;
+          return (
+            <NavbarMenuItem key={`${item}-menu-${index}`}>
+              <NextUILink
+                as={Link}
+                className={
+                  isActive
+                    ? "transition-colors font-medium"
+                    : "text-muted-foreground transition-colors font-medium"
+                }
+                href={item.link}
+              >
+                {item.title}
+              </NextUILink>
+            </NavbarMenuItem>
+          );
+        })}
+      </NavbarMenu>
     </Navbar>
   );
 }

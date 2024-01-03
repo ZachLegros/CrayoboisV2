@@ -19,7 +19,7 @@ export default function AuthButton() {
 
   return user ? (
     <div className="flex items-center gap-4">
-      {user.email}
+      {/* {user.email} */}
       <Button onClick={handleLogout} disableAnimation disableRipple>
         Déconnexion
       </Button>
