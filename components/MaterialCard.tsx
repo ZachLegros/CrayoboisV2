@@ -6,10 +6,16 @@ import Image from "next/image";
 import { FaEarthAmericas } from "react-icons/fa6";
 import { cad } from "@/utils/currencyFormatter";
 
-export default function MaterialCard(props: { material: Material }) {
-  const { material } = props;
+export default function MaterialCard(props: { material: Material; onClick: () => void }) {
+  const { material, onClick } = props;
   return (
-    <Card shadow="sm" className="bg-background/60 dark:bg-default-100/50 " isPressable isHoverable>
+    <Card
+      shadow="sm"
+      className="bg-background/60 dark:bg-default-100/50 "
+      onPress={onClick}
+      isPressable
+      isHoverable
+    >
       <CardBody className="flex flex-row gap-4">
         <Image
           width={125}
