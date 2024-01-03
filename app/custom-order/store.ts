@@ -1,7 +1,42 @@
 import { Hardware, Material } from "@prisma/client";
 import { create } from "zustand";
 
-export type PriceFilter = "asc" | "desc" | null;
+export type PriceFilterValue = "asc" | "desc";
+
+const getInitialPriceFilter = (): PriceFilterValue => "asc";
+const getInitialTypeFilter = () => "all";
+const getInitialOriginFilter = () => "all";
+
+export type Filter = {
+  value: string;
+  setValue: (value: string) => void;
+  clear: () => void;
+  enabled: boolean;
+  setEnabled: (enabled: boolean) => void;
+};
+
+const createFilter = (
+  set: (arg0: {
+    (state: any): { [x: string]: any };
+    (state: any): { [x: string]: any };
+    (state: any): { [x: string]: any };
+  }) => void,
+  filterKey: string,
+  enabled: boolean,
+  valueInitializer: () => any
+): Filter => ({
+  value: valueInitializer(),
+  enabled,
+  setValue: (value: string) => set((state) => ({ [filterKey]: { ...state[filterKey], value } })),
+  setEnabled: (enabled: boolean) =>
+    set((state) => ({
+      [filterKey]: { ...state[filterKey], enabled, value: valueInitializer() },
+    })),
+  clear: () =>
+    set((state) => ({
+      [filterKey]: { ...state[filterKey], value: valueInitializer() },
+    })),
+});
 
 export type CustomOrderStore = {
   materials: Material[];
@@ -9,19 +44,12 @@ export type CustomOrderStore = {
   hardwares: Hardware[];
   setHardwares: (hardwares: Hardware[]) => void;
   selectedMaterialId: string | null;
-  selectMaterial: (materialId: string) => void;
+  selectMaterial: (materialId: string | null) => void;
   selectedHardwareId: string | null;
-  selectHardware: (hardwareId: string) => void;
-  typeFilter: string;
-  setTypeFilter: (type: string) => void;
-  priceFilter: PriceFilter;
-  setPriceFilter: (price: PriceFilter) => void;
-  originFilter: string;
-  setOriginFilter: (origin: string) => void;
-  clearFilters: () => void;
-  clearTypeFilter: () => void;
-  clearPriceFilter: () => void;
-  clearOriginFilter: () => void;
+  selectHardware: (hardwareId: string | null) => void;
+  typeFilter: Filter;
+  priceFilter: Filter;
+  originFilter: Filter;
 };
 
 export const useCustomOrderStore = create<CustomOrderStore>((set) => ({
@@ -30,17 +58,10 @@ export const useCustomOrderStore = create<CustomOrderStore>((set) => ({
   hardwares: [],
   setHardwares: (hardwares: Hardware[]) => set({ hardwares }),
   selectedMaterialId: null,
-  selectMaterial: (materialId: string) => set({ selectedMaterialId: materialId }),
+  selectMaterial: (materialId: string | null) => set({ selectedMaterialId: materialId }),
   selectedHardwareId: null,
-  selectHardware: (hardwareId: string) => set({ selectedHardwareId: hardwareId }),
-  typeFilter: "all",
-  setTypeFilter: (type: string) => set({ typeFilter: type }),
-  priceFilter: null,
-  setPriceFilter: (price: PriceFilter) => set({ priceFilter: price }),
-  originFilter: "all",
-  setOriginFilter: (origin: string) => set({ originFilter: origin }),
-  clearTypeFilter: () => set({ typeFilter: "all" }),
-  clearPriceFilter: () => set({ priceFilter: null }),
-  clearOriginFilter: () => set({ originFilter: "all" }),
-  clearFilters: () => set({ typeFilter: "all", priceFilter: null, originFilter: "all" }),
+  selectHardware: (hardwareId: string | null) => set({ selectedHardwareId: hardwareId }),
+  typeFilter: createFilter(set, "typeFilter", true, getInitialTypeFilter),
+  originFilter: createFilter(set, "originFilter", false, getInitialOriginFilter),
+  priceFilter: createFilter(set, "priceFilter", false, getInitialPriceFilter),
 }));
