@@ -6,7 +6,8 @@
     "start": "next start",
     "migrate-dev": "bunx prisma migrate dev && bun run lib/seedTriggers.ts",
     "seed": "bunx prisma db seed",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prepare": "husky install"
   },
   "prisma": {
     "seed": "bun run prisma/seed.ts"
@@ -36,7 +37,7 @@
     "encoding": "^0.1.13",
     "eslint": "8.56.0",
     "eslint-config-next": "14.0.4",
-    "husky": "^8.0.3",
+    "husky": "^8.0.0",
     "lint-staged": "^15.2.0",
     "postgres": "^3.4.3",
     "prettier": "^3.1.1",
