@@ -9,14 +9,11 @@ async function sequentialAsyncOperations<T>(
   asyncOperation: (value: T) => Promise<any>
 ) {
   try {
-    const result = await values.reduce(
-      async (previousPromise: Promise<any>, currentValue: T) => {
-        const currentResult = await asyncOperation(currentValue);
-        await previousPromise;
-        return [...(await previousPromise), currentResult];
-      },
-      Promise.resolve([])
-    );
+    const result = await values.reduce(async (previousPromise: Promise<any>, currentValue: T) => {
+      const currentResult = await asyncOperation(currentValue);
+      await previousPromise;
+      return [...(await previousPromise), currentResult];
+    }, Promise.resolve([]));
     return result;
   } catch (error) {
     console.error("Error:", error);
@@ -47,31 +44,25 @@ try {
     }
 
     // find materialId
-    const materialInfos = await sequentialAsyncOperations(
-      order.products,
-      async (product) => {
-        const material = await prisma.material.findFirst({
-          where: { name: { equals: product.materialName } },
-          select: { id: true, price: true },
-        });
-        return material;
-      }
-    );
+    const materialInfos = await sequentialAsyncOperations(order.products, async (product) => {
+      const material = await prisma.material.findFirst({
+        where: { name: { equals: product.materialName } },
+        select: { id: true, price: true },
+      });
+      return material;
+    });
 
     // find hardwareId
-    const hardwareInfos = await sequentialAsyncOperations(
-      order.products,
-      async (product) => {
-        const hardware = await prisma.hardware.findFirst({
-          where: {
-            name: { equals: product.hardwareName },
-            color: { equals: product.hardwareColor },
-          },
-          select: { id: true, price: true },
-        });
-        return hardware;
-      }
-    );
+    const hardwareInfos = await sequentialAsyncOperations(order.products, async (product) => {
+      const hardware = await prisma.hardware.findFirst({
+        where: {
+          name: { equals: product.hardwareName },
+          color: { equals: product.hardwareColor },
+        },
+        select: { id: true, price: true },
+      });
+      return hardware;
+    });
 
     if (
       !materialInfos ||
@@ -79,12 +70,7 @@ try {
       materialInfos.includes(undefined) ||
       hardwareInfos.includes(undefined)
     ) {
-      console.log(
-        "Material/Hardware error for:",
-        order,
-        materialInfos,
-        hardwareInfos
-      );
+      console.log("Material/Hardware error for:", order, materialInfos, hardwareInfos);
       return;
     }
 
@@ -129,10 +115,7 @@ try {
     return createdOrder;
   });
   if (result) {
-    console.log(
-      result.filter((value) => value !== undefined).length,
-      "orders created"
-    );
+    console.log(result.filter((value) => value !== undefined).length, "orders created");
     console.log(
       result.length - result.filter((value) => value !== undefined).length,
       "orders failed"
