@@ -4,3 +4,4 @@ app/images/
 *.lock*
 dist/
 prisma/
+*.d.ts
