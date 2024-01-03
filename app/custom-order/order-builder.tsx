@@ -1,14 +1,14 @@
 "use client";
 
-import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { useEffect, useState } from "react";
-import Materials from "./materials";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Hardware, Material } from "@prisma/client";
+import Materials from "./materials";
 import { useCustomOrderStore } from "./store";
 
 export default function OrderBuilder(props: { materials: Material[]; hardwares: Hardware[] }) {
   const { materials, hardwares } = props;
-  const { setMaterials, setHardwares } = useCustomOrderStore();
+  const { setMaterials, setHardwares, selectMaterial, selectHardware } = useCustomOrderStore();
   const [currentStep, setCurrentStep] = useState(0);
 
   useEffect(() => {
@@ -21,9 +21,25 @@ export default function OrderBuilder(props: { materials: Material[]; hardwares: 
       <Breadcrumbs
         steps={["Choix du bois", "Choix du matériel", "Passer la commande"]}
         currentStep={currentStep}
-        onAction={setCurrentStep}
+        onAction={(stepIndex) => {
+          if (stepIndex === 0) {
+            selectMaterial(null);
+            selectHardware(null);
+          }
+          if (stepIndex === 1) {
+            selectHardware(null);
+          }
+          setCurrentStep(stepIndex);
+        }}
       />
-      {currentStep === 0 && <Materials materials={materials} />}
+      {currentStep === 0 && (
+        <Materials
+          onSelect={(materialId) => {
+            setCurrentStep(1);
+            selectMaterial(materialId);
+          }}
+        />
+      )}
     </div>
   );
 }
