@@ -21,7 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Providers>
           <main className="min-h-screen flex flex-col items-center max-w-screen-xl mx-auto">
             <NavBar />
-            {children}
+            <div className="p-6">{children}</div>
             <footer className="w-full border-t border-t-foreground/10 p-8 flex justify-center text-center text-xs">
               <p>
                 Powered by{" "}
