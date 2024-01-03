@@ -14,6 +14,7 @@ export default function Logo(props: { className?: string }) {
         height={50}
         className="min-w-[100px]"
         alt="crayobois-logo"
+        priority={true}
       />
     </NextUILink>
   );
