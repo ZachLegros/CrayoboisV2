@@ -1,9 +1,9 @@
 "use client";
 
+import { useMemo } from "react";
 import ItemsGrid from "@/components/ItemsGrid";
 import MaterialCard from "@/components/MaterialCard";
 import { useCustomOrderStore } from "./store";
-import { useMemo } from "react";
 
 export default function Materials(props: { onSelect: (materialId: string) => void }) {
   const { onSelect } = props;
