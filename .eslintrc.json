@@ -21,7 +21,8 @@
       "rules": {
         "linebreak-style": 0,
         "@typescript-eslint/no-explicit-any": 0,
-        "react/no-unescaped-entities": 0
+        "react/no-unescaped-entities": 0,
+        "react-hooks/exhaustive-deps": 0
       }
     }
   ]

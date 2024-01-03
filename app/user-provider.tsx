@@ -63,7 +63,7 @@ export default function UserProvider(props: { children: React.ReactNode }) {
     if (!user) {
       fetchUser();
     }
-  }, [getCurrentSession, getCurrentUser]);
+  }, []);
 
   return (
     <UserContext.Provider value={{ user, id, email, signOut, getCurrentUser }}>
