@@ -40,3 +40,22 @@
     transform: translateY(0);
   }
 }
+
+.animate-out {
+  animation: animateOut 0.3s ease 0.15s both;
+}
+
+@keyframes animateOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+.ReactCollapse--collapse {
+  transition: height 300ms;
+}
