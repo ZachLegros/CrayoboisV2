@@ -53,11 +53,8 @@ export default function NavBar() {
             <NavbarItem key={`${item.title}-${index}`} isActive={isActive}>
               <NextUILink
                 as={Link}
-                className={
-                  isActive
-                    ? "transition-colors font-medium"
-                    : "text-muted-foreground transition-colors font-medium"
-                }
+                className={`font-medium ${isActive ? "text-gray-100" : "text-gray-400"}`}
+                color="foreground"
                 href={item.link}
               >
                 {item.title}

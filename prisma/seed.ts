@@ -1,4 +1,5 @@
-import { prisma } from "@/utils/prisma";
+// @ts-ignore
+import prisma from "@/lib/prisma";
 import hardwares from "./data/hardwares.json";
 import materials from "./data/materials.json";
 import orders from "./data/orders.json";
