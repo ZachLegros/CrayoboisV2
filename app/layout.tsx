@@ -19,10 +19,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={twMerge("dark", GeistSans.className)}>
       <body className="bg-background text-foreground">
         <Providers>
-          <main className="min-h-screen flex flex-col items-center max-w-screen-xl mx-auto">
+          <main className="flex flex-col items-center min-h-screen max-w-screen-xl mx-auto">
             <NavBar />
             <div className="w-full p-6">{children}</div>
-            <footer className="w-full border-t border-t-foreground/10 p-8 flex justify-center text-center text-xs">
+            <footer className="w-full border-t border-t-foreground/10 p-8 flex justify-center text-center text-xs mt-auto">
               <p>
                 Powered by{" "}
                 <a
