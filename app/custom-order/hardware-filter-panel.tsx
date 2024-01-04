@@ -54,8 +54,8 @@ export default function HardwareFilterPanel() {
       <Filter
         filterName="Par prix"
         filterValues={[
-          { value: "asc", label: "Prix ascendant" },
           { value: "desc", label: "Prix descendant" },
+          { value: "asc", label: "Prix ascendant" },
         ]}
         currentValue={priceFilter.value}
         setValue={priceFilter.setValue}

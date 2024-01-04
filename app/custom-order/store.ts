@@ -3,7 +3,7 @@ import { create } from "zustand";
 
 export type PriceFilterValue = "asc" | "desc";
 
-const getInitialPriceFilter = (): PriceFilterValue => "asc";
+const getInitialPriceFilter = (): PriceFilterValue => "desc";
 const getInitialTypeFilter = () => "all";
 const getInitialOriginFilter = () => "all";
 
