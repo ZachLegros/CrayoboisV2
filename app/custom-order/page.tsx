@@ -3,8 +3,8 @@ import OrderBuilder from "./order-builder";
 
 export default async function CustomOrder() {
   const [materials, hardwares] = await Promise.all([
-    prisma.material.findMany({ where: { NOT: { quantity: 0 } } }),
-    prisma.hardware.findMany({ where: { NOT: { quantity: 0 } } }),
+    prisma.material.findMany({ where: { quantity: { gt: 0 } } }),
+    prisma.hardware.findMany({ where: { quantity: { gt: 0 } } }),
   ]);
 
   return (

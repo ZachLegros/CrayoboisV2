@@ -12,7 +12,13 @@ export default async function Orders() {
       user_id: data.user?.id,
     },
     include: {
-      product: {
+      products: {
+        include: {
+          hardware: true,
+          material: true,
+        },
+      },
+      custom_products: {
         include: {
           hardware: true,
           material: true,
