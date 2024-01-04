@@ -26,7 +26,7 @@ export default function OrderBuilder(props: { materials: Material[]; hardwares: 
   return (
     <div className="flex flex-col w-full gap-4">
       <Breadcrumbs
-        steps={["Choix du bois", "Choix du matériel", "Passer la commande"]}
+        steps={["Choix du bois", "Choix du matériel", "Ajouter au panier"]}
         currentStep={currentStep}
         onAction={(stepIndex) => {
           if (stepIndex === 0) {

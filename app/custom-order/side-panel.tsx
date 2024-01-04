@@ -9,8 +9,10 @@ export default function SidePanel() {
 
   return (
     <div className="w-72 h-screen overflow-hidden sticky top-0 -mt-[calc(64px+24px+1px)] pt-[calc(64px+24px+1px)]">
-      {currentStep === 0 && <MaterialFilterPanel />}
-      {currentStep === 1 && <HardwareFilterPanel />}
+      <div className="flex flex-col w-full h-full gap-4 overflow-y-scroll overflow-x-hidden pr-2">
+        {currentStep === 0 && <MaterialFilterPanel />}
+        {currentStep === 1 && <HardwareFilterPanel />}
+      </div>
     </div>
   );
 }

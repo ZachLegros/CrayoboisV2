@@ -21,7 +21,7 @@ export default function HardwareFilterPanel() {
   };
 
   return (
-    <div className="flex flex-col w-full h-full gap-4 overflow-y-scroll overflow-x-hidden p-2 pl-0">
+    <>
       <div className="flex w-full justify-between items-center pl-2">
         <p className="text-xl font-bold">Filtrer</p>
         <Button
@@ -62,6 +62,6 @@ export default function HardwareFilterPanel() {
         enabled={priceFilter.enabled}
         setEnabled={priceFilter.setEnabled}
       />
-    </div>
+    </>
   );
 }
