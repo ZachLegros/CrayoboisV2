@@ -18,12 +18,6 @@ export default async function Orders() {
           material: true,
         },
       },
-      custom_products: {
-        include: {
-          hardware: true,
-          material: true,
-        },
-      },
     },
   });
 
