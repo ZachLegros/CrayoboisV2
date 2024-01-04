@@ -98,18 +98,19 @@ try {
         address_city: order.city,
         address_street: order.address,
         address_zip: order.postalCode,
-        custom_products: {
+        products: {
           create: order.products.map((product) => ({
             name: `${product.materialName}, ${product.hardwareName} ${product.hardwareColor}`,
             quantity: product.quantity,
             price: product.hardwarePrice + product.materialPrice,
             material_id: product.materialId,
             hardware_id: product.hardwareId,
+            is_custom: true,
           })),
         },
       },
       include: {
-        custom_products: true,
+        products: true,
       },
     });
     return createdOrder;
