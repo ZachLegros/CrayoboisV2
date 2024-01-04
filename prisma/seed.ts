@@ -29,6 +29,20 @@ try {
   });
   console.log({ hardware, material });
 
+  await prisma.shipping.create({
+    data: {
+      name: "Sans suivi du colis",
+      price: 4.5,
+    },
+  });
+
+  await prisma.shipping.create({
+    data: {
+      name: "Avec suivi du colis",
+      price: 12.31,
+    },
+  });
+
   const result = await sequentialAsyncOperations(orders, async (order) => {
     // find userId
     const userId = await prisma.profile
