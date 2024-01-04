@@ -18,8 +18,8 @@ export default function MaterialCard(props: { material: Material; onClick: () =>
     >
       <CardBody className="flex flex-row gap-4">
         <Image
-          width={125}
-          height={125}
+          width={150}
+          height={150}
           src={material.image}
           alt={material.name}
           className="rounded-md object-contain self-start"

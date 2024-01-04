@@ -12,7 +12,7 @@ export default function Loading() {
         />
         <ItemsGrid className="w-full h-full">
           {[...Array(12).keys()].map((_, index) => (
-            <Skeleton className="w-full h-[149px] rounded-md p-3" key={index} />
+            <Skeleton className="w-full h-[174px] rounded-md p-3" key={index} />
           ))}
         </ItemsGrid>
       </div>

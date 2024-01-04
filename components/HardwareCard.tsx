@@ -17,8 +17,8 @@ export default function HardwareCard(props: { hardware: Hardware; onClick: () =>
     >
       <CardBody className="flex flex-row gap-4">
         <Image
-          width={125}
-          height={125}
+          width={150}
+          height={150}
           src={hardware.image}
           alt={hardware.name}
           className="rounded-md object-contain self-start"
