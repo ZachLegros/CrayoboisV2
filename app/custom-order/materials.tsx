@@ -5,6 +5,7 @@ import ItemsGrid from "@/components/ItemsGrid";
 import MaterialCard from "@/components/MaterialCard";
 import { useCustomOrderStore } from "./store";
 import { Material } from "@prisma/client";
+import { Skeleton } from "@nextui-org/react";
 
 export default function Materials(props: { onSelect: (material: Material) => void }) {
   const { onSelect } = props;
@@ -33,6 +34,14 @@ export default function Materials(props: { onSelect: (material: Material) => voi
 
     return mats;
   }, [materials, typeFilter, priceFilter, originFilter]);
+
+  if (filteredMaterials.length === 0) {
+    <ItemsGrid className="w-full h-full">
+      {[...Array(12).keys()].map((_, index) => (
+        <Skeleton className="w-full h-[149px] rounded-md p-3" key={index} />
+      ))}
+    </ItemsGrid>;
+  }
 
   return (
     <ItemsGrid className="animate-in w-full">
