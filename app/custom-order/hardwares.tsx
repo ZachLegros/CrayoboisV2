@@ -4,8 +4,9 @@ import { useMemo } from "react";
 import ItemsGrid from "@/components/ItemsGrid";
 import { useCustomOrderStore } from "./store";
 import HardwareCard from "@/components/HardwareCard";
+import { Hardware } from "@prisma/client";
 
-export default function Hardwares(props: { onSelect: (hardwareId: string) => void }) {
+export default function Hardwares(props: { onSelect: (hardware: Hardware) => void }) {
   const { onSelect } = props;
   const { hardwares, typeFilter, priceFilter } = useCustomOrderStore();
 
@@ -30,7 +31,7 @@ export default function Hardwares(props: { onSelect: (hardwareId: string) => voi
   return (
     <ItemsGrid className="animate-in w-full">
       {filteredHardwares.map((hardware) => (
-        <HardwareCard hardware={hardware} key={hardware.id} onClick={() => onSelect(hardware.id)} />
+        <HardwareCard hardware={hardware} key={hardware.id} onClick={() => onSelect(hardware)} />
       ))}
     </ItemsGrid>
   );

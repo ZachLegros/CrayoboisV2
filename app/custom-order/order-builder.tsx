@@ -3,12 +3,17 @@
 import { useEffect } from "react";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Hardware, Material } from "@prisma/client";
+import { useRouter } from "next/navigation";
 import Materials from "./materials";
 import { useCustomOrderStore } from "./store";
 import Hardwares from "./hardwares";
+import { useCartStore } from "../cart/store";
+import { customProductFactory } from "@/utils/customProductFactory";
 
 export default function OrderBuilder(props: { materials: Material[]; hardwares: Hardware[] }) {
   const { materials, hardwares } = props;
+  const router = useRouter();
+  const { addToCart } = useCartStore();
   const {
     currentStep,
     setCurrentStep,
@@ -16,7 +21,16 @@ export default function OrderBuilder(props: { materials: Material[]; hardwares: 
     setHardwares,
     selectMaterial,
     selectHardware,
+    selectedMaterial,
+    reset,
   } = useCustomOrderStore();
+
+  const handleAddToCart = (material: Material, hardware: Hardware) => {
+    const customProduct = customProductFactory(material, hardware);
+    addToCart(customProduct);
+    router.push("/cart");
+    reset();
+  };
 
   useEffect(() => {
     setMaterials(materials);
@@ -41,17 +55,17 @@ export default function OrderBuilder(props: { materials: Material[]; hardwares: 
       />
       {currentStep === 0 && (
         <Materials
-          onSelect={(materialId) => {
+          onSelect={(material) => {
             setCurrentStep(currentStep + 1);
-            selectMaterial(materialId);
+            selectMaterial(material);
           }}
         />
       )}
       {currentStep === 1 && (
         <Hardwares
-          onSelect={(hardwareId) => {
-            setCurrentStep(currentStep + 1);
-            selectHardware(hardwareId);
+          onSelect={(hardware) => {
+            if (!selectedMaterial || !hardware) return; // error
+            handleAddToCart(selectedMaterial, hardware);
           }}
         />
       )}

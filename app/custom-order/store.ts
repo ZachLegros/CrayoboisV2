@@ -45,14 +45,16 @@ export type CustomOrderStore = {
   setMaterials: (materials: Material[]) => void;
   hardwares: Hardware[];
   setHardwares: (hardwares: Hardware[]) => void;
-  selectedMaterialId: string | null;
-  selectMaterial: (materialId: string | null) => void;
-  selectedHardwareId: string | null;
-  selectHardware: (hardwareId: string | null) => void;
+  selectedMaterial: Material | null;
+  selectMaterial: (material: Material | null) => void;
+  selectedHardware: Hardware | null;
+  selectHardware: (hardware: Hardware | null) => void;
   typeFilter: Filter;
   priceFilter: Filter;
   originFilter: Filter;
   clearFilters: () => void;
+  clearSelections: () => void;
+  reset: () => void;
 };
 
 export const useCustomOrderStore = create<CustomOrderStore>((set, state) => ({
@@ -65,10 +67,10 @@ export const useCustomOrderStore = create<CustomOrderStore>((set, state) => ({
   setMaterials: (materials: Material[]) => set({ materials }),
   hardwares: [],
   setHardwares: (hardwares: Hardware[]) => set({ hardwares }),
-  selectedMaterialId: null,
-  selectMaterial: (materialId: string | null) => set({ selectedMaterialId: materialId }),
-  selectedHardwareId: null,
-  selectHardware: (hardwareId: string | null) => set({ selectedHardwareId: hardwareId }),
+  selectedMaterial: null,
+  selectMaterial: (material: Material | null) => set({ selectedMaterial: material }),
+  selectedHardware: null,
+  selectHardware: (hardware: Hardware | null) => set({ selectedHardware: hardware }),
   typeFilter: createFilter(set, "typeFilter", true, getInitialTypeFilter),
   originFilter: createFilter(set, "originFilter", false, getInitialOriginFilter),
   priceFilter: createFilter(set, "priceFilter", false, getInitialPriceFilter),
@@ -76,5 +78,14 @@ export const useCustomOrderStore = create<CustomOrderStore>((set, state) => ({
     state().typeFilter.clear();
     state().originFilter.clear();
     state().priceFilter.clear();
+  },
+  clearSelections: () => {
+    state().selectMaterial(null);
+    state().selectHardware(null);
+  },
+  reset: () => {
+    set(() => ({ currentStep: 0 }));
+    state().clearFilters();
+    state().clearSelections();
   },
 }));

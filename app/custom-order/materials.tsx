@@ -4,8 +4,9 @@ import { useMemo } from "react";
 import ItemsGrid from "@/components/ItemsGrid";
 import MaterialCard from "@/components/MaterialCard";
 import { useCustomOrderStore } from "./store";
+import { Material } from "@prisma/client";
 
-export default function Materials(props: { onSelect: (materialId: string) => void }) {
+export default function Materials(props: { onSelect: (material: Material) => void }) {
   const { onSelect } = props;
   const { materials, typeFilter, originFilter, priceFilter } = useCustomOrderStore();
 
@@ -36,7 +37,7 @@ export default function Materials(props: { onSelect: (materialId: string) => voi
   return (
     <ItemsGrid className="animate-in w-full">
       {filteredMaterials.map((material) => (
-        <MaterialCard material={material} key={material.id} onClick={() => onSelect(material.id)} />
+        <MaterialCard material={material} key={material.id} onClick={() => onSelect(material)} />
       ))}
     </ItemsGrid>
   );
