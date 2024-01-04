@@ -1,4 +1,3 @@
-// @ts-ignore
 import prisma from "@/lib/prisma";
 import hardwares from "./data/hardwares.json";
 import materials from "./data/materials.json";
@@ -99,18 +98,18 @@ try {
         address_city: order.city,
         address_street: order.address,
         address_zip: order.postalCode,
-        product: {
+        custom_products: {
           create: order.products.map((product) => ({
             name: `${product.materialName}, ${product.hardwareName} ${product.hardwareColor}`,
-            price: product.hardwarePrice + product.materialPrice,
             quantity: product.quantity,
+            price: product.hardwarePrice + product.materialPrice,
             material_id: product.materialId,
             hardware_id: product.hardwareId,
           })),
         },
       },
       include: {
-        product: true,
+        custom_products: true,
       },
     });
     return createdOrder;
