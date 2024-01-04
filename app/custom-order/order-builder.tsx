@@ -16,7 +16,6 @@ export default function OrderBuilder(props: { materials: Material[]; hardwares: 
     setHardwares,
     selectMaterial,
     selectHardware,
-    clearFilters,
   } = useCustomOrderStore();
 
   useEffect(() => {
@@ -30,7 +29,6 @@ export default function OrderBuilder(props: { materials: Material[]; hardwares: 
         steps={["Choix du bois", "Choix du matériel", "Passer la commande"]}
         currentStep={currentStep}
         onAction={(stepIndex) => {
-          clearFilters();
           if (stepIndex === 0) {
             selectMaterial(null);
             selectHardware(null);

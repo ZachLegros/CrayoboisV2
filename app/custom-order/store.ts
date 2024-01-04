@@ -55,9 +55,12 @@ export type CustomOrderStore = {
   clearFilters: () => void;
 };
 
-export const useCustomOrderStore = create<CustomOrderStore>((set) => ({
+export const useCustomOrderStore = create<CustomOrderStore>((set, state) => ({
   currentStep: 0,
-  setCurrentStep: (step: number) => set({ currentStep: step }),
+  setCurrentStep: (step: number) => {
+    state().clearFilters();
+    set({ currentStep: step });
+  },
   materials: [],
   setMaterials: (materials: Material[]) => set({ materials }),
   hardwares: [],
@@ -70,10 +73,8 @@ export const useCustomOrderStore = create<CustomOrderStore>((set) => ({
   originFilter: createFilter(set, "originFilter", false, getInitialOriginFilter),
   priceFilter: createFilter(set, "priceFilter", false, getInitialPriceFilter),
   clearFilters: () => {
-    set((state) => ({
-      typeFilter: { ...state.typeFilter, value: getInitialTypeFilter() },
-      originFilter: { ...state.originFilter, value: getInitialOriginFilter() },
-      priceFilter: { ...state.priceFilter, value: getInitialPriceFilter() },
-    }));
+    state().typeFilter.clear();
+    state().originFilter.clear();
+    state().priceFilter.clear();
   },
 }));
