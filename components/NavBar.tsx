@@ -1,15 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Navbar,
-  NavbarContent,
-  NavbarItem,
-  NavbarMenu,
-  NavbarMenuItem,
-  NavbarMenuToggle,
-  Link as NextUILink,
-} from "@nextui-org/react";
+import { Navbar, NavbarContent, NavbarItem, NavbarMenu, NavbarMenuToggle } from "@nextui-org/react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import AuthButton from "./AuthButton";
@@ -50,16 +42,17 @@ export default function NavBar() {
         {items.map((item, index) => {
           const isActive = item.link === pathname;
           return (
-            <NavbarItem key={`${item.title}-${index}`} isActive={isActive}>
-              <NextUILink
-                as={Link}
-                className={`font-medium ${isActive ? "text-gray-100" : "text-gray-400"}`}
-                color="foreground"
-                href={item.link}
-              >
-                {item.title}
-              </NextUILink>
-            </NavbarItem>
+            <Link
+              key={index}
+              href={item.link}
+              className={
+                isActive
+                  ? "text-md font-medium transition-colors hover:text-gray-100"
+                  : "text-md font-sem text-gray-400 transition-colors hover:text-gray-100"
+              }
+            >
+              {item.title}
+            </Link>
           );
         })}
       </NavbarContent>
@@ -70,21 +63,18 @@ export default function NavBar() {
       </NavbarContent>
       <NavbarMenu>
         {items.map((item, index) => {
-          const isActive = item.link === pathname;
           return (
-            <NavbarMenuItem key={`${item}-menu-${index}`}>
-              <NextUILink
-                as={Link}
-                className={
-                  isActive
-                    ? "transition-colors font-medium"
-                    : "text-muted-foreground transition-colors font-medium"
-                }
-                href={item.link}
-              >
-                {item.title}
-              </NextUILink>
-            </NavbarMenuItem>
+            <Link
+              key={index}
+              href={item.link}
+              className={
+                item.link === pathname
+                  ? "text-md font-medium transition-colors hover:text-primary"
+                  : "text-md font-sem text-muted-foreground transition-colors hover:text-primary"
+              }
+            >
+              {item.title}
+            </Link>
           );
         })}
       </NavbarMenu>
