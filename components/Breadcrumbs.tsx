@@ -5,7 +5,7 @@ import { Breadcrumbs as BreadcrumbsWrapper, BreadcrumbItem } from "@nextui-org/r
 export function Breadcrumbs(props: {
   steps: string[];
   currentStep: number;
-  onAction: (stepIndex: number) => void;
+  onAction?: (stepIndex: number) => void;
 }) {
   const { steps, currentStep, onAction } = props;
 
@@ -14,7 +14,7 @@ export function Breadcrumbs(props: {
       size="lg"
       variant="solid"
       radius="md"
-      onAction={(key) => onAction(parseInt(key as string))}
+      onAction={(key) => onAction?.(parseInt(key as string))}
     >
       {steps.map((step, index) => {
         const isCurrent = currentStep === index;
