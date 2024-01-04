@@ -16,6 +16,9 @@ export default {
           "background-hover": "hsl(var(--btn-background-hover))",
         },
       },
+      gridTemplateColumns: {
+        "cart-item": "150px auto 125px 150px",
+      },
     },
   },
   darkMode: "class",
