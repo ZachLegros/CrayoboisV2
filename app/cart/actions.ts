@@ -44,3 +44,7 @@ export const fetchProducts = async (
 
   return [...products, ...customProducts];
 };
+
+export const fetchShippingMethods = async () => {
+  return await prisma.shipping.findMany();
+};
