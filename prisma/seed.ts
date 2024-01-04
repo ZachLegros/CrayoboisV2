@@ -1,8 +1,10 @@
-import prisma from "@/lib/prisma";
+import { PrismaClient } from "@prisma/client";
 import hardwares from "./data/hardwares.json";
 import materials from "./data/materials.json";
 import orders from "./data/orders.json";
 import { OrderStatus } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 async function sequentialAsyncOperations<T>(
   values: T[],
