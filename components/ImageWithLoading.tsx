@@ -8,12 +8,18 @@ export type ImageWithLoadingProps = Omit<ImageProps, "onLoadingComplete" | "load
 };
 
 export default function ImageWithLoading(props: ImageWithLoadingProps) {
-  const { className, src, ...rest } = props;
+  const { className, src, alt, ...rest } = props;
   const [isLoaded, setIsLoaded] = useState(false);
 
   return (
     <div className={twMerge("relative overflow-hidden", className)}>
-      <Image src={src} {...rest} onLoadingComplete={() => setIsLoaded(true)} loading="lazy" />
+      <Image
+        src={src}
+        alt={alt}
+        {...rest}
+        onLoadingComplete={() => setIsLoaded(true)}
+        loading="lazy"
+      />
       {!isLoaded && <Skeleton className="absolute top-0 left-0 w-full h-full" />}
     </div>
   );

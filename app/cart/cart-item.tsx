@@ -43,14 +43,14 @@ export default function CartItem(props: { item: CartItemType }) {
             height={75}
             src={material.image}
             alt={material.name}
-            quality={70}
+            quality={80}
           />
           <ImageWithLoading
             width={75}
             height={75}
             src={hardware.image}
             alt={hardware.name}
-            quality={70}
+            quality={80}
           />
         </>
       );
@@ -61,7 +61,7 @@ export default function CartItem(props: { item: CartItemType }) {
         height={150}
         src={(product as NonNullabbleProduct).image}
         alt={product.name}
-        quality={70}
+        quality={80}
       />
     );
   };
