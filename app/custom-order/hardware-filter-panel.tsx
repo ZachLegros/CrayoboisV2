@@ -3,7 +3,7 @@
 import React, { useMemo } from "react";
 import { Button } from "@nextui-org/react";
 import { useCustomOrderStore } from "./store";
-import Filter from "./filter";
+import Filter from "../../components/Filter";
 
 export default function HardwareFilterPanel() {
   const { hardwares, typeFilter, priceFilter } = useCustomOrderStore();
