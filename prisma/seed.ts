@@ -1,9 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import hardwares from "./data/hardwares.json";
 import materials from "./data/materials.json";
-import orders from "./data/orders.json";
-import { OrderStatus } from "@prisma/client";
-import { sequentialAsyncOperations } from "../utils/utils";
+import orders from "./data/clientOrders.json";
 
 const prisma = new PrismaClient();
 
@@ -30,99 +28,23 @@ try {
     },
   });
 
-  const result = await sequentialAsyncOperations(orders, async (order) => {
-    // find userId
-    const userId = await prisma.profile
-      .findFirst({
-        where: { email: { equals: order.account_email } },
-        select: { id: true },
-      })
-      .then((profile) => profile?.id);
+  const createOrderPromises: any[] = [];
 
-    if (!userId) {
-      console.log("User id error for:", order);
-      return;
-    }
-
-    // find materialId
-    const materialInfos = await sequentialAsyncOperations(order.products, async (product) => {
-      const material = await prisma.material.findFirst({
-        where: { name: { equals: product.materialName } },
-        select: { id: true, price: true },
-      });
-      return material;
-    });
-
-    // find hardwareId
-    const hardwareInfos = await sequentialAsyncOperations(order.products, async (product) => {
-      const hardware = await prisma.hardware.findFirst({
-        where: {
-          name: { equals: product.hardwareName },
-          color: { equals: product.hardwareColor },
-        },
-        select: { id: true, price: true },
-      });
-      return hardware;
-    });
-
-    if (
-      !materialInfos ||
-      !hardwareInfos ||
-      materialInfos.includes(undefined) ||
-      hardwareInfos.includes(undefined)
-    ) {
-      console.log("Material/Hardware error for:", order, materialInfos, hardwareInfos);
-      return;
-    }
-
-    order.products.forEach((product, index) => {
-      product["materialId"] = materialInfos[index].id;
-      product["materialPrice"] = materialInfos[index].price;
-      product["hardwareId"] = hardwareInfos[index].id;
-      product["hardwarePrice"] = hardwareInfos[index].price;
-    });
-
-    // create order and products
-    const createdOrder = await prisma.clientOrder.create({
+  for (const orderData of orders) {
+    const { products, ...order } = orderData;
+    const createQuery = prisma.clientOrder.create({
+      // @ts-ignore
       data: {
-        order_no: order.order_no,
-        created_at: order.createdAt,
-        user_id: userId,
-        payer_email: order.payer_email,
-        payer_name: order.name,
-        status: order.status as OrderStatus,
-        amount: order.price.total,
-        shipping: order.price.shipping,
-        tax: order.price.tax,
-        address_country: order.country,
-        address_state: order.state,
-        address_city: order.city,
-        address_street: order.address,
-        address_zip: order.postalCode,
+        ...order,
         products: {
-          create: order.products.map((product) => ({
-            name: `${product.materialName}, ${product.hardwareName} ${product.hardwareColor}`,
-            quantity: product.quantity,
-            price: product.hardwarePrice + product.materialPrice,
-            material_id: product.materialId,
-            hardware_id: product.hardwareId,
-            is_custom: true,
-          })),
+          create: products,
         },
       },
-      include: {
-        products: true,
-      },
     });
-    return createdOrder;
-  });
-  if (result) {
-    console.log(result.filter((value) => value !== undefined).length, "orders created");
-    console.log(
-      result.length - result.filter((value) => value !== undefined).length,
-      "orders failed"
-    );
+    createOrderPromises.push(createQuery);
   }
+  await Promise.all(createOrderPromises);
+  console.log("Orders created:", orders.length);
 } catch (error) {
   console.error(error);
 } finally {
