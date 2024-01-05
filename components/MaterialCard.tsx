@@ -23,7 +23,7 @@ export default function MaterialCard(props: { material: Material; onClick: () =>
           src={material.image}
           alt={material.name}
           className="rounded-md"
-          quality={80}
+          quality={70}
         />
         <div className="flex flex-1 flex-col gap-2">
           <div className="flex justify-between gap-4 text-lg">
