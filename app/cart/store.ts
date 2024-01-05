@@ -72,6 +72,13 @@ async function syncProducts(cart: CartItemType[], setCart: (cart: CartItemType[]
   setCart(inSyncCartItemTypes);
 }
 
+const isProductInCart = (
+  product: Product | ProductWithComponents,
+  cart: readonly CartItemType[]
+) => {
+  return cart.some((item) => item.product.id === product.id);
+};
+
 export type CartStore = {
   cart: readonly CartItemType[];
   addToCart: (product: Product | ProductWithComponents) => void;
@@ -82,6 +89,7 @@ export type CartStore = {
   setShippingMethods: (shippingMethods: Shipping[]) => void;
   shippingMethod: Shipping | null;
   setShippingMethod: (id: number) => void;
+  isProductInCart: (product: Product | ProductWithComponents) => boolean;
 };
 
 export const useCartStore = create<CartStore>((set, state) => ({
@@ -107,6 +115,7 @@ export const useCartStore = create<CartStore>((set, state) => ({
     set(() => ({ cart: newCart }));
     storeCartInLocalStorage(newCart);
   },
+  isProductInCart: (product) => isProductInCart(product, state().cart),
   clearCart: () => {
     set(() => ({ cart: [] }));
     storeCartInLocalStorage([]);
