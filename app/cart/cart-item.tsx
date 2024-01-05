@@ -38,8 +38,20 @@ export default function CartItem(props: { item: CartItemType }) {
       const { material, hardware } = productWithComponents;
       return (
         <>
-          <ImageWithLoading width={75} height={75} src={material.image} alt={material.name} />
-          <ImageWithLoading width={75} height={75} src={hardware.image} alt={hardware.name} />
+          <ImageWithLoading
+            width={75}
+            height={75}
+            src={material.image}
+            alt={material.name}
+            quality={80}
+          />
+          <ImageWithLoading
+            width={75}
+            height={75}
+            src={hardware.image}
+            alt={hardware.name}
+            quality={80}
+          />
         </>
       );
     }
@@ -49,6 +61,7 @@ export default function CartItem(props: { item: CartItemType }) {
         height={150}
         src={(product as NonNullabbleProduct).image}
         alt={product.name}
+        quality={80}
       />
     );
   };

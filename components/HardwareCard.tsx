@@ -22,6 +22,7 @@ export default function HardwareCard(props: { hardware: Hardware; onClick: () =>
           src={hardware.image}
           alt={hardware.name}
           className="rounded-md"
+          quality={80}
         />
         <div className="flex flex-1 flex-col gap-2">
           <div className="flex justify-between gap-4 text-lg">
