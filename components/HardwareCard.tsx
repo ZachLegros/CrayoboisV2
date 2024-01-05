@@ -21,10 +21,10 @@ export default function HardwareCard(props: { hardware: Hardware; onClick: () =>
           height={150}
           src={hardware.image}
           alt={hardware.name}
-          className="rounded-md"
+          className="rounded-md min-w-[150px] max-h-[150px]"
           quality={80}
         />
-        <div className="flex flex-1 flex-col gap-2">
+        <div className="flex flex-auto flex-col gap-2">
           <div className="flex justify-between gap-4 text-lg">
             <b>{hardware.name}</b>
             <p>{cad(hardware.price)}</p>
