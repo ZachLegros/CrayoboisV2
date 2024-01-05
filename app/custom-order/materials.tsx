@@ -44,7 +44,7 @@ export default function Materials(props: { onSelect: (material: Material) => voi
   }
 
   return (
-    <ItemsGrid className="animate-in w-full">
+    <ItemsGrid className="w-full">
       {filteredMaterials.map((material) => (
         <MaterialCard material={material} key={material.id} onClick={() => onSelect(material)} />
       ))}

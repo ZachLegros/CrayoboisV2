@@ -38,7 +38,7 @@ export default function Hardwares(props: { onSelect: (hardware: Hardware) => voi
   }
 
   return (
-    <ItemsGrid className="animate-in w-full">
+    <ItemsGrid className="w-full">
       {filteredHardwares.map((hardware) => (
         <HardwareCard hardware={hardware} key={hardware.id} onClick={() => onSelect(hardware)} />
       ))}
