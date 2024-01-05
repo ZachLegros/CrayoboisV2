@@ -3,24 +3,9 @@ import hardwares from "./data/hardwares.json";
 import materials from "./data/materials.json";
 import orders from "./data/orders.json";
 import { OrderStatus } from "@prisma/client";
+import { sequentialAsyncOperations } from "../utils/utils";
 
 const prisma = new PrismaClient();
-
-async function sequentialAsyncOperations<T>(
-  values: T[],
-  asyncOperation: (value: T) => Promise<any>
-) {
-  try {
-    const result = await values.reduce(async (previousPromise: Promise<any>, currentValue: T) => {
-      const currentResult = await asyncOperation(currentValue);
-      await previousPromise;
-      return [...(await previousPromise), currentResult];
-    }, Promise.resolve([]));
-    return result;
-  } catch (error) {
-    console.error("Error:", error);
-  }
-}
 
 try {
   const hardware = await prisma.hardware.createMany({
