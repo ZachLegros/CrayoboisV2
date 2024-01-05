@@ -24,7 +24,7 @@ export default function Cart() {
 
   return (
     <>
-      <div className="flex flex-col flex-1 gap-4">
+      <div className="animate-in flex flex-col flex-1 gap-4">
         {cart.toReversed().map((item, index) => (
           <>
             <CartItem item={item} />
