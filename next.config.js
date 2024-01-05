@@ -5,9 +5,9 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "firebasestorage.googleapis.com",
+        hostname: "axxvbauccqdrffmnozld.supabase.co",
         port: "",
-        pathname: "/v0/b/crayobois-fe722.appspot.com/o/**",
+        pathname: "/storage/v1/object/public/inventory/**",
       },
     ],
   },
