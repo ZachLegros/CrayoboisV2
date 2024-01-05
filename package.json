@@ -36,6 +36,7 @@
     "zustand": "^4.4.7"
   },
   "devDependencies": {
+    "@types/bun": "^1.0.0",
     "@types/fold-to-ascii": "^5.0.2",
     "@types/node": "20.3.1",
     "@types/react": "18.2.8",
