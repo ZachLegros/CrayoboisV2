@@ -7,17 +7,19 @@ export default function CheckButton(props: {
   isChecked: boolean;
   onClick: () => void;
   children: React.ReactNode;
+  isDisabled?: boolean;
   className?: string;
 }) {
-  const { isChecked, onClick, children, className } = props;
+  const { isChecked, onClick, children, className, isDisabled } = props;
 
   return (
     <Button
-      className={twMerge("flex justify-between p-2", className)}
+      className={twMerge("flex justify-between p-2 ", className)}
       size="md"
       radius="sm"
       variant="light"
       onClick={onClick}
+      isDisabled={isDisabled}
     >
       {children}
       <Checkbox
