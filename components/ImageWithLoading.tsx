@@ -3,12 +3,13 @@ import Image, { type ImageProps } from "next/image";
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";
 
-export type ImageWithLoadingProps = Omit<ImageProps, "onLoadingComplete" | "loading"> & {
+export type ImageWithLoadingProps = Omit<ImageProps, "loading"> & {
   className?: string;
+  onLoad?: () => void;
 };
 
 export default function ImageWithLoading(props: ImageWithLoadingProps) {
-  const { className, src, alt, ...rest } = props;
+  const { className, src, alt, onLoad, ...rest } = props;
   const [isLoaded, setIsLoaded] = useState(false);
 
   return (
@@ -17,7 +18,10 @@ export default function ImageWithLoading(props: ImageWithLoadingProps) {
         src={src}
         alt={alt}
         {...rest}
-        onLoad={() => setIsLoaded(true)}
+        onLoad={() => {
+          setIsLoaded(true);
+          onLoad?.();
+        }}
         loading="lazy"
         className="w-full h-full object-cover"
       />
