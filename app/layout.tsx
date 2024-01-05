@@ -3,6 +3,7 @@ import { GeistSans } from "geist/font/sans";
 import "./globals.css";
 import { twMerge } from "tailwind-merge";
 import NavBar from "@/components/NavBar";
+import { Toaster } from "sonner";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -20,6 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-background text-foreground">
         <Providers>
           <main className="flex flex-col items-center min-h-screen max-w-screen-xl mx-auto">
+            <Toaster richColors />
             <NavBar />
             <div className="w-full p-6">{children}</div>
             <footer className="w-full border-t border-t-foreground/10 p-8 flex justify-center text-center text-xs mt-auto">
