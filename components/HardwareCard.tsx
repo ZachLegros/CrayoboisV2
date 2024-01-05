@@ -2,8 +2,8 @@
 
 import { Hardware } from "@prisma/client";
 import { Card, CardBody, Chip } from "@nextui-org/react";
-import Image from "next/image";
 import { cad } from "@/utils/currencyFormatter";
+import ImageWithLoading from "./ImageWithLoading";
 
 export default function HardwareCard(props: { hardware: Hardware; onClick: () => void }) {
   const { hardware, onClick } = props;
@@ -16,13 +16,12 @@ export default function HardwareCard(props: { hardware: Hardware; onClick: () =>
       isHoverable
     >
       <CardBody className="flex flex-row gap-4">
-        <Image
+        <ImageWithLoading
           width={150}
           height={150}
           src={hardware.image}
           alt={hardware.name}
-          className="rounded-md object-contain self-start"
-          loading="lazy"
+          className="rounded-md"
         />
         <div className="flex flex-1 flex-col gap-2">
           <div className="flex justify-between gap-4 text-lg">

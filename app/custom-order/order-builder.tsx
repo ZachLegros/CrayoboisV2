@@ -28,8 +28,8 @@ export default function OrderBuilder(props: { materials: Material[]; hardwares: 
   const handleAddToCart = (material: Material, hardware: Hardware) => {
     const customProduct = customProductFactory(material, hardware);
     addToCart(customProduct);
-    router.push("/cart");
     reset();
+    router.push("/cart");
   };
 
   useEffect(() => {

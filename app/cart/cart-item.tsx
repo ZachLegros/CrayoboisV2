@@ -1,5 +1,4 @@
 import { twMerge } from "tailwind-merge";
-import Image from "next/image";
 import { cad } from "@/utils/currencyFormatter";
 import { Chip, Button, Select, SelectItem } from "@nextui-org/react";
 import { CartItemType, getProductMaxQuantity, useCartStore } from "./store";
@@ -8,6 +7,7 @@ import {
   NonNullabbleProduct,
   NonNullabbleProductWithComponents,
 } from "@/utils/customProductFactory";
+import ImageWithLoading from "@/components/ImageWithLoading";
 
 export default function CartItem(props: { item: CartItemType }) {
   const { item } = props;
@@ -38,18 +38,17 @@ export default function CartItem(props: { item: CartItemType }) {
       const { material, hardware } = productWithComponents;
       return (
         <>
-          <Image width={75} height={75} src={material.image} alt={material.name} priority />
-          <Image width={75} height={75} src={hardware.image} alt={hardware.name} priority />
+          <ImageWithLoading width={75} height={75} src={material.image} alt={material.name} />
+          <ImageWithLoading width={75} height={75} src={hardware.image} alt={hardware.name} />
         </>
       );
     }
     return (
-      <Image
+      <ImageWithLoading
         width={150}
         height={150}
         src={(product as NonNullabbleProduct).image}
         alt={product.name}
-        priority
       />
     );
   };

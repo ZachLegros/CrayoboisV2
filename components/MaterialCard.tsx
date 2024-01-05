@@ -2,9 +2,9 @@
 
 import { Material } from "@prisma/client";
 import { Card, CardBody, Chip } from "@nextui-org/react";
-import Image from "next/image";
 import { FaEarthAmericas } from "react-icons/fa6";
 import { cad } from "@/utils/currencyFormatter";
+import ImageWithLoading from "./ImageWithLoading";
 
 export default function MaterialCard(props: { material: Material; onClick: () => void }) {
   const { material, onClick } = props;
@@ -17,13 +17,12 @@ export default function MaterialCard(props: { material: Material; onClick: () =>
       isHoverable
     >
       <CardBody className="flex flex-row gap-4">
-        <Image
+        <ImageWithLoading
           width={150}
           height={150}
           src={material.image}
           alt={material.name}
-          className="rounded-md object-contain self-start"
-          loading="lazy"
+          className="rounded-md"
         />
         <div className="flex flex-1 flex-col gap-2">
           <div className="flex justify-between gap-4 text-lg">
