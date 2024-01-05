@@ -8,6 +8,8 @@ import {
   NonNullabbleProductWithComponents,
 } from "@/utils/customProductFactory";
 import ImageWithLoading from "@/components/ImageWithLoading";
+import Image from "next/image";
+import ImageListWithLoading from "@/components/ImageListWithLoading";
 
 export default function CartItem(props: { item: CartItemType }) {
   const { item } = props;
@@ -36,23 +38,32 @@ export default function CartItem(props: { item: CartItemType }) {
     if (product.is_custom) {
       const productWithComponents = product as NonNullabbleProductWithComponents;
       const { material, hardware } = productWithComponents;
+
       return (
-        <>
-          <ImageWithLoading
-            width={75}
-            height={75}
-            src={material.image}
-            alt={material.name}
-            quality={70}
-          />
-          <ImageWithLoading
-            width={75}
-            height={75}
-            src={hardware.image}
-            alt={hardware.name}
-            quality={70}
-          />
-        </>
+        <ImageListWithLoading itemsNo={2}>
+          {(onLoad) => (
+            <>
+              <Image
+                width={75}
+                height={75}
+                src={material.image}
+                alt={material.name}
+                quality={70}
+                loading="eager"
+                onLoad={onLoad}
+              />
+              <Image
+                width={75}
+                height={75}
+                src={hardware.image}
+                alt={hardware.name}
+                quality={70}
+                loading="eager"
+                onLoad={onLoad}
+              />
+            </>
+          )}
+        </ImageListWithLoading>
       );
     }
     return (
