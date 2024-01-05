@@ -34,7 +34,7 @@ export default function ProductCard(props: { product: NonNullabbleProduct; onCli
               src={product.image}
               alt={product.name}
               className="rounded-md cursor-pointer"
-              quality={100}
+              quality={70}
               onClick={() => setIsOpen(true)}
             />
             <Tooltip showArrow content="Agrandir">
@@ -81,7 +81,7 @@ export default function ProductCard(props: { product: NonNullabbleProduct; onCli
               alt={product.name}
               width={500}
               height={500}
-              quality={100}
+              quality={80}
             />
           </ModalBody>
         </ModalContent>
