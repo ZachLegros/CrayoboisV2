@@ -17,8 +17,9 @@ export default function ImageWithLoading(props: ImageWithLoadingProps) {
         src={src}
         alt={alt}
         {...rest}
-        onLoadingComplete={() => setIsLoaded(true)}
+        onLoad={() => setIsLoaded(true)}
         loading="lazy"
+        className="w-full h-full object-cover"
       />
       {!isLoaded && <Skeleton className="absolute top-0 left-0 w-full h-full" />}
     </div>
