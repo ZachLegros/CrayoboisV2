@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import hardwares from "./data/hardwares.json";
 import materials from "./data/materials.json";
 import orders from "./data/clientOrders.json";
+import products from "./data/products.json";
 
 const prisma = new PrismaClient();
 
@@ -14,19 +15,24 @@ try {
   });
   console.log({ hardware, material });
 
-  await prisma.shipping.create({
-    data: {
-      name: "Sans suivi du colis",
-      price: 4.5,
-    },
+  const product = await prisma.product.createMany({
+    data: products,
   });
+  console.log({ product });
 
-  await prisma.shipping.create({
-    data: {
-      name: "Avec suivi du colis",
-      price: 12.31,
-    },
+  const shipping = await prisma.shipping.createMany({
+    data: [
+      {
+        name: "Sans suivi du colis",
+        price: 4.5,
+      },
+      {
+        name: "Avec suivi du colis",
+        price: 12.31,
+      },
+    ],
   });
+  console.log({ shipping });
 
   const createOrderPromises: any[] = [];
 
