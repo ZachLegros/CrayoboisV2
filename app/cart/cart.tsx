@@ -25,7 +25,7 @@ export default function Cart() {
   return (
     <>
       <div className="flex flex-col flex-1 gap-4">
-        {cart.map((item, index) => (
+        {cart.toReversed().map((item, index) => (
           <>
             <CartItem item={item} />
             {index !== cart.length - 1 && <div className="border-b" />}
@@ -33,7 +33,7 @@ export default function Cart() {
         ))}
         {/* <CartItem item={stubProduct} /> */}
       </div>
-      <div className="w-72">
+      <div className="w-72 max-h-screen overflow-hidden sticky top-0 -mt-[calc(64px+24px+1px)] pt-[calc(64px+24px+1px)]">
         <CartBreakdown />
       </div>
     </>

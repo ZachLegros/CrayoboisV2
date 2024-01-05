@@ -43,14 +43,14 @@ export default function CartItem(props: { item: CartItemType }) {
             height={75}
             src={material.image}
             alt={material.name}
-            quality={80}
+            quality={70}
           />
           <ImageWithLoading
             width={75}
             height={75}
             src={hardware.image}
             alt={hardware.name}
-            quality={80}
+            quality={70}
           />
         </>
       );
