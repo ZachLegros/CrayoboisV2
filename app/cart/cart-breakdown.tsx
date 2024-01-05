@@ -84,7 +84,11 @@ export default function CartBreakdown() {
       </div>
       <div className="flex justify-between text-2xl font-semibold text-gray-100 mt-2">
         <span>Total</span>
-        <span>{cad(getTotal())}</span>
+        {shippingMethod ? (
+          <span>{cad(getTotal())}</span>
+        ) : (
+          <Skeleton className="w-24 h-8 rounded-md" />
+        )}
       </div>
     </div>
   );
