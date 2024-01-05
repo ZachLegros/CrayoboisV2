@@ -15,7 +15,7 @@ export type Filter = {
   setEnabled: (enabled: boolean) => void;
 };
 
-const createFilter = (
+export const createFilter = (
   set: (arg0: {
     (state: any): { [x: string]: any };
     (state: any): { [x: string]: any };
