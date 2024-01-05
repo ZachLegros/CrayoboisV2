@@ -32,22 +32,36 @@ export default function Filter(props: {
   filterValues: FilterValue[];
   currentValue: string;
   setValue: (value: string) => void;
-  enabled: boolean;
-  setEnabled: (enabled: boolean) => void;
+  filterEnabled: boolean;
+  setFilterEnabled: (enabled: boolean) => void;
+  isDisabled?: boolean;
 }) {
-  const { filterName, enabled, setEnabled, currentValue, filterValues, setValue } = props;
+  const {
+    filterName,
+    filterEnabled,
+    setFilterEnabled,
+    currentValue,
+    filterValues,
+    setValue,
+    isDisabled,
+  } = props;
 
   return (
     <div className="flex flex-col w-full">
       <CheckButton
-        isChecked={enabled}
+        isChecked={filterEnabled && !isDisabled}
         onClick={() => {
-          setEnabled(!enabled);
+          setFilterEnabled(!filterEnabled);
         }}
+        isDisabled={isDisabled}
       >
         <p className="text-xl font-bold text-gray-300">{filterName}</p>
       </CheckButton>
-      <CollapseRadioGroup filter={currentValue} isFilterEnabled={enabled} setFilter={setValue}>
+      <CollapseRadioGroup
+        filter={currentValue}
+        isFilterEnabled={filterEnabled && !isDisabled}
+        setFilter={setValue}
+      >
         {filterValues.map((filter) => (
           <Radio key={filter.value} color="primary" value={filter.value}>
             {filter.label} {filter.amount !== undefined && `(${filter.amount})`}

@@ -5,7 +5,8 @@ import { useProductsStore } from "./store";
 import Filter from "../../components/Filter";
 
 export default function SidePanel() {
-  const { priceFilter } = useProductsStore();
+  const { products, priceFilter } = useProductsStore();
+  const isDisabled = products.length === 0;
 
   const handleReset = () => {
     priceFilter.setEnabled(false);
@@ -21,7 +22,9 @@ export default function SidePanel() {
               size="md"
               variant="light"
               color="primary"
-              className={`font-bold ${priceFilter.enabled ? "visible" : "invisible"}`}
+              className={`font-bold ${
+                priceFilter.enabled && !isDisabled ? "visible" : "invisible"
+              }`}
               onClick={handleReset}
             >
               Réinitialiser
@@ -35,8 +38,9 @@ export default function SidePanel() {
             ]}
             currentValue={priceFilter.value}
             setValue={priceFilter.setValue}
-            enabled={priceFilter.enabled}
-            setEnabled={priceFilter.setEnabled}
+            filterEnabled={priceFilter.enabled}
+            setFilterEnabled={priceFilter.setEnabled}
+            isDisabled={isDisabled}
           />
         </>
       </div>

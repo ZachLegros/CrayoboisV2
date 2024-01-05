@@ -48,8 +48,8 @@ export default function HardwareFilterPanel() {
         ]}
         currentValue={typeFilter.value}
         setValue={typeFilter.setValue}
-        enabled={typeFilter.enabled}
-        setEnabled={typeFilter.setEnabled}
+        filterEnabled={typeFilter.enabled}
+        setFilterEnabled={typeFilter.setEnabled}
       />
       <Filter
         filterName="Par prix"
@@ -59,8 +59,8 @@ export default function HardwareFilterPanel() {
         ]}
         currentValue={priceFilter.value}
         setValue={priceFilter.setValue}
-        enabled={priceFilter.enabled}
-        setEnabled={priceFilter.setEnabled}
+        filterEnabled={priceFilter.enabled}
+        setFilterEnabled={priceFilter.setEnabled}
       />
     </>
   );
