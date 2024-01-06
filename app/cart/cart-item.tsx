@@ -98,12 +98,9 @@ export default function CartItem(props: { item: CartItemType }) {
             ))}
           </Select>
         ) : (
-          <div className="flex gap-4">
-            <p>1</p>
-            <Chip color="warning" variant="dot">
-              1 en stock
-            </Chip>
-          </div>
+          <Chip color="warning" variant="dot">
+            1 en stock
+          </Chip>
         )}
       </Section>
       <Section title="Sous-total" className="items-end">
