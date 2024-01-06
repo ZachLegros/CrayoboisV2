@@ -9,9 +9,11 @@ export default function SidePanel() {
 
   return (
     <div className="w-72 h-screen overflow-hidden sticky top-0 -mt-[calc(64px+24px+1px)] pt-[calc(64px+24px+1px)]">
-      <div className="flex flex-col w-full h-full gap-4 overflow-y-auto overflow-x-hidden pr-2">
+      <div className="h-full overflow-y-auto overflow-x-hidden pr-2">
         {currentStep === 0 && <MaterialFilterPanel />}
-        {currentStep === 1 && <HardwareFilterPanel />}
+        {(currentStep === 1 || currentStep === 2) && (
+          <HardwareFilterPanel isDisabled={currentStep === 2} />
+        )}
       </div>
     </div>
   );

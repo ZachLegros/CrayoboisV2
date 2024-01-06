@@ -5,7 +5,8 @@ import { Button } from "@nextui-org/react";
 import { useCustomOrderStore } from "./store";
 import Filter from "../../components/Filter";
 
-export default function HardwareFilterPanel() {
+export default function HardwareFilterPanel(props: { isDisabled?: boolean }) {
+  const { isDisabled } = props;
   const { hardwares, typeFilter, priceFilter } = useCustomOrderStore();
 
   const hardwareTypes: { [type: string]: number } = useMemo(() => {
@@ -21,7 +22,11 @@ export default function HardwareFilterPanel() {
   };
 
   return (
-    <>
+    <div
+      className={
+        isDisabled ? "flex flex-col gap-4 pointer-events-none opacity-50" : "flex flex-col gap-4"
+      }
+    >
       <div className="flex w-full justify-between items-center pl-2">
         <p className="text-xl font-bold">Filtrer</p>
         <Button
@@ -62,6 +67,6 @@ export default function HardwareFilterPanel() {
         filterEnabled={priceFilter.enabled}
         setFilterEnabled={priceFilter.setEnabled}
       />
-    </>
+    </div>
   );
 }

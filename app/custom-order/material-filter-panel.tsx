@@ -29,7 +29,7 @@ export default function MaterialFilterPanel() {
   };
 
   return (
-    <>
+    <div className="flex flex-col gap-4">
       <div className="flex w-full justify-between items-center pl-2">
         <p className="text-xl font-bold">Filtrer</p>
         <Button
@@ -87,6 +87,6 @@ export default function MaterialFilterPanel() {
         filterEnabled={originFilter.enabled}
         setFilterEnabled={originFilter.setEnabled}
       />
-    </>
+    </div>
   );
 }
