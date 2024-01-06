@@ -37,7 +37,7 @@ export default function ProductsGrid(props: { products: Product[] }) {
         <p className="text-3xl font-bold">Tous nos produits préfabriqués sont vendus!</p>
         <Button
           color="primary"
-          className="mt-8"
+          className="mt-8 font-semibold"
           size="lg"
           onClick={() => router.push("/custom-order")}
         >
