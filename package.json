@@ -25,6 +25,7 @@
     "framer-motion": "^10.17.0",
     "geist": "^1.0.0",
     "next": "latest",
+    "next-themes": "^0.2.1",
     "postcss": "^8.4.32",
     "react": "18.2.0",
     "react-collapse": "^5.1.1",

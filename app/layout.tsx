@@ -17,10 +17,16 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={twMerge("dark", GeistSans.className)}>
+    <html lang="en">
       <body className="bg-background text-foreground">
         <Providers>
-          <main className="flex flex-col items-center min-h-screen max-w-screen-xl mx-auto">
+          <main
+            className={twMerge(
+              "dark",
+              GeistSans.className,
+              "flex flex-col items-center min-h-screen max-w-screen-xl mx-auto"
+            )}
+          >
             <Toaster richColors />
             <NavBar />
             <div className="w-full p-6">{children}</div>
