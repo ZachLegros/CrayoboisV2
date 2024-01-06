@@ -25,12 +25,12 @@ export default function Cart() {
 
   return (
     <>
-      <div className="animate-in flex flex-col flex-1 gap-4">
+      <div className="animate-in flex flex-col flex-1">
         {cart.toReversed().map((item, index) => (
-          <>
+          <div className="flex flex-col gap-4 mb-4" key={index}>
             <CartItem item={item} />
             {index !== cart.length - 1 && <Divider />}
-          </>
+          </div>
         ))}
         {/* <CartItem item={stubProduct} /> */}
       </div>

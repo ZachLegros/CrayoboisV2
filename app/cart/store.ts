@@ -80,10 +80,6 @@ const isProductInCart = (
   return cart.some((item) => item.product.id === product.id);
 };
 
-const getCartTotalQuantity = (cart: readonly CartItemType[]) => {
-  return cart.reduce((acc, item) => acc + item.quantity, 0);
-};
-
 export type CartStore = {
   cart: readonly CartItemType[];
   addToCart: (product: Product | ProductWithComponents) => void;
@@ -95,7 +91,6 @@ export type CartStore = {
   shippingMethod: Shipping | null;
   setShippingMethod: (id: number) => void;
   isProductInCart: (product: Product | ProductWithComponents) => boolean;
-  getCartTotalQuantity: () => number;
 };
 
 export const useCartStore = create<CartStore>((set, state) => ({
@@ -122,7 +117,6 @@ export const useCartStore = create<CartStore>((set, state) => ({
     storeCartInLocalStorage(newCart);
   },
   isProductInCart: (product) => isProductInCart(product, state().cart),
-  getCartTotalQuantity: () => getCartTotalQuantity(state().cart),
   clearCart: () => {
     set(() => ({ cart: [] }));
     storeCartInLocalStorage([]);

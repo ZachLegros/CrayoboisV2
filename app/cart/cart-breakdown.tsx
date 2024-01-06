@@ -2,50 +2,23 @@
 
 import { cad } from "@/utils/currencyFormatter";
 import { useCartStore } from "./store";
-import { Chip, Radio, RadioGroup, Skeleton } from "@nextui-org/react";
+import { Button, Chip, Radio, RadioGroup, Skeleton } from "@nextui-org/react";
 import { useEffect, useMemo } from "react";
 import { fetchShippingMethods } from "./actions";
+import {
+  getShippingPrice,
+  getTotal,
+  getTotalPrice,
+  getTotalTPS,
+  getTotalTVQ,
+  isShippingFree,
+} from "./utils";
+import { useRouter } from "next/navigation";
 
 export default function CartBreakdown() {
-  const {
-    cart,
-    shippingMethods,
-    setShippingMethods,
-    shippingMethod,
-    setShippingMethod,
-    getCartTotalQuantity,
-  } = useCartStore();
-
-  const getTotalPrice = () => {
-    return cart.reduce((acc, item) => {
-      return acc + item.product.price * item.quantity;
-    }, 0);
-  };
-
-  const getTotalTPS = () => {
-    return cart.reduce((acc, item) => {
-      return acc + item.product.price * item.quantity * 0.05;
-    }, 0);
-  };
-
-  const getTotalTVQ = () => {
-    return cart.reduce((acc, item) => {
-      return acc + item.product.price * item.quantity * 0.09975;
-    }, 0);
-  };
-
-  const isShippingFree = () => {
-    return getCartTotalQuantity() >= 4 || getTotalPrice() >= 150;
-  };
-
-  const getShippingPrice = () => {
-    if (!shippingMethod || isShippingFree()) return 0;
-    return shippingMethod.price;
-  };
-
-  const getTotal = () => {
-    return getTotalPrice() + getTotalTPS() + getTotalTVQ() + getShippingPrice();
-  };
+  const { cart, shippingMethods, setShippingMethods, shippingMethod, setShippingMethod } =
+    useCartStore();
+  const router = useRouter();
 
   useEffect(() => {
     async function getShipping() {
@@ -57,8 +30,12 @@ export default function CartBreakdown() {
   }, []);
 
   const freeShipping = useMemo(() => {
-    return isShippingFree();
+    return isShippingFree(cart);
   }, [cart]);
+
+  const isLoading = useMemo(() => {
+    return shippingMethods.length === 0;
+  }, [shippingMethods]);
 
   return (
     <div className="flex flex-col gap-2 w-full text-l">
@@ -70,7 +47,7 @@ export default function CartBreakdown() {
         </p>
         {shippingMethods.length > 0 ? (
           freeShipping ? (
-            <Chip color="success">
+            <Chip color="success" size="sm">
               <p className="font-semibold">Livraison gratuite</p>
             </Chip>
           ) : (
@@ -90,30 +67,43 @@ export default function CartBreakdown() {
           <Skeleton className="w-full h-14 rounded-md" />
         )}
       </div>
-      <div className="flex justify-between mt-3">
+      <div className="flex justify-between mt-2">
         <span>Sous-total</span>
-        <span>{cad(getTotalPrice())}</span>
+        <span>{cad(getTotalPrice(cart))}</span>
       </div>
       <div className="flex justify-between">
         <span>TPS</span>
-        <span>{cad(getTotalTPS())}</span>
+        <span>{cad(getTotalTPS(cart))}</span>
       </div>
       <div className="flex justify-between">
         <span>TVQ</span>
-        <span>{cad(getTotalTVQ())}</span>
+        <span>{cad(getTotalTVQ(cart))}</span>
       </div>
       <div className="flex justify-between">
         <span>Livraison</span>
-        {shippingMethod ? cad(getShippingPrice()) : <Skeleton className="w-16 rounded-md" />}
+        {shippingMethod ? (
+          cad(getShippingPrice(shippingMethod, cart))
+        ) : (
+          <Skeleton className="w-16 rounded-md" />
+        )}
       </div>
       <div className="flex justify-between text-2xl font-semibold text-gray-100 mt-2">
         <span>Total</span>
         {shippingMethod ? (
-          <span>{cad(getTotal())}</span>
+          <span>{cad(getTotal({ shippingMethod, cart }))}</span>
         ) : (
           <Skeleton className="w-24 h-8 rounded-md" />
         )}
       </div>
+      <Button
+        color="primary"
+        size="lg"
+        className="mt-2"
+        isDisabled={isLoading}
+        onClick={() => router.push("/checkout")}
+      >
+        Commander
+      </Button>
     </div>
   );
 }
