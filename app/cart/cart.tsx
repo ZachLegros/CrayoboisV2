@@ -4,6 +4,7 @@ import CartItem from "./cart-item";
 import EmptyCart from "./empty-cart";
 import { useCartStore } from "./store";
 import CartBreakdown from "./cart-breakdown";
+import { Divider } from "@nextui-org/react";
 
 export default function Cart() {
   const { cart } = useCartStore();
@@ -28,7 +29,7 @@ export default function Cart() {
         {cart.toReversed().map((item, index) => (
           <>
             <CartItem item={item} />
-            {index !== cart.length - 1 && <div className="border-b" />}
+            {index !== cart.length - 1 && <Divider />}
           </>
         ))}
         {/* <CartItem item={stubProduct} /> */}
