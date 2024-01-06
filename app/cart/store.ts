@@ -40,6 +40,7 @@ async function syncProducts(cart: CartItemType[], setCart: (cart: CartItemType[]
     .map((item) => item.product as NonNullabbleProduct);
   const products = await fetchProducts(normalProductTemplates, customProductTemplates);
   const inSyncCartItemTypes: CartItemType[] = cart
+    // Filter out items that are no longer available
     .filter((item) => {
       if (item.product.is_custom) {
         return products.some(
@@ -62,7 +63,7 @@ async function syncProducts(cart: CartItemType[], setCart: (cart: CartItemType[]
       if (product) {
         const closestMaxQuantity = Math.min(item.quantity, getProductMaxQuantity(product));
         return {
-          product: product,
+          product,
           quantity: closestMaxQuantity > 0 ? closestMaxQuantity : 1,
         };
       }
@@ -79,6 +80,10 @@ const isProductInCart = (
   return cart.some((item) => item.product.id === product.id);
 };
 
+const getCartTotalQuantity = (cart: readonly CartItemType[]) => {
+  return cart.reduce((acc, item) => acc + item.quantity, 0);
+};
+
 export type CartStore = {
   cart: readonly CartItemType[];
   addToCart: (product: Product | ProductWithComponents) => void;
@@ -90,6 +95,7 @@ export type CartStore = {
   shippingMethod: Shipping | null;
   setShippingMethod: (id: number) => void;
   isProductInCart: (product: Product | ProductWithComponents) => boolean;
+  getCartTotalQuantity: () => number;
 };
 
 export const useCartStore = create<CartStore>((set, state) => ({
@@ -116,6 +122,7 @@ export const useCartStore = create<CartStore>((set, state) => ({
     storeCartInLocalStorage(newCart);
   },
   isProductInCart: (product) => isProductInCart(product, state().cart),
+  getCartTotalQuantity: () => getCartTotalQuantity(state().cart),
   clearCart: () => {
     set(() => ({ cart: [] }));
     storeCartInLocalStorage([]);
