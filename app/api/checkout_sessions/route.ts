@@ -23,6 +23,8 @@ export async function POST(req: Request) {
       mode: "payment",
       return_url: `${req.headers.get("origin")}/return?session_id={CHECKOUT_SESSION_ID}`,
     });
+    console.log("New checkout session:", session.id);
+    // TODO: Save session.id to database alongside order details
     return new Response(JSON.stringify({ clientSecret: session.client_secret }));
   } catch (err: any) {
     return new Response(JSON.stringify({ error: err.message }), { status: err.statusCode || 500 });
