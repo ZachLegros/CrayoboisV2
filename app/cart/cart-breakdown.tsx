@@ -5,19 +5,22 @@ import { useCartStore } from "./store";
 import { Button, Chip, Radio, RadioGroup, Skeleton } from "@nextui-org/react";
 import { useEffect, useMemo } from "react";
 import { fetchShippingMethods } from "./actions";
-import {
-  getShippingPrice,
-  getTotal,
-  getTotalPrice,
-  getTotalTPS,
-  getTotalTVQ,
-  isShippingFree,
-} from "./utils";
 import { useRouter } from "next/navigation";
 
 export default function CartBreakdown() {
-  const { cart, shippingMethods, setShippingMethods, shippingMethod, setShippingMethod } =
-    useCartStore();
+  const {
+    cart,
+    shippingMethods,
+    setShippingMethods,
+    shippingMethod,
+    setShippingMethod,
+    getShippingPrice,
+    getTotal,
+    getTotalPrice,
+    getTotalTPS,
+    getTotalTVQ,
+    isShippingFree,
+  } = useCartStore();
   const router = useRouter();
 
   useEffect(() => {
@@ -30,7 +33,7 @@ export default function CartBreakdown() {
   }, []);
 
   const freeShipping = useMemo(() => {
-    return isShippingFree(cart);
+    return isShippingFree();
   }, [cart]);
 
   const isLoading = useMemo(() => {
@@ -54,7 +57,7 @@ export default function CartBreakdown() {
             <RadioGroup
               defaultValue={`${shippingMethods[0].id}`}
               size="md"
-              onValueChange={(id: string) => setShippingMethod(parseInt(id))}
+              onValueChange={(id: string) => setShippingMethod(id)}
             >
               {shippingMethods.map((method, index) => (
                 <Radio value={`${method.id}`} key={index}>
@@ -69,28 +72,24 @@ export default function CartBreakdown() {
       </div>
       <div className="flex justify-between mt-2">
         <span>Sous-total</span>
-        <span>{cad(getTotalPrice(cart))}</span>
+        <span>{cad(getTotalPrice())}</span>
       </div>
       <div className="flex justify-between">
         <span>TPS</span>
-        <span>{cad(getTotalTPS(cart))}</span>
+        <span>{cad(getTotalTPS())}</span>
       </div>
       <div className="flex justify-between">
         <span>TVQ</span>
-        <span>{cad(getTotalTVQ(cart))}</span>
+        <span>{cad(getTotalTVQ())}</span>
       </div>
       <div className="flex justify-between">
         <span>Livraison</span>
-        {shippingMethod ? (
-          cad(getShippingPrice(shippingMethod, cart))
-        ) : (
-          <Skeleton className="w-16 rounded-md" />
-        )}
+        {shippingMethod ? cad(getShippingPrice()) : <Skeleton className="w-16 rounded-md" />}
       </div>
       <div className="flex justify-between text-2xl font-semibold text-gray-100 mt-2">
         <span>Total</span>
         {shippingMethod ? (
-          <span>{cad(getTotal({ shippingMethod, cart }))}</span>
+          <span>{cad(getTotal())}</span>
         ) : (
           <Skeleton className="w-24 h-8 rounded-md" />
         )}
