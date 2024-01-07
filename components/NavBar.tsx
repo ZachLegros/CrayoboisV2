@@ -27,7 +27,16 @@ export default function NavBar() {
   ];
 
   return (
-    <Navbar maxWidth="xl" onMenuOpenChange={setIsMenuOpen} isBlurred={false} isBordered>
+    <Navbar
+      maxWidth="xl"
+      onMenuOpenChange={setIsMenuOpen}
+      isBlurred={false}
+      isBordered
+      classNames={{
+        wrapper: "bg-background",
+        menu: "bg-background",
+      }}
+    >
       <NavbarContent className="sm:hidden" justify="start">
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
@@ -47,8 +56,8 @@ export default function NavBar() {
               href={item.link}
               className={
                 isActive
-                  ? "text-md font-medium transition-colors hover:text-gray-100"
-                  : "text-md font-sem text-gray-400 transition-colors hover:text-gray-100"
+                  ? "text-md font-medium transition-colors hover:text-foreground"
+                  : "text-md font-sem text-foreground/70 transition-colors hover:text-foreground"
               }
             >
               {item.title}
@@ -69,8 +78,8 @@ export default function NavBar() {
               href={item.link}
               className={
                 item.link === pathname
-                  ? "text-md font-medium transition-colors hover:text-primary"
-                  : "text-md font-sem text-muted-foreground transition-colors hover:text-primary"
+                  ? "text-md font-medium transition-colors hover:text-foreground"
+                  : "text-md font-sem text-foreground/70 transition-colors hover:text-foreground"
               }
             >
               {item.title}
