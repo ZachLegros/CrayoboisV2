@@ -26,64 +26,63 @@ model Profile {
 }
 
 model Material {
-  id       String    @id @default(uuid()) @db.Uuid
-  name     String
-  nature   String
-  origin   String
-  type     String
-  image    String
-  price    Float
-  quantity Int       @default(1)
-  products Product[]
+  id            String          @id @default(uuid()) @db.Uuid
+  name          String
+  nature        String
+  origin        String
+  type          String
+  image         String
+  price         Float
+  quantity      Int             @default(1)
+  CustomProduct CustomProduct[]
 
   @@map("material")
 }
 
 model Hardware {
-  id       String    @id @default(uuid()) @db.Uuid
-  name     String
-  color    String
-  image    String
-  price    Float
-  quantity Int       @default(1)
-  products Product[]
+  id            String          @id @default(uuid()) @db.Uuid
+  name          String
+  color         String
+  image         String
+  price         Float
+  quantity      Int             @default(1)
+  CustomProduct CustomProduct[]
 
   @@map("hardware")
 }
 
 model Product {
-  id          String        @id @default(uuid()) @db.Uuid
-  name        String
-  price       Float
-  quantity    Int           @default(1)
-  is_custom   Boolean       @default(false)
-  image       String?
-  description String?
-  material    Material?     @relation(fields: [material_id], references: [id])
-  material_id String?       @db.Uuid
-  hardware    Hardware?     @relation(fields: [hardware_id], references: [id])
-  hardware_id String?       @db.Uuid
-  orders      ClientOrder[]
+  id              String            @id @default(uuid()) @db.Uuid
+  name            String
+  price           Float
+  quantity        Int               @default(1)
+  image           String
+  description     String?
+  orders          ClientOrder[]
+  CheckoutSession CheckoutSession[]
 
   @@map("product")
 }
 
-// model CustomProduct {
-//   id          String        @id @default(uuid()) @db.Uuid
-//   name        String
-//   price       Float
-//   quantity    Int           @default(1)
-//   material_id String        @db.Uuid
-//   hardware_id String        @db.Uuid
-//   material    Material      @relation(fields: [material_id], references: [id])
-//   hardware    Hardware      @relation(fields: [hardware_id], references: [id])
-//   orders      ClientOrder[]
+model CustomProduct {
+  id                String           @id @default(uuid()) @db.Uuid
+  name              String
+  price             Float
+  quantity          Int              @default(1)
+  material_id       String           @db.Uuid
+  hardware_id       String           @db.Uuid
+  material          Material         @relation(fields: [material_id], references: [id])
+  hardware          Hardware         @relation(fields: [hardware_id], references: [id])
+  order             ClientOrder?     @relation(fields: [clientOrderId], references: [id])
+  clientOrderId     String?          @db.Uuid
+  CheckoutSession   CheckoutSession? @relation(fields: [checkoutSessionId], references: [id])
+  checkoutSessionId String?
 
-//   @@map("customProduct")
-// }
+  @@map("customProduct")
+}
 
 model Shipping {
-  id    Int    @id @default(autoincrement())
+  id    String @id @default(uuid()) @db.Uuid
   name  String
   price Float
 
@@ -96,14 +95,14 @@ enum OrderStatus {
 }
 
 model ClientOrder {
-  id              String      @id @default(uuid()) @db.Uuid
-  order_no        Int         @unique @default(autoincrement())
-  created_at      DateTime    @default(now())
-  status          OrderStatus @default(pending)
+  id              String          @id @default(uuid()) @db.Uuid
+  order_no        Int             @unique @default(autoincrement())
+  created_at      DateTime        @default(now())
+  status          OrderStatus     @default(pending)
   payer_email     String
   payer_name      String
-  user_id         String?     @db.Uuid
-  user            Profile?    @relation(fields: [user_id], references: [id])
+  user_id         String?         @db.Uuid
+  user            Profile?        @relation(fields: [user_id], references: [id])
   amount          Float
   tax             Float
   shipping        Float
@@ -113,6 +112,21 @@ model ClientOrder {
   address_country String
   address_zip     String
   products        Product[]
+  custom_products CustomProduct[]
 
   @@map("clientOrder")
+}
+
+enum CheckoutSessionStatus {
+  ongoing
+  completed
+}
+
+model CheckoutSession {
+  id              String                @id
+  status          CheckoutSessionStatus @default(ongoing)
+  products        Product[]
+  custom_products CustomProduct[]
+
+  @@map("checkoutSession")
 }
