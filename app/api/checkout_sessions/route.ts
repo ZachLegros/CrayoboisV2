@@ -1,27 +1,49 @@
 import Stripe from "stripe";
+import {
+  CartItemType,
+  CartProductType,
+  getCartProductHardwareId,
+  getCartProductMaterialId,
+} from "@/app/cart/store";
+import { syncCartWithComponents } from "@/app/cart/actions";
+import { getHardwareId, getMaterialId } from "@/utils/productUtils";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(req: Request) {
   try {
+    const cart = (await req.json()) as CartItemType<CartProductType>[];
+    const syncedCart = await syncCartWithComponents(cart);
+    const isCartInSync = cart.every((item) =>
+      syncedCart.some(
+        (syncedItem) =>
+          item.product.id === syncedItem.product.id &&
+          getCartProductMaterialId(item.product) === getMaterialId(syncedItem.product) &&
+          getCartProductHardwareId(item.product) === getHardwareId(syncedItem.product)
+      )
+    );
+    if (!isCartInSync) throw new Error(`Cart is out of sync: ${JSON.stringify(cart)}`);
+
+    const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = syncedCart.map((item) => {
+      return {
+        price_data: {
+          currency: "cad",
+          product_data: {
+            name: item.product.name,
+          },
+          unit_amount: item.product.price * 100,
+        },
+        quantity: item.quantity,
+      };
+    });
+
     // Create Checkout Sessions from body params.
     const session = await stripe.checkout.sessions.create({
       ui_mode: "embedded",
       payment_method_types: ["card"],
-      line_items: [
-        {
-          price_data: {
-            currency: "cad",
-            product_data: {
-              name: "Custom Product",
-            },
-            unit_amount: 12345,
-          },
-          quantity: 1,
-        },
-      ],
+      line_items: lineItems,
       mode: "payment",
-      return_url: `${req.headers.get("origin")}/return?session_id={CHECKOUT_SESSION_ID}`,
+      return_url: `${req.headers.get("origin")}/checkout?session_id={CHECKOUT_SESSION_ID}`,
     });
     console.log("New checkout session:", session.id);
     // TODO: Save session.id to database alongside order details
