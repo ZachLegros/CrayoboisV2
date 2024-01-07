@@ -1,10 +1,15 @@
 import { Shipping } from "@prisma/client";
 import { create } from "zustand";
 import { syncCart } from "./actions";
+import { DbProduct, getHardwareId, getMaterialId } from "@/utils/productUtils";
 
 export type CartProduct = { id: string };
 export type CartCustomProduct = CartProduct & { material_id: string; hardware_id: string };
 export type CartProductType = CartProduct | CartCustomProduct;
+export type CartItemData = {
+  [key: string]: DbProduct | undefined;
+};
+export type Cart = CartItemType<CartProductType>[];
 
 export const isCartCustomProduct = (
   cartProduct: CartProductType
@@ -34,14 +39,17 @@ export const isCartItemType = (
   return item.product !== undefined && !isNaN(item.quantity);
 };
 
-const storeCartInLocalStorage = (cart: CartItemType<CartProductType>[]) => {
+const storeCartInLocalStorage = (cart: Cart) => {
   if (typeof localStorage === "undefined") return;
   localStorage.setItem("cart", JSON.stringify(cart));
 };
 
-const initializeCartFromLocalStorage = (
-  callback?: (cart: CartItemType<CartProductType>[]) => void
-) => {
+const storeCartItemDataInLocalStorage = (cartItemData: CartItemData) => {
+  if (typeof localStorage === "undefined") return;
+  localStorage.setItem("cartItemData", JSON.stringify(cartItemData));
+};
+
+const initializeCartFromLocalStorage = (callback?: (cart: Cart) => void): Cart => {
   if (typeof localStorage === "undefined") return [];
   const cartString = localStorage.getItem("cart");
   const cart = cartString ? JSON.parse(cartString) : [];
@@ -49,16 +57,25 @@ const initializeCartFromLocalStorage = (
   return cart;
 };
 
-const isProductInCart = (
-  product: CartProductType,
-  cart: readonly CartItemType<CartProductType>[]
-) => {
+const initializeCartItemDataFromLocalStorage = (
+  callback?: (cartItemData: CartItemData) => void
+): CartItemData => {
+  if (typeof localStorage === "undefined") return {};
+  const cartItemDataString = localStorage.getItem("cart");
+  const cartItemData = cartItemDataString ? JSON.parse(cartItemDataString) : {};
+  callback?.(cartItemData);
+  return cartItemData;
+};
+
+const isProductInCart = (product: CartProductType, cart: Cart) => {
   return cart.some((item) => item.product.id === product.id);
 };
 
 export type CartStore = {
-  cart: readonly CartItemType<CartProductType>[];
-  addToCart: (product: CartProductType) => void;
+  cart: Cart;
+  cartItemData: CartItemData;
+  getItemData: (product: CartProductType) => DbProduct | undefined;
+  addToCart: (product: DbProduct) => void;
   removeFromCart: (product: CartProductType) => void;
   clearCart: () => void;
   setItemQuantity: (product: CartProductType, quantity: number) => void;
@@ -67,25 +84,62 @@ export type CartStore = {
   shippingMethod: Shipping | null;
   setShippingMethod: (id: string) => void;
   isProductInCart: (product: CartProductType) => boolean;
+  getTotalPrice: () => number;
+  getTotalTPS: () => number;
+  getTotalTVQ: () => number;
+  getCartTotal: () => number;
+  getCartTotalQuantity: () => number;
+  isShippingFree: () => boolean;
+  getShippingPrice: () => number;
+  getTotal: () => number;
 };
 
 export const useCartStore = create<CartStore>((set, state) => ({
   cart: initializeCartFromLocalStorage(async (cart) => {
     const syncedCart = await syncCart(cart);
-    storeCartInLocalStorage(syncedCart);
-    set(() => ({ cart: syncedCart }));
-  }),
-  addToCart: (product) => {
-    const alreadyInCart = state().cart.find((item) => item.product.id === product.id);
-    if (alreadyInCart) return;
-    const newCart = [...state().cart, { product, quantity: 1 }];
-    set(() => ({ cart: newCart }));
+    const newCart: Cart = syncedCart.map(({ product, quantity }) => ({
+      product: {
+        id: product.id,
+        material_id: getMaterialId(product),
+        hardware_id: getHardwareId(product),
+      },
+      quantity,
+    }));
+    const newCartItemData: CartItemData = syncedCart.reduce((acc, { product }) => {
+      acc[product.id as keyof CartItemData] = product;
+      return acc;
+    }, {} as CartItemData);
     storeCartInLocalStorage(newCart);
+    storeCartItemDataInLocalStorage(newCartItemData);
+    set(() => ({ cart: newCart, cartItemData: newCartItemData }));
+  }),
+  cartItemData: initializeCartItemDataFromLocalStorage(),
+  getItemData: (product) => state().cartItemData[product.id],
+  addToCart: (product) => {
+    const alreadyInCart = state().cart.some((item) => item.product.id === product.id);
+    if (alreadyInCart) return;
+    const newCart = [
+      ...state().cart,
+      {
+        product: {
+          id: product.id,
+          material_id: getMaterialId(product),
+          hardware_id: getHardwareId(product),
+        },
+        quantity: 1,
+      },
+    ];
+    const newCartItemData = { ...state().cartItemData, [product.id]: product };
+    storeCartInLocalStorage(newCart);
+    storeCartItemDataInLocalStorage(newCartItemData);
+    set(() => ({ cart: newCart, cartItemData: newCartItemData }));
   },
   removeFromCart: (product) => {
     const newCart = state().cart.filter((item) => item.product.id !== product.id);
-    set(() => ({ cart: newCart }));
+    const newCartItemData = { ...state().cartItemData, [product.id]: undefined };
     storeCartInLocalStorage(newCart);
+    storeCartItemDataInLocalStorage(newCartItemData);
+    set(() => ({ cart: newCart, cartItemData: newCartItemData }));
   },
   setItemQuantity: (product, quantity) => {
     const newCart = state().cart.map((item) =>
@@ -96,12 +150,47 @@ export const useCartStore = create<CartStore>((set, state) => ({
   },
   isProductInCart: (product) => isProductInCart(product, state().cart),
   clearCart: () => {
-    set(() => ({ cart: [] }));
+    set(() => ({ cart: [], cartItemData: {} }));
     storeCartInLocalStorage([]);
+    storeCartItemDataInLocalStorage({});
   },
   shippingMethods: [],
   setShippingMethods: (shippingMethods) => set(() => ({ shippingMethods })),
   shippingMethod: null,
-  setShippingMethod: (id: string) =>
+  setShippingMethod: (id) =>
     set(() => ({ shippingMethod: state().shippingMethods.find((item) => item.id === id) })),
+  getTotalPrice: () => {
+    return state().cart.reduce((acc, item) => {
+      const product = state().cartItemData[item.product.id];
+      if (product === undefined) return acc;
+      return acc + product.price * item.quantity;
+    }, 0);
+  },
+  getTotalTPS: () => {
+    return state().getTotalPrice() * 0.05;
+  },
+  getTotalTVQ: () => {
+    return state().getTotalPrice() * 0.09975;
+  },
+  getCartTotal: () => {
+    return state().getTotalPrice() + state().getTotalTPS() + state().getTotalTVQ();
+  },
+  getCartTotalQuantity: () => {
+    return state().cart.reduce((acc, item) => acc + item.quantity, 0);
+  },
+  isShippingFree: () => {
+    return state().getCartTotalQuantity() >= 4 || state().getTotalPrice() >= 150;
+  },
+  getShippingPrice: () => {
+    if (!state().shippingMethod || state().isShippingFree()) return 0;
+    return state().shippingMethod!.price;
+  },
+  getTotal: () => {
+    return (
+      state().getTotalPrice() +
+      state().getTotalTPS() +
+      state().getTotalTVQ() +
+      state().getShippingPrice()
+    );
+  },
 }));
