@@ -18,8 +18,8 @@ enum Role {
 
 model Profile {
   id     String        @id @db.Uuid
-  role   Role          @default(user)
   email  String        @unique
+  role   Role          @default(user)
   orders ClientOrder[]
 
   @@map("profile")

@@ -40,3 +40,5 @@ data/*
 !data/materials.json
 !data/hardwares.json
 !data/products.json
+!data/seed.ts
+!data/seedProd.ts
