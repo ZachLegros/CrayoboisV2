@@ -12,12 +12,18 @@ export default function Cart() {
   return (
     <Button
       isIconOnly
-      className="flex items-center justify-center"
+      className="flex items-center justify-center overflow-visible"
       variant="light"
       aria-label="cart"
       onClick={() => router.push("/cart")}
     >
-      <Badge content={cart.length} color="primary" size="md" isInvisible={cart.length < 1}>
+      <Badge
+        content={cart.length}
+        color="primary"
+        size="sm"
+        isInvisible={cart.length < 1}
+        showOutline={false}
+      >
         <FaShoppingCart className="text-2xl" />
       </Badge>
     </Button>
