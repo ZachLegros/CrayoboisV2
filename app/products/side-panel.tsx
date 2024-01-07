@@ -22,7 +22,7 @@ export default function SidePanel() {
               size="md"
               variant="light"
               color="primary"
-              className={`font-bold ${
+              className={`font-semibold ${
                 priceFilter.enabled && !isDisabled ? "visible" : "invisible"
               }`}
               onClick={handleReset}

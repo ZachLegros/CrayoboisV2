@@ -33,7 +33,7 @@ export default function HardwareFilterPanel(props: { isDisabled?: boolean }) {
           size="md"
           variant="light"
           color="primary"
-          className={`font-bold ${
+          className={`font-semibold ${
             typeFilter.enabled || priceFilter.enabled ? "visible" : "invisible"
           }`}
           onClick={handleReset}

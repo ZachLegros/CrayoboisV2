@@ -36,7 +36,7 @@ export default function MaterialFilterPanel() {
           size="md"
           variant="light"
           color="primary"
-          className={`font-bold ${
+          className={`font-semibold ${
             typeFilter.enabled || originFilter.enabled || priceFilter.enabled
               ? "visible"
               : "invisible"
