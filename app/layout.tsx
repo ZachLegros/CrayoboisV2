@@ -29,7 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           >
             <Toaster richColors />
             <NavBar />
-            <div className="w-full p-6">{children}</div>
+            <div className="w-full h-full p-6">{children}</div>
             <footer className="w-full border-t border-t-foreground/10 p-8 flex justify-center text-center text-xs mt-auto">
               <p>
                 Powered by{" "}

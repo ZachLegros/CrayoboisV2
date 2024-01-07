@@ -47,8 +47,8 @@ export default function CartBreakdown() {
         </p>
         {shippingMethods.length > 0 ? (
           freeShipping ? (
-            <Chip color="success" size="sm">
-              <p className="font-semibold">Livraison gratuite</p>
+            <Chip color="secondary" size="sm">
+              <p>Livraison gratuite</p>
             </Chip>
           ) : (
             <RadioGroup
