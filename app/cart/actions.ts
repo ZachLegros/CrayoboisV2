@@ -22,11 +22,8 @@ export const syncCartWithComponents = async (cart: CartItemType<CartProductType>
           if (material && hardware) {
             const customProduct = customProductFactory(material, hardware);
             syncedCartWithComponents.push({
-              product: customProduct,
-              quantity: getClosestValidQuantity(
-                item.quantity,
-                customProductFactory(material, hardware)
-              ),
+              product: { ...customProduct, id: item.product.id },
+              quantity: getClosestValidQuantity(item.quantity, customProduct),
             });
           }
         } else {
@@ -62,7 +59,7 @@ export const syncCart = async (cart: CartItemType<CartProductType>[]) => {
           if (material && hardware) {
             const customProduct = customProductFactory(material, hardware);
             syncedCart.push({
-              product: customProduct,
+              product: { ...customProduct, id: item.product.id },
               quantity: getClosestValidQuantity(item.quantity, customProduct),
             });
           }
