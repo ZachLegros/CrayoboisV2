@@ -12,7 +12,7 @@ export default function Cart() {
   return (
     <Button
       isIconOnly
-      className="flex items-center justify-center overflow-visible"
+      className="flex items-center justify-center"
       variant="light"
       aria-label="cart"
       onClick={() => router.push("/cart")}
