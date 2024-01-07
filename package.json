@@ -10,7 +10,7 @@
     "prepare": "husky install"
   },
   "prisma": {
-    "seed": "bun run prisma/seed.ts"
+    "seed": "bun run data/seed.ts"
   },
   "dependencies": {
     "@nextui-org/react": "^2.2.9",
