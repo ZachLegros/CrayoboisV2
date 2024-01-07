@@ -3,14 +3,14 @@
 import { Button, Card, CardBody, Modal, ModalBody, ModalContent } from "@nextui-org/react";
 import { cad } from "@/utils/currencyFormatter";
 import ImageWithLoading from "./ImageWithLoading";
-import { NonNullabbleProduct } from "@/utils/customProductFactory";
 import { useCartStore } from "@/app/cart/store";
 import { useState } from "react";
 import { FaExpandAlt } from "react-icons/fa";
 import { Tooltip } from "@nextui-org/react";
 import { toast } from "sonner";
+import { Product } from "@prisma/client";
 
-export default function ProductCard(props: { product: NonNullabbleProduct; onClick: () => void }) {
+export default function ProductCard(props: { product: Product; onClick: () => void }) {
   const { product } = props;
   const { addToCart, isProductInCart } = useCartStore();
   const [isInCart, setIsInCart] = useState(isProductInCart(product));

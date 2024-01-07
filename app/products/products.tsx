@@ -2,7 +2,6 @@
 
 import ItemsGrid from "@/components/ItemsGrid";
 import ProductCard from "@/components/ProductCard";
-import { NonNullabbleProduct } from "@/utils/customProductFactory";
 import { Button } from "@nextui-org/react";
 import { Product } from "@prisma/client";
 import { useEffect, useMemo } from "react";
@@ -49,7 +48,7 @@ export default function ProductsGrid(props: { products: Product[] }) {
   return (
     <ItemsGrid className="md:grid-cols-2 lg:grid-cols-3">
       {filteredProducts.map((product) => (
-        <ProductCard key={product.id} product={product as NonNullabbleProduct} onClick={() => {}} />
+        <ProductCard key={product.id} product={product} onClick={() => {}} />
       ))}
     </ItemsGrid>
   );
