@@ -7,7 +7,7 @@ import Materials from "./materials";
 import { useCustomOrderStore } from "./store";
 import Hardwares from "./hardwares";
 import { useCartStore } from "../cart/store";
-import { customProductFactory } from "@/utils/customProductFactory";
+import { customProductFactory } from "@/utils/productUtils";
 import AddedToCart from "./added-to-cart";
 import { toast } from "sonner";
 
