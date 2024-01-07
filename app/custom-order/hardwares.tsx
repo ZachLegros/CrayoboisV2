@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import ItemsGrid from "@/components/ItemsGrid";
 import { useCustomOrderStore } from "./store";
 import HardwareCard from "@/components/HardwareCard";
@@ -27,6 +27,10 @@ export default function Hardwares(props: { onSelect: (hardware: Hardware) => voi
     }
 
     return mats;
+  }, [hardwares, typeFilter, priceFilter]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
   }, [hardwares, typeFilter, priceFilter]);
 
   if (filteredHardwares.length === 0) {

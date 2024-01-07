@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import ItemsGrid from "@/components/ItemsGrid";
 import MaterialCard from "@/components/MaterialCard";
 import { useCustomOrderStore } from "./store";
@@ -42,6 +42,10 @@ export default function Materials(props: { onSelect: (material: Material) => voi
       ))}
     </ItemsGrid>;
   }
+
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [materials, typeFilter, priceFilter, originFilter]);
 
   return (
     <ItemsGrid className="w-full">
