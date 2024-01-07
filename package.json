@@ -22,7 +22,6 @@
     "@types/fold-to-ascii": "^5.0.2",
     "autoprefixer": "10.4.15",
     "cssnano": "^6.0.2",
-    "deep-eql": "^5.0.1",
     "fold-to-ascii": "^5.0.1",
     "framer-motion": "^10.17.0",
     "geist": "^1.0.0",
