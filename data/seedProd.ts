@@ -37,13 +37,13 @@ try {
   const createOrderPromises: any[] = [];
 
   for (const orderData of orders) {
-    const { products, ...order } = orderData;
+    const { custom_products, ...order } = orderData;
     const createQuery = prisma.clientOrder.create({
       // @ts-ignore
       data: {
         ...order,
-        products: {
-          create: products,
+        custom_products: {
+          create: custom_products,
         },
       },
     });

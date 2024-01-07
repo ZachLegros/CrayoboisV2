@@ -37,7 +37,7 @@ try {
   const createOrderPromises: any[] = [];
 
   for (const orderData of orders) {
-    const { products, ...order } = orderData;
+    const { custom_products, ...order } = orderData;
     const createQuery = prisma.clientOrder.create({
       data: {
         ...order,
@@ -45,8 +45,8 @@ try {
         user_id: await prisma.profile
           .findFirst({ where: { email: order.payer_email } })
           .then((profile) => profile?.id),
-        products: {
-          create: products,
+        custom_products: {
+          create: custom_products,
         },
       },
     });
