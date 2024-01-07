@@ -2009,6 +2009,11 @@
   dependencies:
     bun-types "1.0.18"
 
+"@types/fold-to-ascii@^5.0.2":
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/@types/fold-to-ascii/-/fold-to-ascii-5.0.2.tgz#c0e2abfda64157c8b1b3f26f3424abba7a590821"
+  integrity sha512-5aD3uXARTpE87W75ZWQLGjiWoT65sFA28JCb3VEXB5O1w6mh2/ceVt6/mCV0vI36STPsCiXM4ZnRtQXvBOIa/A==
+
 "@types/json-schema@^7.0.12":
   version "7.0.15"
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.15.tgz#596a1747233694d50f6ad8a7869fcb6f56cf5841"
@@ -3287,6 +3292,11 @@ flatted@^3.2.9:
   version "3.2.9"
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-3.2.9.tgz#7eb4c67ca1ba34232ca9d2d93e9886e611ad7daf"
   integrity sha512-36yxDn5H7OFZQla0/jFJmbIKTdZAQHngCedGxiMmpNfEZM0sdEeT+WczLQrjK6D7o2aiyLYDnkw0R3JK0Qv1RQ==
+
+fold-to-ascii@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/fold-to-ascii/-/fold-to-ascii-5.0.1.tgz#d0b4f06e7b511e959bd502fa49e8e3678b9fc6cc"
+  integrity sha512-VdMFm+u7pSzUWj0IDOniuHekp4lbMOtwKi6EsVx03DGVQaNI+77kxotj8hYaMmNkpym7wwv6c1woY4OZXYdqfg==
 
 for-each@^0.3.3:
   version "0.3.3"
@@ -5072,14 +5082,14 @@ string.prototype.trimstart@^1.0.7:
     define-properties "^1.2.0"
     es-abstract "^1.22.1"
 
-"strip-ansi-cjs@npm:strip-ansi@^6.0.1":
+"strip-ansi-cjs@npm:strip-ansi@^6.0.1", strip-ansi@^6.0.0, strip-ansi@^6.0.1:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
   integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
   dependencies:
     ansi-regex "^5.0.1"
 
-strip-ansi@^6.0.0, strip-ansi@^6.0.1, strip-ansi@^7.0.1, strip-ansi@^7.1.0:
+strip-ansi@^7.0.1, strip-ansi@^7.1.0:
   version "7.1.0"
   resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-7.1.0.tgz#d5b6568ca689d8561370b0707685d22434faff45"
   integrity sha512-iq6eVVI64nQQTRYq2KtEg2d2uU7LElhTJwsH4YzIHZshxlgZms/wIc4VoDQTlG/IvVIrBKG06CrZnp0qv7hkcQ==
