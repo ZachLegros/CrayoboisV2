@@ -123,7 +123,7 @@ enum CheckoutSessionStatus {
 }
 
 model CheckoutSession {
-  id              String                @id
+  id              String                @id @unique
   status          CheckoutSessionStatus @default(ongoing)
   expires_at      DateTime              @default(now())
   products        Product[]
