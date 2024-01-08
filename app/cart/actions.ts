@@ -9,6 +9,24 @@ import prisma from "@/lib/prisma";
 import { Product } from "@prisma/client";
 import { CartItemType, CartProductType, isCartCustomProduct, isCartItemType } from "./store";
 
+const productIsInCheckout = async (productId: string): Promise<boolean> => {
+  const session = await prisma.checkoutSession.findFirst({
+    where: {
+      products: {
+        some: {
+          id: productId,
+          quantity: {
+            not: {
+              gt: 1,
+            },
+          },
+        },
+      },
+    },
+  });
+  return !!session;
+};
+
 export const syncCartWithComponents = async (cart: CartItemType<CartProductType>[]) => {
   try {
     const syncedCartWithComponents: CartItemType<Product | CustomProductWithComponents>[] = [];
@@ -30,7 +48,8 @@ export const syncCartWithComponents = async (cart: CartItemType<CartProductType>
           const product = await prisma.product.findUnique({
             where: { id: item.product.id, quantity: { gt: 0 } },
           });
-          if (product) {
+          const isInCheckout = await productIsInCheckout(item.product.id);
+          if (product && !isInCheckout) {
             syncedCartWithComponents.push({
               product,
               quantity: getClosestValidQuantity(item.quantity, product),
@@ -67,7 +86,8 @@ export const syncCart = async (cart: CartItemType<CartProductType>[]) => {
           const product = await prisma.product.findUnique({
             where: { id: item.product.id, quantity: { gt: 0 } },
           });
-          if (product) {
+          const isInCheckout = await productIsInCheckout(item.product.id);
+          if (product && !isInCheckout) {
             syncedCart.push({
               product,
               quantity: getClosestValidQuantity(item.quantity, product),
@@ -82,40 +102,6 @@ export const syncCart = async (cart: CartItemType<CartProductType>[]) => {
     return [];
   }
 };
-
-// export const fetchProducts = async (
-//   normalProductIdsFromLS: string[],
-//   customProductIdsFromLS: { material_id: string; hardware_id: string }[]
-// ): Promise<(Product | CustomProductWithComponents)[]> => {
-//   const [products, materials, hardwares] = await Promise.all([
-//     prisma.product.findMany({
-//       where: { id: { in: normalProductIdsFromLS }, quantity: { gt: 0 } },
-//     }),
-//     prisma.material.findMany({
-//       where: {
-//         id: { in: customProductIdsFromLS.map((item) => item.material_id) },
-//       },
-//     }),
-//     prisma.hardware.findMany({
-//       where: {
-//         id: { in: customProductIdsFromLS.map((item) => item.hardware_id) },
-//       },
-//     }),
-//   ]);
-
-//   // merge the custom products with the fetched corresponding materials and hardwares to form a CustomProduct type or discard the custom product if the corresponding material or hardware is not found
-//   const customProducts = customProductIdsFromLS
-//     .map((item) => {
-//       const material = materials.find((m) => m.id === item.material_id);
-//       const hardware = hardwares.find((h) => h.id === item.hardware_id);
-//       if (material && hardware) {
-//         return customProductFactory(material, hardware);
-//       }
-//     })
-//     .filter((item): item is CustomProductWithComponents => !!item);
-
-//   return [...products, ...customProducts];
-// };
 
 export const fetchShippingMethods = async () => {
   return await prisma.shipping.findMany();
