@@ -3,7 +3,7 @@
 import { cad } from "@/utils/currencyFormatter";
 import { useCartStore } from "./store";
 import { Button, Chip, Radio, RadioGroup, Skeleton } from "@nextui-org/react";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { fetchShippingMethods } from "./actions";
 import { useRouter } from "next/navigation";
 
@@ -22,6 +22,7 @@ export default function CartBreakdown() {
     isShippingFree,
   } = useCartStore();
   const router = useRouter();
+  const [isButtonLoading, setIsButtonLoading] = useState(false);
 
   useEffect(() => {
     async function getShipping() {
@@ -98,8 +99,12 @@ export default function CartBreakdown() {
         color="primary"
         size="lg"
         className="mt-2"
-        isDisabled={isLoading}
-        onClick={() => router.push("/checkout")}
+        isDisabled={isLoading || isButtonLoading}
+        onClick={() => {
+          setIsButtonLoading(true);
+          router.push("/checkout");
+        }}
+        isLoading={isButtonLoading}
       >
         Commander
       </Button>
