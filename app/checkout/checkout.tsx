@@ -18,7 +18,7 @@ export default function Checkout() {
   const sessionId = searchParams.get("session_id");
 
   useEffect(() => {
-    if (!cart.length && !sessionId && !clientSecret) {
+    if (cart.length > 0 && !sessionId && !clientSecret) {
       fetch("/api/checkout_sessions", {
         method: "POST",
         body: JSON.stringify(cart),
@@ -31,17 +31,16 @@ export default function Checkout() {
           } else {
             if (data.error === "cart_is_empty") {
               toast.error("Votre panier est vide.");
-              router.push("/cart");
             } else if (data.error === "cart_out_of_sync") {
               syncCart();
               toast.error("Un ou plusieurs produits de votre panier ne sont plus disponibles.");
-              router.push("/cart");
             } else {
               toast.error(
                 "Une erreur inattendu est survenue. Veuillez réessayer ou nous contacter."
               );
               console.log(data.error);
             }
+            router.push("/cart");
           }
         })
         .catch((err) => console.log(err));
