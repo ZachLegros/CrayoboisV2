@@ -5,10 +5,11 @@
     "build": "prisma generate && next build",
     "start": "next start",
     "generate": "prisma generate",
-    "migrate-dev": "dotenv -e .env.development.local -- prisma migrate dev && bun run lib/seedTriggers.ts",
-    "migrate-prod": "dotenv -e .env.production.local -- prisma migrate dev && bun run lib/seedTriggers.ts",
+    "migrate-dev": "dotenv -e .env.development.local -- prisma migrate dev && bun lib/seedTriggers.ts",
+    "migrate-prod": "dotenv -e .env.production.local -- prisma migrate dev && bun lib/seedTriggers.ts",
     "seed": "bun --env-file=.env.development.local data/seed.ts",
     "seed-prod": "bun --env-file=.env.production.local data/seedProd.ts",
+    "studio": "dotenv -e .env.development.local -- prisma studio",
     "lint": "next lint",
     "prepare": "husky install"
   },
