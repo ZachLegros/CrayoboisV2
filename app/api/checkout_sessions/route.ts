@@ -13,6 +13,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 export async function POST(req: Request) {
   try {
     const cart = (await req.json()) as CartItemType<CartProductType>[];
+    if (!Array.isArray(cart) || !cart.length) throw new Error("cart_is_empty");
     const syncedCart = await syncCartWithComponents(cart);
     const isCartInSync = cart.every((item) =>
       syncedCart.some(
@@ -22,7 +23,7 @@ export async function POST(req: Request) {
           getCartProductHardwareId(item.product) === getHardwareId(syncedItem.product)
       )
     );
-    if (!isCartInSync) throw new Error(`Cart is out of sync: ${JSON.stringify(cart)}`);
+    if (!isCartInSync) throw new Error("cart_out_of_sync");
 
     const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = syncedCart.map((item) => {
       return {
