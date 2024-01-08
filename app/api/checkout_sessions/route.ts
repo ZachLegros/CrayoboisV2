@@ -7,6 +7,7 @@ import {
 } from "@/app/cart/store";
 import { syncCartWithComponents } from "@/app/cart/actions";
 import { getHardwareId, getMaterialId } from "@/utils/productUtils";
+import { cookies } from "next/headers";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -25,6 +26,15 @@ export async function POST(req: Request) {
     );
     if (!isCartInSync) throw new Error("cart_out_of_sync");
 
+    const checkoutSid = cookies().get("checkout_sid")?.value;
+    if (checkoutSid) {
+      const session = await stripe.checkout.sessions.retrieve(checkoutSid);
+      if (session.payment_status === "paid") {
+        throw new Error("session_already_paid");
+      }
+      return new Response(JSON.stringify({ clientSecret: session.client_secret }), { status: 200 });
+    }
+
     const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = syncedCart.map((item) => {
       return {
         price_data: {
@@ -37,20 +47,33 @@ export async function POST(req: Request) {
         quantity: item.quantity,
       };
     });
-
-    // Create Checkout Sessions from body params.
     const session = await stripe.checkout.sessions.create({
       ui_mode: "embedded",
       payment_method_types: ["card"],
+      billing_address_collection: "required",
+      expires_at: Math.floor(Date.now() / 1000) + 30 * 60,
       line_items: lineItems,
       mode: "payment",
       return_url: `${req.headers.get("origin")}/checkout?session_id={CHECKOUT_SESSION_ID}`,
     });
-    console.log("New checkout session:", session.id);
     // TODO: Save session.id to database alongside order details
-    return new Response(JSON.stringify({ clientSecret: session.client_secret }));
+    console.log("New checkout session:", session.id);
+    const expires = new Date(Date.now() + 60 * 30 * 1000).toUTCString();
+    return new Response(JSON.stringify({ clientSecret: session.client_secret }), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "Set-Cookie": `checkout_sid=${session.id}; httpOnly=true; expires=${expires}`,
+      },
+    });
   } catch (err: any) {
-    return new Response(JSON.stringify({ error: err.message }), { status: err.statusCode || 500 });
+    return new Response(JSON.stringify({ error: err.message }), {
+      status: err.statusCode || 500,
+      headers: {
+        "Content-Type": "application/json",
+        "Set-Cookie": "checkout_sid=; httpOnly=true; expires=Thu, 01 Jan 1970 00:00:00 GMT",
+      },
+    });
   }
 }
 
