@@ -1,6 +1,6 @@
 import { Shipping } from "@prisma/client";
 import { create } from "zustand";
-import { syncCart } from "./actions";
+import { syncCart as syncCartAction } from "./actions";
 import { DbProduct, getHardwareId, getMaterialId } from "@/utils/productUtils";
 
 export type CartProduct = { id: string };
@@ -71,7 +71,30 @@ const isProductInCart = (product: CartProductType, cart: Cart) => {
   return cart.some((item) => item.product.id === product.id);
 };
 
+const syncCart = async (
+  cart: Cart,
+  set: (arg0: () => { cart: Cart; cartItemData: CartItemData }) => void
+) => {
+  const syncedCart = await syncCartAction(cart);
+  const newCart: Cart = syncedCart.map(({ product, quantity }) => ({
+    product: {
+      id: product.id,
+      material_id: getMaterialId(product),
+      hardware_id: getHardwareId(product),
+    },
+    quantity,
+  }));
+  const newCartItemData: CartItemData = syncedCart.reduce((acc, { product }) => {
+    acc[product.id as keyof CartItemData] = product;
+    return acc;
+  }, {} as CartItemData);
+  storeCartInLocalStorage(newCart);
+  storeCartItemDataInLocalStorage(newCartItemData);
+  set(() => ({ cart: newCart, cartItemData: newCartItemData }));
+};
+
 export type CartStore = {
+  syncCart: () => Promise<void>;
   cart: Cart;
   cartItemData: CartItemData;
   getItemData: (product: CartProductType) => DbProduct | undefined;
@@ -95,24 +118,8 @@ export type CartStore = {
 };
 
 export const useCartStore = create<CartStore>((set, state) => ({
-  cart: initializeCartFromLocalStorage(async (cart) => {
-    const syncedCart = await syncCart(cart);
-    const newCart: Cart = syncedCart.map(({ product, quantity }) => ({
-      product: {
-        id: product.id,
-        material_id: getMaterialId(product),
-        hardware_id: getHardwareId(product),
-      },
-      quantity,
-    }));
-    const newCartItemData: CartItemData = syncedCart.reduce((acc, { product }) => {
-      acc[product.id as keyof CartItemData] = product;
-      return acc;
-    }, {} as CartItemData);
-    storeCartInLocalStorage(newCart);
-    storeCartItemDataInLocalStorage(newCartItemData);
-    set(() => ({ cart: newCart, cartItemData: newCartItemData }));
-  }),
+  syncCart: () => syncCart(state().cart, set),
+  cart: initializeCartFromLocalStorage((cart) => syncCart(cart, set)),
   cartItemData: initializeCartItemDataFromLocalStorage(),
   getItemData: (product) => state().cartItemData[product.id],
   addToCart: (product) => {
