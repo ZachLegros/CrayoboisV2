@@ -29,7 +29,12 @@ export default function Checkout() {
             <EmbeddedCheckout className="rounded-lg overflow-hidden" />
           </EmbeddedCheckoutProvider>
         ) : (
-          <Spinner size="lg" />
+          <div className="flex flex-col w-full h-full justify-center items-center gap-4">
+            <p className="text-2xl font-semibold text-center">
+              Création d'une session de paiement sécurisée...
+            </p>
+            <Spinner size="lg" />
+          </div>
         )}
       </CardBody>
     </Card>
