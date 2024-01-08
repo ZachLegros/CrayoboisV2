@@ -125,6 +125,7 @@ enum CheckoutSessionStatus {
 model CheckoutSession {
   id              String                @id
   status          CheckoutSessionStatus @default(ongoing)
+  expires_at      DateTime              @default(now())
   products        Product[]
   custom_products CustomProduct[]
 
