@@ -12,6 +12,13 @@ export const config = {
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
+async function setCheckoutSessionCompleted(checkoutSid: string) {
+  return prisma.checkoutSession.update({
+    where: { sid: checkoutSid },
+    data: { status: "completed" },
+  });
+}
+
 async function createOrder(event: Stripe.CheckoutSessionCompletedEvent) {
   try {
     const customerDetails = event.data.object.customer_details;
@@ -66,8 +73,9 @@ async function createOrder(event: Stripe.CheckoutSessionCompletedEvent) {
 
 async function handleSuccess(event: Stripe.CheckoutSessionCompletedEvent) {
   const checkoutSessionId = event.id;
-  console.log("Checkout session succeed:", checkoutSessionId);
-  return await createOrder(event);
+  console.log("Checkout session completed:", checkoutSessionId);
+  await createOrder(event);
+  return await setCheckoutSessionCompleted(checkoutSessionId);
 }
 
 async function handleExpire(event: Stripe.Event) {
