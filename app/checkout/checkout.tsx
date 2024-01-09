@@ -13,10 +13,10 @@ import { FaExclamationCircle } from "react-icons/fa";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
-const destroyCheckoutSession = async () => {
+const destroyCheckoutSession = async (sessionIdSearchParam?: string) => {
   // Destroy checkout session
   const storedSessionId = localStorage.getItem("checkout_session_id");
-  if (storedSessionId) {
+  if (sessionIdSearchParam === undefined && storedSessionId) {
     fetch(`/api/checkout_sessions?session_id=${storedSessionId}`, {
       method: "DELETE",
     }).then(() => localStorage.removeItem("checkout_session_id"));
@@ -45,7 +45,7 @@ export default function Checkout(props: { sessionId?: string }) {
     };
 
     // Clean up last checkout session if any
-    destroyCheckoutSession();
+    destroyCheckoutSession(sessionId);
 
     const fetchCheckoutSessions = async () => {
       try {
