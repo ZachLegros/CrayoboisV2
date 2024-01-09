@@ -7,63 +7,114 @@ import { Card, CardBody, Spinner } from "@nextui-org/react";
 import { useCartStore } from "../cart/store";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
+import { FaCircleCheck } from "react-icons/fa6";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+
+const destroyCheckoutSession = async () => {
+  // Destroy checkout session
+  const storedSessionId = localStorage.getItem("checkout_session_id");
+  if (storedSessionId) {
+    fetch(`/api/checkout_sessions?session_id=${storedSessionId}`, {
+      method: "DELETE",
+    }).then(() => localStorage.removeItem("checkout_session_id"));
+  }
+};
 
 export default function Checkout() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { cart, syncCart } = useCartStore();
+  const { cart, syncCart, shippingMethod, clearCart } = useCartStore();
   const [clientSecret, setClientSecret] = useState("");
+  const [success, setSuccess] = useState(false);
   const sessionId = searchParams.get("session_id");
 
   useEffect(() => {
-    if (cart.length > 0 && !sessionId && !clientSecret) {
-      fetch("/api/checkout_sessions", {
-        method: "POST",
-        body: JSON.stringify(cart),
-        credentials: "same-origin",
-      })
-        .then(async (res) => {
+    const handleErrors = (data: { error: string }) => {
+      if (data.error === "cart_is_empty") {
+        toast.error("Votre panier est vide.");
+      } else if (data.error === "cart_out_of_sync") {
+        syncCart();
+        toast.error("Un ou plusieurs produits de votre panier ne sont plus disponibles.");
+      } else {
+        toast.error("Une erreur inattendu est survenue. Veuillez réessayer ou nous contacter.");
+        console.log(data.error);
+      }
+    };
+
+    // Clean up last checkout session if any
+    destroyCheckoutSession();
+
+    const fetchCheckoutSessions = async () => {
+      try {
+        if (cart.length > 0 && shippingMethod && !sessionId && !clientSecret) {
+          const res = await fetch("/api/checkout_sessions", {
+            method: "POST",
+            body: JSON.stringify({ cart, shippingId: shippingMethod.id }),
+            credentials: "same-origin",
+          });
+
           const data = await res.json();
+
           if (res.status === 200) {
             setClientSecret(data.clientSecret);
+            localStorage.setItem("checkout_session_id", data.sessionId);
           } else {
-            if (data.error === "cart_is_empty") {
-              toast.error("Votre panier est vide.");
-            } else if (data.error === "cart_out_of_sync") {
-              syncCart();
-              toast.error("Un ou plusieurs produits de votre panier ne sont plus disponibles.");
-            } else {
-              toast.error(
-                "Une erreur inattendu est survenue. Veuillez réessayer ou nous contacter."
-              );
-              console.log(data.error);
-            }
+            handleErrors(data);
             router.push("/cart");
           }
-        })
-        .catch((err) => console.log(err));
-    } else if (sessionId) {
-      fetch(`/api/checkout_sessions?session_id=${sessionId}`, {
-        method: "GET",
-      }).then(async (res) => {
-        const data = await res.json();
-        console.log(data);
-      });
-    } else if (cart.length === 0) {
-      router.push("/cart");
-    }
+        } else if (sessionId) {
+          const res = await fetch(`/api/checkout_sessions?session_id=${sessionId}`, {
+            method: "GET",
+          });
+
+          const data = await res.json();
+
+          if (data.status === "complete") {
+            clearCart();
+            setSuccess(true);
+          }
+
+          console.log(data);
+        } else {
+          router.push("/cart");
+        }
+      } catch (err) {
+        toast.error(
+          "Une erreur inattendu est survenue. Veuillez réessayer et nous contacter si le problème persiste."
+        );
+        console.log(err);
+        router.push("/cart");
+      }
+    };
+
+    fetchCheckoutSessions();
+
+    return () => {
+      destroyCheckoutSession();
+    };
   }, []);
 
   return (
     <Card id="checkout" className="animate-in max-w-screen-sm mx-auto relative">
       <CardBody className={clientSecret ? "h-auto" : "flex justify-center items-center h-[650px]"}>
         {sessionId ? (
-          <></>
+          success ? (
+            <div className="animate-in flex flex-col w-full h-full justify-center items-center gap-2 p-4">
+              <p className="text-xl md:text-2xl font-semibold text-center">
+                Merci de supporter Crayobois!
+              </p>
+              <p className="text-lg md:text-xl text-foreground/60 font-semibold text-center">
+                Vous recevrez un email de confirmation à l'adresse fournie.
+              </p>
+              <FaCircleCheck className="text-6xl text-green-500 mt-4" />
+            </div>
+          ) : (
+            <Spinner size="lg" />
+          )
         ) : clientSecret ? (
           <EmbeddedCheckoutProvider stripe={stripePromise} options={{ clientSecret }}>
-            <EmbeddedCheckout className="rounded-lg overflow-hidden" />
+            <EmbeddedCheckout className="animate-in rounded-lg overflow-hidden" />
           </EmbeddedCheckoutProvider>
         ) : (
           <div className="flex flex-col w-full h-full justify-center items-center gap-4">
