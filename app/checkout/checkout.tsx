@@ -92,7 +92,7 @@ export default function Checkout(props: { sessionId?: string }) {
     fetchCheckoutSessions();
 
     return () => {
-      destroyCheckoutSession();
+      destroyCheckoutSession(sessionId);
     };
   }, []);
 
