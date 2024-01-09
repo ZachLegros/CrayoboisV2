@@ -42,10 +42,14 @@ try {
 
   for (const orderData of orders) {
     const { custom_products, ...order } = orderData;
+    const { email, ...orderWithoutEmail } = order;
     const createQuery = prisma.clientOrder.create({
       // @ts-ignore
       data: {
-        ...order,
+        ...orderWithoutEmail,
+        user_id: await prisma.profile
+          .findFirst({ where: { email } })
+          .then((profile) => profile?.id),
         custom_products: {
           create: custom_products,
         },
