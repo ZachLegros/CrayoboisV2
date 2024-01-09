@@ -9,7 +9,7 @@ const sql = postgres(dbUrl);
 
 console.log(`Adding triggers and functions to ${process.env.PROJECT_ID}...`);
 
-async function main() {
+async function createUserTriggers() {
   await sql`
     create or replace function public.handle_new_user()
     returns trigger as $$
@@ -26,7 +26,9 @@ async function main() {
       after insert on auth.users
       for each row execute procedure public.handle_new_user();
   `;
+}
 
+async function deleteUserTriggers() {
   await sql`
     create or replace function public.handle_user_delete()
     returns trigger as $$
@@ -42,17 +44,18 @@ async function main() {
       after delete on public.profile
       for each row execute procedure public.handle_user_delete()
   `;
+}
 
+async function productAvailabilityTriggers() {
   await sql`
-    create or replace function prevent_duplicate_products()
+    create or replace function check_product_availability()
     returns trigger as $$
+    declare
+      available_quantity integer;
     begin
-      if exists (
-        (select "A", "B", quantity from "_CheckoutSessionToProduct" cs
-        join product p1 on p1.id = cs."B"
-        where "A" <> NEW.id
-        and quantity <= 1)
-      ) then
+      select quantity into available_quantity from "product" p1
+      where p1.id = NEW."productId";
+      if NEW.quantity > available_quantity then
         raise exception 'Checkout session violates product quantity constraint';
       else
         return NEW;
@@ -62,43 +65,65 @@ async function main() {
   `;
 
   await sql`
-    create or replace trigger prevent_duplicate_products_trigger
-      after update or insert on "checkoutSession"
+    create or replace trigger check_product_availability_trigger
+      before update or insert on "cartItem"
       for each row
-      execute function prevent_duplicate_products();
+      execute function check_product_availability();
   `;
+}
 
+async function productQuantityTriggers() {
   await sql`
-    create or replace function prevent_product_update_in_checkout()
+    create or replace function decrement_product_quantity_in_checkout()
     returns trigger as $$
-    begin
-      if exists (
-        (select "A", "B" from "_CheckoutSessionToProduct" cs
-        where "B" = NEW.id)
-      ) then
-        raise exception 'Cannot update product in checkout session';
-      else
+      begin
+        update "product" p1 set quantity = p1.quantity - NEW.quantity
+        where p1.id = NEW."productId";
         return NEW;
-      end if;
-    end;
+      end;
     $$ language plpgsql;
   `;
 
   await sql`
-    create or replace trigger prevent_product_update_in_checkout_trigger
-      after update on "product"
+    create or replace trigger decrement_product_quantity_in_checkout_trigger
+      after update or insert on "cartItem"
       for each row
-      execute function prevent_product_update_in_checkout();
+      execute function decrement_product_quantity_in_checkout();
   `;
 
+  await sql`
+    create or replace function increment_product_quantity_in_checkout()
+    returns trigger as $$
+      begin
+        update "product" p1
+        set quantity = p1.quantity + x.item_quantity
+        from (
+          select item.quantity as item_quantity, p1.id as product_id
+          from "cartItem" item join "product" p1 on item."productId" = p1.id
+          where "checkoutSessionId" = OLD.id
+        ) as x
+        where p1.id = x.product_id;
+        return OLD;
+      end;
+    $$ language plpgsql;
+  `;
+
+  await sql`
+    create or replace trigger increment_product_quantity_in_checkout_trigger
+      before delete on "checkoutSession"
+      for each row
+      execute function increment_product_quantity_in_checkout();
+  `;
+}
+
+async function productDeleteTriggers() {
   await sql`
     create or replace function prevent_product_delete_in_checkout()
     returns trigger as $$
     begin
       if exists (
-        (select "A", "B" from "_CheckoutSessionToProduct" cs
-        where "B" = OLD.id)
-        ) then
+        select "productId" from "cartItem" where "cartItem"."productId" = OLD.id
+      ) then
         raise exception 'Cannot delete product in checkout session';
       else
         return OLD;
@@ -109,32 +134,38 @@ async function main() {
 
   await sql`
     create or replace trigger prevent_product_delete_in_checkout_trigger
-      after delete on "product"
+      before delete on "product"
       for each row
       execute function prevent_product_delete_in_checkout();
   `;
+}
 
+async function deleteCustomProductTriggers() {
   await sql`
-    create or replace function calculate_total_price_of_custom_product()
+    create or replace function delete_custom_product()
     returns trigger as $$
-    declare
-      cp_price numeric;
     begin
-      select sum(mat.price) + sum(hw.price) into cp_price from 
-      "customProduct" cp join "material" mat on cp.material_id = mat.id join "hardware" hw on cp.hardware_id = hw.id
-      where cp.id = NEW.id;
-      NEW.price := cp_price;
+      delete from "customProduct" where id = OLD."customProductId";
       return NEW;
     end;
     $$ language plpgsql;
   `;
 
   await sql`
-    create or replace trigger calculate_total_price_of_custom_product_trigger
-      before insert or update on "customProduct"
+    create or replace trigger delete_custom_product_trigger
+      after delete on "cartCustomItem"
       for each row
-      execute function calculate_total_price_of_custom_product();
+      execute function delete_custom_product();
   `;
+}
+
+async function main() {
+  await createUserTriggers();
+  await deleteUserTriggers();
+  await productAvailabilityTriggers();
+  await productQuantityTriggers();
+  await productDeleteTriggers();
+  await deleteCustomProductTriggers();
 
   console.log("Finished adding triggers and functions.");
   process.exit();
