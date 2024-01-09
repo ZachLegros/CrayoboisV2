@@ -9,24 +9,6 @@ import prisma from "@/lib/prisma";
 import { Product } from "@prisma/client";
 import { CartItemType, CartProductType, isCartCustomProduct, isCartItemType } from "./store";
 
-const productIsInCheckout = async (productId: string): Promise<boolean> => {
-  const session = await prisma.checkoutSession.findFirst({
-    where: {
-      products: {
-        some: {
-          id: productId,
-          quantity: {
-            not: {
-              gt: 1,
-            },
-          },
-        },
-      },
-    },
-  });
-  return !!session;
-};
-
 export const syncCartWithComponents = async (cart: CartItemType<CartProductType>[]) => {
   try {
     const syncedCartWithComponents: CartItemType<Product | CustomProductWithComponents>[] = [];
@@ -48,8 +30,7 @@ export const syncCartWithComponents = async (cart: CartItemType<CartProductType>
           const product = await prisma.product.findUnique({
             where: { id: item.product.id, quantity: { gt: 0 } },
           });
-          const isInCheckout = await productIsInCheckout(item.product.id);
-          if (product && !isInCheckout) {
+          if (product) {
             syncedCartWithComponents.push({
               product,
               quantity: getClosestValidQuantity(item.quantity, product),
@@ -86,8 +67,7 @@ export const syncCart = async (cart: CartItemType<CartProductType>[]) => {
           const product = await prisma.product.findUnique({
             where: { id: item.product.id, quantity: { gt: 0 } },
           });
-          const isInCheckout = await productIsInCheckout(item.product.id);
-          if (product && !isInCheckout) {
+          if (product) {
             syncedCart.push({
               product,
               quantity: getClosestValidQuantity(item.quantity, product),
