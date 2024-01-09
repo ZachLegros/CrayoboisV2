@@ -30,6 +30,10 @@ try {
         name: "Avec suivi du colis",
         price: 12.31,
       },
+      {
+        name: "Gratuit",
+        price: 0.0,
+      },
     ],
   });
   console.log({ shipping });
@@ -46,7 +50,18 @@ try {
           .findFirst({ where: { email: order.payer_email } })
           .then((profile) => profile?.id),
         custom_products: {
-          create: custom_products,
+          create: custom_products.map((custom_product) => ({
+            id: custom_product.id,
+            name: custom_product.name,
+            quantity: custom_product.quantity,
+            price: custom_product.price,
+            material: {
+              connect: { id: custom_product.material_id },
+            },
+            hardware: {
+              connect: { id: custom_product.hardware_id },
+            },
+          })),
         },
       },
     });
