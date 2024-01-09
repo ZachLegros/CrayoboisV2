@@ -66,6 +66,5 @@ export const customProductFactory = (
     hardware_id: hardware.id,
     hardware,
     clientOrderId: null,
-    checkoutSessionId: null,
   };
 };
