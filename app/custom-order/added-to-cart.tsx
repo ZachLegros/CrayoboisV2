@@ -25,7 +25,7 @@ export default function AddedToCart() {
           panier
         </Link>
       </p>
-      <Button color="primary" className="mt-8 font-semibold" size="lg" onClick={() => reset()}>
+      <Button color="primary" className="mt-8 font-semibold" size="md" onClick={() => reset()}>
         Créer un autre produit
       </Button>
     </div>
