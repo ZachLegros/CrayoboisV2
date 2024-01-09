@@ -3,12 +3,6 @@ import prisma from "@/lib/prisma";
 import { deleteCheckoutSessionInDB } from "../checkout_sessions/route";
 import { orZero } from "../utils";
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
