@@ -4,6 +4,7 @@ import "./globals.css";
 import { twMerge } from "tailwind-merge";
 import NavBar from "@/components/NavBar";
 import { Toaster } from "sonner";
+import { Suspense } from "react";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -28,7 +29,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             )}
           >
             <Toaster richColors />
-            <NavBar />
+            <Suspense>
+              <NavBar />
+            </Suspense>
             <div className="w-full h-full p-6">{children}</div>
             <footer className="w-full border-t border-t-foreground/10 p-8 flex justify-center text-center text-xs mt-auto">
               <p>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { Navbar, NavbarContent, NavbarItem, NavbarMenu, NavbarMenuToggle } from "@nextui-org/react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
@@ -67,7 +67,9 @@ export default function NavBar() {
       </NavbarContent>
       <NavbarContent justify="end">
         <NavbarItem>
-          <AuthButton />
+          <Suspense>
+            <AuthButton />
+          </Suspense>
         </NavbarItem>
       </NavbarContent>
       <NavbarMenu>
