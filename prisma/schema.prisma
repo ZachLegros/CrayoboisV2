@@ -52,33 +52,30 @@ model Hardware {
 }
 
 model Product {
-  id              String            @id @default(uuid()) @db.Uuid
-  name            String
-  price           Float
-  quantity        Int               @default(1)
-  image           String
-  description     String?
-  orders          ClientOrder[]
-  CheckoutSession CheckoutSession[]
-  CartItem        CartItem[]
+  id          String        @id @default(uuid()) @db.Uuid
+  name        String
+  price       Float
+  quantity    Int           @default(1)
+  image       String
+  description String?
+  orders      ClientOrder[]
+  CartItem    CartItem[]
 
   @@map("product")
 }
 
 model CustomProduct {
-  id                String           @id @default(uuid()) @db.Uuid
-  name              String
-  price             Float
-  quantity          Int              @default(1)
-  material_id       String           @db.Uuid
-  hardware_id       String           @db.Uuid
-  material          Material         @relation(fields: [material_id], references: [id])
-  hardware          Hardware         @relation(fields: [hardware_id], references: [id])
-  order             ClientOrder?     @relation(fields: [clientOrderId], references: [id])
-  clientOrderId     String?          @db.Uuid
-  CheckoutSession   CheckoutSession? @relation(fields: [checkoutSessionId], references: [id], onDelete: Cascade)
-  checkoutSessionId String?          @db.Uuid
-  CartCustomItem    CartCustomItem[]
+  id             String          @id @default(uuid()) @db.Uuid
+  name           String
+  price          Float
+  quantity       Int             @default(1)
+  material_id    String          @db.Uuid
+  hardware_id    String          @db.Uuid
+  material       Material        @relation(fields: [material_id], references: [id])
+  hardware       Hardware        @relation(fields: [hardware_id], references: [id])
+  order          ClientOrder?    @relation(fields: [clientOrderId], references: [id])
+  clientOrderId  String?         @db.Uuid
+  cartCustomItem CartCustomItem?
 
   @@map("customProduct")
 }
@@ -135,7 +132,7 @@ model CartCustomItem {
   id                String          @id @default(uuid()) @db.Uuid
   quantity          Int             @default(1)
   customProduct     CustomProduct   @relation(fields: [customProductId], references: [id], onDelete: Cascade)
-  customProductId   String          @db.Uuid
+  customProductId   String          @unique @db.Uuid
   CheckoutSession   CheckoutSession @relation(fields: [checkoutSessionId], references: [id], onDelete: Cascade)
   checkoutSessionId String          @db.Uuid
 
@@ -148,16 +145,14 @@ enum CheckoutSessionStatus {
 }
 
 model CheckoutSession {
-  id            String                @id @default(uuid()) @db.Uuid
-  sid           String                @unique
-  status        CheckoutSessionStatus @default(ongoing)
-  expires_at    DateTime              @default(now())
-  shipping_id   String                @db.Uuid
-  shipping      Shipping              @relation(fields: [shipping_id], references: [id])
-  items         CartItem[]
-  custom_items  CartCustomItem[]
-  Product       Product[]
-  CustomProduct CustomProduct[]
+  id           String                @id @default(uuid()) @db.Uuid
+  sid          String                @unique
+  status       CheckoutSessionStatus @default(ongoing)
+  expires_at   DateTime              @default(now())
+  shipping_id  String                @db.Uuid
+  shipping     Shipping              @relation(fields: [shipping_id], references: [id])
+  items        CartItem[]
+  custom_items CartCustomItem[]
 
   @@map("checkoutSession")
 }
