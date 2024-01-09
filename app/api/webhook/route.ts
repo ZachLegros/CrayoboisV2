@@ -3,6 +3,12 @@ import prisma from "@/lib/prisma";
 import { deleteCheckoutSessionInDB } from "../checkout_sessions/route";
 import { orZero } from "../utils";
 
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
@@ -75,10 +81,9 @@ export async function POST(req: Request) {
 
   if (!sig) throw new Error("Missing stripe-signature");
 
-  const data = await req.json();
   let event: Stripe.Event;
-
   try {
+    const data = await req.text();
     event = stripe.webhooks.constructEvent(data, sig, endpointSecret);
   } catch (err: any) {
     return new Response(JSON.stringify({ error: `Webhook Error: ${err.message}` }), {
