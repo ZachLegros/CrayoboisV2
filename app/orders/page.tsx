@@ -12,12 +12,8 @@ export default async function OrdersPage() {
       user_id: data.user?.id,
     },
     include: {
-      products: {
-        include: {
-          hardware: true,
-          material: true,
-        },
-      },
+      products: true,
+      custom_products: true,
     },
   });
 
