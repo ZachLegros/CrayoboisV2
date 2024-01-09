@@ -2,13 +2,13 @@
 
 import { useRouter } from "next/navigation";
 import { Button } from "@nextui-org/react";
-import { useUser } from "@/app/user-provider";
+import { useUserStore } from "@/app/user-store";
 import { useCartStore } from "@/app/cart/store";
 import Cart from "./Cart";
 
 export default function AuthButton() {
   const router = useRouter();
-  const { user, signOut } = useUser();
+  const { user, signOut } = useUserStore();
   const { clearCart } = useCartStore();
 
   const handleLogin = () => {

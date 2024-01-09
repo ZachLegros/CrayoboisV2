@@ -3,7 +3,7 @@ import { useState } from "react";
 import { sendOtp, verifyOtp } from "./actions";
 import { useRouter } from "next/navigation";
 import { Button, Card, CardBody, CardFooter, Input } from "@nextui-org/react";
-import { useUser } from "../user-provider";
+import { useUserStore } from "../user-store";
 
 const validateEmail = (email: string) => {
   return String(email)
@@ -19,7 +19,7 @@ const validateOtp = (otp: string) => {
 
 export default function LoginForm() {
   const router = useRouter();
-  const { getCurrentUser } = useUser();
+  const { getCurrentUser } = useUserStore();
   const [isLoading, setIsLoading] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
   const [email, setEmail] = useState("");
