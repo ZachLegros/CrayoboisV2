@@ -30,6 +30,10 @@ try {
         name: "Avec suivi du colis",
         price: 12.31,
       },
+      {
+        name: "Gratuit",
+        price: 0.0,
+      },
     ],
   });
   console.log({ shipping });
