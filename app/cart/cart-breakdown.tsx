@@ -34,7 +34,11 @@ export default function CartBreakdown() {
   }, []);
 
   const freeShipping = useMemo(() => {
-    return isShippingFree();
+    if (isShippingFree()) {
+      setShippingMethod(shippingMethods.filter((method) => method.price === 0)[0].id);
+      return true;
+    }
+    return false;
   }, [cart]);
 
   const isLoading = useMemo(() => {
@@ -46,8 +50,10 @@ export default function CartBreakdown() {
       <div className="flex flex-col gap-2 mb-2">
         <p>Méthode de livraison</p>
         <p className="text-gray-400">
-          La livraison est gratuite pour toutes commandes excédant une valeur de 150 $ ou l'achat de
-          4 stylos et plus.
+          {`La livraison est gratuite pour toutes commandes ayant un sous-total ${cad(
+            150
+          )} et plus ou
+          l'achat d'au moins 4 produits.`}
         </p>
         {shippingMethods.length > 0 ? (
           freeShipping ? (
@@ -60,11 +66,13 @@ export default function CartBreakdown() {
               size="md"
               onValueChange={(id: string) => setShippingMethod(id)}
             >
-              {shippingMethods.map((method, index) => (
-                <Radio value={`${method.id}`} key={index}>
-                  {method.name} ({cad(method.price)})
-                </Radio>
-              ))}
+              {shippingMethods
+                .filter((method) => method.price !== 0)
+                .map((method, index) => (
+                  <Radio value={`${method.id}`} key={index}>
+                    {method.name} ({cad(method.price)})
+                  </Radio>
+                ))}
             </RadioGroup>
           )
         ) : (
