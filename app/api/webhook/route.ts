@@ -35,7 +35,7 @@ async function createOrder(event: Stripe.CheckoutSessionCompletedEvent) {
     const { items, custom_items, shipping_id } = checkoutSession;
     const shipping = await prisma.shipping.findUnique({ where: { id: shipping_id } });
     const eventAmount = orZero(event.data.object.amount_total) / 100;
-    const totalTax = orZero(0.05 * eventAmount) - orZero(0.09975 * eventAmount);
+    const totalTax = orZero(0.05 * eventAmount) + orZero(0.09975 * eventAmount);
     const totalShipping = orZero(shipping?.price);
     const totalAmount = orZero(eventAmount) - totalShipping - totalTax;
     const order = await prisma.clientOrder.create({
