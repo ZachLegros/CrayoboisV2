@@ -28,7 +28,7 @@ async function createOrder(event: Stripe.CheckoutSessionCompletedEvent) {
       throw new Error("Missing customer details");
 
     const checkoutSession = await prisma.checkoutSession.findUnique({
-      where: { sid: event.id },
+      where: { sid: event.data.object.id },
       include: { items: true, custom_items: true },
     });
     if (!checkoutSession) throw new Error("Checkout session not found");
@@ -66,14 +66,14 @@ async function createOrder(event: Stripe.CheckoutSessionCompletedEvent) {
 }
 
 async function handleSuccess(event: Stripe.CheckoutSessionCompletedEvent) {
-  const checkoutSessionId = event.id;
+  const checkoutSessionId = event.data.object.id;
   console.log("Checkout session completed:", checkoutSessionId);
   await createOrder(event);
   return await setCheckoutSessionCompleted(checkoutSessionId);
 }
 
-async function handleExpire(event: Stripe.Event) {
-  const checkoutSid = event.id;
+async function handleExpire(event: Stripe.CheckoutSessionExpiredEvent) {
+  const checkoutSid = event.data.object.id;
   console.log("Checkout session expired:", checkoutSid);
   return await deleteCheckoutSessionInDB(checkoutSid);
 }
