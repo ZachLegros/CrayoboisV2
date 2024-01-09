@@ -159,6 +159,27 @@ async function deleteCustomProductTriggers() {
   `;
 }
 
+async function preventDeleteCompletedCheckoutSessions() {
+  await sql`
+    create or replace function prevent_delete_completed_checkout_sessions()
+    returns trigger as $$
+    begin
+      if (OLD.status = 'completed') then
+        raise exception 'Cannot delete completed checkout session';
+      end if;
+      return OLD;
+    end;
+    $$ language plpgsql;
+  `;
+
+  await sql`
+    create or replace trigger prevent_delete_completed_checkout_sessions_trigger
+      before delete on "checkoutSession"
+      for each row
+      execute function prevent_delete_completed_checkout_sessions();
+  `;
+}
+
 async function main() {
   await createUserTriggers();
   await deleteUserTriggers();
@@ -166,6 +187,7 @@ async function main() {
   await productQuantityTriggers();
   await productDeleteTriggers();
   await deleteCustomProductTriggers();
+  await preventDeleteCompletedCheckoutSessions();
 
   console.log("Finished adding triggers and functions.");
   process.exit();
