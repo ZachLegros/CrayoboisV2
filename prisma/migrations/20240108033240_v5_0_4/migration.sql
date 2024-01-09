@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "checkoutSession" ADD COLUMN     "expires_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP;
