@@ -5,7 +5,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
 import { Card, CardBody, Spinner } from "@nextui-org/react";
 import { useCartStore } from "../cart/store";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { FaCircleCheck } from "react-icons/fa6";
 
@@ -21,13 +21,12 @@ const destroyCheckoutSession = async () => {
   }
 };
 
-export default function Checkout() {
+export default function Checkout(props: { sessionId?: string }) {
+  const { sessionId } = props;
   const router = useRouter();
-  const searchParams = useSearchParams();
   const { cart, syncCart, shippingMethod, clearCart } = useCartStore();
   const [clientSecret, setClientSecret] = useState("");
   const [success, setSuccess] = useState(false);
-  const sessionId = searchParams.get("session_id");
 
   useEffect(() => {
     const handleErrors = (data: { error: string }) => {

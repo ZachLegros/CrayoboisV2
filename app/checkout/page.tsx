@@ -1,10 +1,13 @@
 import { Suspense } from "react";
 import Checkout from "./checkout";
 
-export default function CheckoutPage() {
+export default function CheckoutPage(props: { searchParams?: { session_id?: string } }) {
+  const { searchParams } = props;
+  const sessionId = searchParams?.session_id;
+
   return (
     <Suspense>
-      <Checkout />
+      <Checkout sessionId={sessionId} />
     </Suspense>
   );
 }
