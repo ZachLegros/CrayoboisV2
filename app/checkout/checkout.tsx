@@ -3,11 +3,13 @@
 import { useEffect, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
-import { Card, CardBody, Spinner } from "@nextui-org/react";
-import { useCartStore } from "../cart/store";
+import { Card, CardBody, Link, Spinner } from "@nextui-org/react";
+import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useCartStore } from "../cart/store";
 import { FaCircleCheck } from "react-icons/fa6";
+import { FaExclamationCircle } from "react-icons/fa";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
@@ -27,6 +29,7 @@ export default function Checkout(props: { sessionId?: string }) {
   const { cart, syncCart, shippingMethod, clearCart } = useCartStore();
   const [clientSecret, setClientSecret] = useState("");
   const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     const handleErrors = (data: { error: string }) => {
@@ -66,14 +69,13 @@ export default function Checkout(props: { sessionId?: string }) {
           const res = await fetch(`/api/checkout_sessions?session_id=${sessionId}`, {
             method: "GET",
           });
-
           const data = await res.json();
-
           if (data.status === "complete") {
             clearCart();
             setSuccess(true);
+          } else {
+            setError(true);
           }
-
           console.log(data);
         } else {
           router.push("/cart");
@@ -107,6 +109,26 @@ export default function Checkout(props: { sessionId?: string }) {
                 Vous recevrez un email de confirmation à l'adresse fournie.
               </p>
               <FaCircleCheck className="text-6xl text-green-500 mt-4" />
+            </div>
+          ) : error ? (
+            <div className="animate-in flex flex-col w-full h-full justify-center items-center gap-2 p-4">
+              <p className="text-xl md:text-2xl font-semibold text-center">
+                Une erreur est survenue.
+              </p>
+              <p className="text-lg md:text-xl text-foreground/60 font-semibold text-center">
+                Veuillez réessayer ou nous{" "}
+                <Link
+                  as={NextLink}
+                  href="/contact"
+                  color="primary"
+                  className="text-lg md:text-xl font-semibold"
+                  underline="hover"
+                >
+                  contacter
+                </Link>{" "}
+                afin de nous faire part du problème rencontré.
+              </p>
+              <FaExclamationCircle className="text-6xl text-primary mt-4" />
             </div>
           ) : (
             <Spinner size="lg" />
