@@ -1,7 +1,7 @@
-import { Button, Link } from "@nextui-org/react";
 import NextLink from "next/link";
 import { useCustomOrderStore } from "./store";
 import { useEffect } from "react";
+import { Button } from "@/components/ui/button";
 
 export default function AddedToCart() {
   const { reset } = useCustomOrderStore();
@@ -14,18 +14,11 @@ export default function AddedToCart() {
     <div className="flex flex-col items-center justify-start w-full h-full mt-8">
       <p className="text-3xl font-bold">
         Votre produit a été ajouté au{" "}
-        <Link
-          as={NextLink}
-          href="/cart"
-          className="text-3xl font-bold cursor-pointer"
-          color="primary"
-          underline="hover"
-          onClick={() => reset()}
-        >
-          panier
-        </Link>
+        <Button variant="link" className="text-3xl font-bold p-0 underline" onClick={() => reset()}>
+          <NextLink href="/cart">panier</NextLink>
+        </Button>
       </p>
-      <Button color="primary" className="mt-8 font-semibold" size="md" onClick={() => reset()}>
+      <Button color="primary" className="mt-8 font-semibold" onClick={() => reset()}>
         Créer un autre produit
       </Button>
     </div>
