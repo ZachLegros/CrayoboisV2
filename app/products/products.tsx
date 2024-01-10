@@ -2,11 +2,11 @@
 
 import ItemsGrid from "@/components/ItemsGrid";
 import ProductCard from "@/components/ProductCard";
-import { Button } from "@nextui-org/react";
 import { Product } from "@prisma/client";
 import { useEffect, useMemo } from "react";
 import { useProductsStore } from "./store";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 export default function ProductsGrid(props: { products: Product[] }) {
   const { products } = props;
@@ -34,12 +34,7 @@ export default function ProductsGrid(props: { products: Product[] }) {
     return (
       <div className="flex flex-col items-center justify-start w-full h-full mt-8">
         <p className="text-3xl font-bold">Tous nos produits préfabriqués sont vendus!</p>
-        <Button
-          color="primary"
-          className="mt-8 font-semibold"
-          size="lg"
-          onClick={() => router.push("/custom-order")}
-        >
+        <Button className="mt-8 font-semibold" onClick={() => router.push("/custom-order")}>
           Commander un produit sur mesure
         </Button>
       </div>
