@@ -7,9 +7,5 @@ export default async function CustomOrderPage() {
     prisma.hardware.findMany({ where: { quantity: { gt: 0 } } }),
   ]);
 
-  return (
-    <div className="w-full">
-      <OrderBuilder materials={materials} hardwares={hardwares} />
-    </div>
-  );
+  return <OrderBuilder materials={materials} hardwares={hardwares} />;
 }

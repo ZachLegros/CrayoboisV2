@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { Breadcrumbs } from "@/components/Breadcrumbs";
+// import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Hardware, Material } from "@prisma/client";
 import Materials from "./materials";
 import { useCustomOrderStore } from "./store";
@@ -9,10 +9,11 @@ import Hardwares from "./hardwares";
 import { useCartStore } from "../cart/store";
 import { customProductFactory } from "@/utils/productUtils";
 import AddedToCart from "./added-to-cart";
-import { toast } from "sonner";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function OrderBuilder(props: { materials: Material[]; hardwares: Hardware[] }) {
   const { materials, hardwares } = props;
+  const { toast } = useToast();
   const { addToCart } = useCartStore();
   const {
     currentStep,
@@ -20,7 +21,7 @@ export default function OrderBuilder(props: { materials: Material[]; hardwares: 
     setMaterials,
     setHardwares,
     selectMaterial,
-    selectHardware,
+    // selectHardware,
     selectedMaterial,
   } = useCustomOrderStore();
 
@@ -28,7 +29,7 @@ export default function OrderBuilder(props: { materials: Material[]; hardwares: 
     const customProduct = customProductFactory(material, hardware);
     addToCart(customProduct);
     setCurrentStep(currentStep + 1);
-    toast.success("Votre produit a été ajouté au panier");
+    toast({ title: "Votre produit a été ajouté au panier" });
   };
 
   useEffect(() => {
@@ -38,7 +39,7 @@ export default function OrderBuilder(props: { materials: Material[]; hardwares: 
 
   return (
     <div className="flex flex-col w-full gap-4">
-      {currentStep < 2 && (
+      {/* {currentStep < 2 && (
         <Breadcrumbs
           steps={["Choix du bois", "Choix du matériel", "Ajouter au panier"]}
           currentStep={currentStep}
@@ -53,7 +54,7 @@ export default function OrderBuilder(props: { materials: Material[]; hardwares: 
             setCurrentStep(stepIndex);
           }}
         />
-      )}
+      )} */}
       {currentStep === 0 && (
         <Materials
           onSelect={(material) => {

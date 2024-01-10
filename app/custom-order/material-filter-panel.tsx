@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { Button } from "@nextui-org/react";
 import { useCustomOrderStore } from "./store";
 import Filter from "../../components/Filter";
+import { Button } from "@/components/ui/button";
 
 export default function MaterialFilterPanel() {
   const { materials, originFilter, typeFilter, priceFilter } = useCustomOrderStore();
@@ -33,9 +33,7 @@ export default function MaterialFilterPanel() {
       <div className="flex w-full justify-between items-center pl-2">
         <p className="text-xl font-bold">Filtrer</p>
         <Button
-          size="md"
-          variant="light"
-          color="primary"
+          variant="secondary"
           className={`font-semibold ${
             typeFilter.enabled || originFilter.enabled || priceFilter.enabled
               ? "visible"

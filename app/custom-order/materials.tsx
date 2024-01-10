@@ -5,7 +5,7 @@ import ItemsGrid from "@/components/ItemsGrid";
 import MaterialCard from "@/components/MaterialCard";
 import { useCustomOrderStore } from "./store";
 import { Material } from "@prisma/client";
-import { Skeleton } from "@nextui-org/react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Materials(props: { onSelect: (material: Material) => void }) {
   const { onSelect } = props;
@@ -38,7 +38,7 @@ export default function Materials(props: { onSelect: (material: Material) => voi
   if (filteredMaterials.length === 0) {
     <ItemsGrid className="w-full h-full">
       {[...Array(12).keys()].map((_, index) => (
-        <Skeleton className="w-full h-[149px] rounded-md p-3" key={index} />
+        <Skeleton className="w-full h-[149px] p-3" key={index} />
       ))}
     </ItemsGrid>;
   }

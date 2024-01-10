@@ -5,7 +5,7 @@ import ItemsGrid from "@/components/ItemsGrid";
 import { useCustomOrderStore } from "./store";
 import HardwareCard from "@/components/HardwareCard";
 import { Hardware } from "@prisma/client";
-import { Skeleton } from "@nextui-org/react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Hardwares(props: { onSelect: (hardware: Hardware) => void }) {
   const { onSelect } = props;
@@ -36,7 +36,7 @@ export default function Hardwares(props: { onSelect: (hardware: Hardware) => voi
   if (filteredHardwares.length === 0) {
     <ItemsGrid className="w-full h-full">
       {[...Array(12).keys()].map((_, index) => (
-        <Skeleton className="w-full h-[149px] rounded-md p-3" key={index} />
+        <Skeleton className="w-full h-[149px] p-3" key={index} />
       ))}
     </ItemsGrid>;
   }
