@@ -3,14 +3,15 @@
 import { useEffect, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
-import { CardBody, Link, Spinner } from "@nextui-org/react";
-import Card from "@/components/Card";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 import { useCartStore } from "../cart/store";
 import { FaCircleCheck } from "react-icons/fa6";
 import { FaExclamationCircle } from "react-icons/fa";
+import { useToast } from "@/components/ui/use-toast";
+import { Card, CardContent } from "@/components/ui/card";
+import { Spinner } from "@/components/ui/spinner";
+import { Button } from "@/components/ui/button";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
@@ -27,6 +28,7 @@ const destroyCheckoutSession = async (sessionIdSearchParam?: string) => {
 export default function Checkout(props: { sessionId?: string }) {
   const { sessionId } = props;
   const router = useRouter();
+  const { toast } = useToast();
   const { cart, syncCart, shippingMethod, clearCart } = useCartStore();
   const [clientSecret, setClientSecret] = useState("");
   const [success, setSuccess] = useState(false);
@@ -35,12 +37,18 @@ export default function Checkout(props: { sessionId?: string }) {
   useEffect(() => {
     const handleErrors = (data: { error: string }) => {
       if (data.error === "cart_is_empty") {
-        toast.error("Votre panier est vide.");
+        toast({ title: "Votre panier est vide." });
       } else if (data.error === "cart_out_of_sync") {
         syncCart();
-        toast.error("Un ou plusieurs produits de votre panier ne sont plus disponibles.");
+        toast({
+          title: "Un ou plusieurs produits de votre panier ne sont plus disponibles.",
+          variant: "destructive",
+        });
       } else {
-        toast.error("Une erreur inattendu est survenue. Veuillez réessayer ou nous contacter.");
+        toast({
+          title: "Une erreur inattendu est survenue. Veuillez réessayer ou nous contacter.",
+          variant: "destructive",
+        });
         console.log(data.error);
       }
     };
@@ -82,9 +90,10 @@ export default function Checkout(props: { sessionId?: string }) {
           router.push("/cart");
         }
       } catch (err) {
-        toast.error(
-          "Une erreur inattendu est survenue. Veuillez réessayer et nous contacter si le problème persiste."
-        );
+        toast({
+          title: "Une erreur inattendu est survenue. Veuillez réessayer ou nous contacter.",
+          variant: "destructive",
+        });
         console.log(err);
         router.push("/cart");
       }
@@ -99,7 +108,9 @@ export default function Checkout(props: { sessionId?: string }) {
 
   return (
     <Card id="checkout" className="animate-in max-w-screen-sm mx-auto relative">
-      <CardBody className={clientSecret ? "h-auto" : "flex justify-center items-center h-[650px]"}>
+      <CardContent
+        className={clientSecret ? "h-auto" : "flex justify-center items-center h-[650px]"}
+      >
         {sessionId ? (
           success ? (
             <div className="animate-in flex flex-col w-full h-full justify-center items-center gap-2 p-4">
@@ -118,21 +129,15 @@ export default function Checkout(props: { sessionId?: string }) {
               </p>
               <p className="text-lg md:text-xl text-foreground/60 font-semibold text-center">
                 Veuillez réessayer ou nous{" "}
-                <Link
-                  as={NextLink}
-                  href="/contact"
-                  color="primary"
-                  className="text-lg md:text-xl font-semibold"
-                  underline="hover"
-                >
-                  contacter
-                </Link>{" "}
+                <Button variant="link" className="text-lg md:text-xl font-semibold">
+                  <NextLink href="/contact">contacter</NextLink>
+                </Button>{" "}
                 afin de nous faire part du problème rencontré.
               </p>
               <FaExclamationCircle className="text-6xl text-primary mt-4" />
             </div>
           ) : (
-            <Spinner size="lg" />
+            <Spinner />
           )
         ) : clientSecret ? (
           <EmbeddedCheckoutProvider stripe={stripePromise} options={{ clientSecret }}>
@@ -143,10 +148,10 @@ export default function Checkout(props: { sessionId?: string }) {
             <p className="text-xl md:text-2xl font-semibold text-center">
               Création d'une session de paiement sécurisée...
             </p>
-            <Spinner size="lg" />
+            <Spinner />
           </div>
         )}
-      </CardBody>
+      </CardContent>
     </Card>
   );
 }
