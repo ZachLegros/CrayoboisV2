@@ -2,9 +2,11 @@
 import { useState } from "react";
 import { sendOtp, verifyOtp } from "./actions";
 import { useRouter } from "next/navigation";
-import { Button, CardBody, CardFooter, Input } from "@nextui-org/react";
-import Card from "@/components/Card";
 import { useUserStore } from "../user-store";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@radix-ui/react-label";
+import { Button } from "@/components/ui/button";
 
 const validateEmail = (email: string) => {
   return String(email)
@@ -56,37 +58,41 @@ export default function LoginForm() {
   return (
     <div className="animate-in flex-1 flex flex-col w-full justify-center gap-2 text-foreground">
       <Card className="p-2">
-        <CardBody>
+        <CardContent>
           {!otpSent ? (
-            <Input
-              label="Email"
-              type="email"
-              placeholder="vous@example.com"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              autoComplete="on"
-            />
+            <div className="grid w-full max-w-sm items-center gap-1.5">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                type="email"
+                id="email"
+                placeholder="vous@example.com"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                autoComplete="on"
+              />
+            </div>
           ) : (
-            <Input
-              label="Code à 6 chiffres"
-              type="text"
-              placeholder="******"
-              inputMode="numeric"
-              pattern="\d*"
-              value={otp}
-              onChange={(e) => setOtp(e.target.value)}
-              required
-            />
+            <div className="grid w-full max-w-sm items-center gap-1.5">
+              <Label htmlFor="email">Code à 6 chiffres</Label>
+              <Input
+                id="otp"
+                type="text"
+                placeholder="******"
+                inputMode="numeric"
+                pattern="\d*"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+                required
+              />
+            </div>
           )}
-        </CardBody>
+        </CardContent>
         <CardFooter>
           <div className="flex flex-col flex-1 gap-4">
             <Button
-              color="success"
               onClick={!otpSent ? signIn : verify}
-              disableRipple
-              isLoading={isLoading}
+              disabled={isLoading}
               className="w-full font-medium"
             >
               {!otpSent ? "Connexion" : "Vérifier le code"}
