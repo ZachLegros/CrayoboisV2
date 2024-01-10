@@ -14,6 +14,10 @@ export function Breadcrumbs(props: {
       size="lg"
       variant="solid"
       radius="md"
+      color="foreground"
+      classNames={{
+        list: "border bg-background dark:bg-slate-800 dark:border-none",
+      }}
       onAction={(key) => onAction?.(parseInt(key as string))}
     >
       {steps.map((step, index) => {
