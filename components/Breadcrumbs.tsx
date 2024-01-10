@@ -1,39 +1,22 @@
 "use client";
 
-import { Breadcrumbs as BreadcrumbsWrapper, BreadcrumbItem } from "@nextui-org/react";
+import { Breadcrumb, BreadcrumbItem } from "./ui/breadcrumbs";
 
 export function Breadcrumbs(props: {
   steps: string[];
   currentStep: number;
   onAction?: (stepIndex: number) => void;
 }) {
-  const { steps, currentStep, onAction } = props;
+  const { steps } = props;
 
   return (
-    <BreadcrumbsWrapper
-      size="lg"
-      variant="solid"
-      radius="md"
-      color="foreground"
-      classNames={{
-        list: "border bg-background dark:bg-slate-800 dark:border-none",
-      }}
-      onAction={(key) => onAction?.(parseInt(key as string))}
+    <Breadcrumb
+
+    // onAction={(key) => onAction?.(parseInt(key as string))}
     >
-      {steps.map((step, index) => {
-        const isCurrent = currentStep === index;
-        const isDisabled = index > currentStep;
-        return (
-          <BreadcrumbItem
-            key={index}
-            isCurrent={isCurrent}
-            underline={!isCurrent && !isDisabled ? "always" : "none"}
-            isDisabled={index > currentStep}
-          >
-            {step}
-          </BreadcrumbItem>
-        );
-      })}
-    </BreadcrumbsWrapper>
+      {steps.map((step, index) => (
+        <BreadcrumbItem key={index}>{step}</BreadcrumbItem>
+      ))}
+    </Breadcrumb>
   );
 }
