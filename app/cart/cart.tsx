@@ -22,7 +22,7 @@ export default function Cart() {
       <div className="animate-in flex flex-col flex-1">
         {cart.toReversed().map((item, index) => (
           <div className="flex flex-col gap-4 mb-4" key={index}>
-            <CartItem item={item} hasDivider={index !== cart.length - 1} />
+            <CartItem item={item} hasSeparator={index !== cart.length - 1} />
           </div>
         ))}
       </div>
