@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import AuthButton from "./AuthButton";
 import Logo from "./Logo";
+import ThemeSwitch from "./ThemeSwitch";
 
 export default function NavBar() {
   const pathname = usePathname();
@@ -66,7 +67,8 @@ export default function NavBar() {
         })}
       </NavbarContent>
       <NavbarContent justify="end">
-        <NavbarItem>
+        <NavbarItem className="flex">
+          <ThemeSwitch />
           <Suspense>
             <AuthButton />
           </Suspense>
