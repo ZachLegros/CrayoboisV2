@@ -1,7 +1,8 @@
 "use client";
 
-import { Button, Checkbox } from "@nextui-org/react";
-import { twMerge } from "tailwind-merge";
+import { cn } from "@/lib/utils";
+import { Button } from "./ui/button";
+import { Checkbox } from "./ui/checkbox";
 
 export default function CheckButton(props: {
   isChecked: boolean;
@@ -14,19 +15,13 @@ export default function CheckButton(props: {
 
   return (
     <Button
-      className={twMerge("flex justify-between p-2 ", className)}
-      size="md"
-      radius="sm"
-      variant="light"
+      className={cn("flex justify-between p-2", className)}
+      variant="ghost"
       onClick={onClick}
-      isDisabled={isDisabled}
+      disabled={isDisabled}
     >
       {children}
-      <Checkbox
-        isSelected={isChecked}
-        isIndeterminate={isChecked}
-        className="pointer-events-none m-0! p-0"
-      />
+      <Checkbox checked={isChecked} className="pointer-events-none m-0! p-0" />
     </Button>
   );
 }
