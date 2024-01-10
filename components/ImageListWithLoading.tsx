@@ -1,6 +1,6 @@
-import { Skeleton } from "@nextui-org/react";
 import { ReactNode, useState } from "react";
 import { twMerge } from "tailwind-merge";
+import { Skeleton } from "./ui/skeleton";
 
 export default function ImageListWithLoading(props: {
   itemsNo: number;
@@ -16,7 +16,7 @@ export default function ImageListWithLoading(props: {
 
   return (
     <div className={twMerge("flex relative overflow-hidden", className)}>
-      {loadCount < itemsNo && <Skeleton className="rounded-md w-full h-full absolute" />}
+      {loadCount < itemsNo && <Skeleton className="w-full h-full absolute" />}
       {children(handleLoad)}
     </div>
   );

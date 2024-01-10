@@ -1,7 +1,7 @@
-import { Skeleton } from "@nextui-org/react";
 import Image, { type ImageProps } from "next/image";
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";
+import { Skeleton } from "./ui/skeleton";
 
 export type ImageWithLoadingProps = Omit<ImageProps, "loading"> & {
   className?: string;
