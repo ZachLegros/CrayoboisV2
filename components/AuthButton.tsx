@@ -1,10 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Button } from "@nextui-org/react";
 import { useUserStore } from "@/app/user-store";
 import { useCartStore } from "@/app/cart/store";
-import Cart from "./Cart";
+import { Button } from "./ui/button";
 
 export default function AuthButton() {
   const router = useRouter();
@@ -31,7 +30,6 @@ export default function AuthButton() {
       ) : (
         <Button onClick={handleLogin}>Connexion</Button>
       )}
-      <Cart />
     </div>
   );
 }
