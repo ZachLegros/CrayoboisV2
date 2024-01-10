@@ -2,7 +2,8 @@
 import { useState } from "react";
 import { sendOtp, verifyOtp } from "./actions";
 import { useRouter } from "next/navigation";
-import { Button, Card, CardBody, CardFooter, Input } from "@nextui-org/react";
+import { Button, CardBody, CardFooter, Input } from "@nextui-org/react";
+import Card from "@/components/Card";
 import { useUserStore } from "../user-store";
 
 const validateEmail = (email: string) => {

@@ -1,7 +1,8 @@
 "use client";
 
 import { Material } from "@prisma/client";
-import { Card, CardBody, Chip } from "@nextui-org/react";
+import { CardBody, Chip } from "@nextui-org/react";
+import Card from "@/components/Card";
 import { FaEarthAmericas } from "react-icons/fa6";
 import { cad } from "@/utils/currencyFormatter";
 import ImageWithLoading from "./ImageWithLoading";
@@ -34,11 +35,12 @@ export default function MaterialCard(props: { material: Material; onClick: () =>
               <p>{cad(material.price)}</p>
             </div>
             <div className="flex gap-2 flex-wrap">
-              <div className="flex text-sm items-center gap-1">
-                <FaEarthAmericas className="flex" />
-                <p>{material.origin}</p>
-              </div>
-              {/* <p>•</p> */}
+              {material.origin !== "Inconnu" && (
+                <div className="flex text-sm items-center gap-1">
+                  <FaEarthAmericas className="flex" />
+                  <p>{material.origin}</p>
+                </div>
+              )}
               <Chip radius="sm" size="sm" variant="flat" color="warning">
                 {material.type}
               </Chip>

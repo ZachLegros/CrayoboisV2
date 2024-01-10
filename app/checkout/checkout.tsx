@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
-import { Card, CardBody, Link, Spinner } from "@nextui-org/react";
+import { CardBody, Link, Spinner } from "@nextui-org/react";
+import Card from "@/components/Card";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";

@@ -1,7 +1,8 @@
 "use client";
 
 import { Hardware } from "@prisma/client";
-import { Card, CardBody, Chip } from "@nextui-org/react";
+import { CardBody, Chip } from "@nextui-org/react";
+import Card from "@/components/Card";
 import { cad } from "@/utils/currencyFormatter";
 import ImageWithLoading from "./ImageWithLoading";
 

@@ -1,6 +1,7 @@
 "use client";
 
-import { Button, Card, CardBody, Modal, ModalBody, ModalContent } from "@nextui-org/react";
+import { Button, CardBody, Modal, ModalBody, ModalContent } from "@nextui-org/react";
+import Card from "@/components/Card";
 import { cad } from "@/utils/currencyFormatter";
 import ImageWithLoading from "./ImageWithLoading";
 import { useCartStore } from "@/app/cart/store";
@@ -25,7 +26,7 @@ export default function ProductCard(props: { product: Product; onClick: () => vo
 
   return (
     <>
-      <Card shadow="sm" className="bg-background/60 dark:bg-default-100/50 " isFooterBlurred>
+      <Card>
         <CardBody className="flex flex-col gap-4">
           <div className="relative">
             <ImageWithLoading
@@ -42,7 +43,7 @@ export default function ProductCard(props: { product: Product; onClick: () => vo
                 isIconOnly
                 variant="flat"
                 size="sm"
-                className="absolute bottom-0 right-0 m-1 hover:bg-default/90"
+                className="absolute bottom-0 right-0 m-1"
                 onClick={() => setIsOpen(true)}
               >
                 <FaExpandAlt className="text-lg" />
@@ -59,7 +60,11 @@ export default function ProductCard(props: { product: Product; onClick: () => vo
                 Ajouter au Panier
               </Button>
             ) : (
-              <Button className="mt-auto" variant="faded" isDisabled>
+              <Button
+                className="mt-auto border-opacity-100 bg-slate-300 dark:bg-slate-700"
+                variant="bordered"
+                isDisabled
+              >
                 Dans le Panier
               </Button>
             )}
@@ -71,7 +76,8 @@ export default function ProductCard(props: { product: Product; onClick: () => vo
         isOpen={isOpen}
         onClose={onClose}
         classNames={{
-          closeButton: "transition-colors bg-background/50 text-gray-300 z-10",
+          closeButton:
+            "transition-colors text-foreground bg-slate-200/50 hover:bg-slate-300/50 dark:bg-slate-800/50 dark:hover:bg-slate-700/50 z-10",
         }}
       >
         <ModalContent>
