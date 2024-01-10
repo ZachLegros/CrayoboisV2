@@ -1,7 +1,7 @@
 import Image, { type ImageProps } from "next/image";
 import { useState } from "react";
-import { twMerge } from "tailwind-merge";
 import { Skeleton } from "./ui/skeleton";
+import { cn } from "@/lib/utils";
 
 export type ImageWithLoadingProps = Omit<ImageProps, "loading"> & {
   className?: string;
@@ -13,7 +13,7 @@ export default function ImageWithLoading(props: ImageWithLoadingProps) {
   const [isLoaded, setIsLoaded] = useState(false);
 
   return (
-    <div className={twMerge("relative overflow-hidden", className)}>
+    <div className={cn("relative overflow-hidden", className)}>
       <Image
         src={src}
         alt={alt}

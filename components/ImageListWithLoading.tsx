@@ -1,6 +1,6 @@
 import { ReactNode, useState } from "react";
-import { twMerge } from "tailwind-merge";
 import { Skeleton } from "./ui/skeleton";
+import { cn } from "@/lib/utils";
 
 export default function ImageListWithLoading(props: {
   itemsNo: number;
@@ -15,7 +15,7 @@ export default function ImageListWithLoading(props: {
   };
 
   return (
-    <div className={twMerge("flex relative overflow-hidden", className)}>
+    <div className={cn("flex relative overflow-hidden", className)}>
       {loadCount < itemsNo && <Skeleton className="w-full h-full absolute" />}
       {children(handleLoad)}
     </div>
