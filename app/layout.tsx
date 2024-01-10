@@ -1,10 +1,14 @@
-import { Providers } from "./providers";
-import { GeistSans } from "geist/font/sans";
 import "./globals.css";
-import { twMerge } from "tailwind-merge";
+import { Providers } from "./providers";
+import { Inter as FontSans } from "next/font/google";
 import NavBar from "@/components/NavBar";
-import { Toaster } from "sonner";
-import { Suspense } from "react";
+import { cn } from "@/lib/utils";
+import { Toaster } from "@/components/ui/toaster";
+
+export const fontSans = FontSans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -18,26 +22,19 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body>
-        <Providers>
-          <main
-            className={twMerge(
-              GeistSans.className,
-              "flex flex-col items-center min-h-screen max-w-screen-xl mx-auto"
-            )}
-          >
-            <Toaster richColors />
-            <Suspense>
-              <NavBar />
-            </Suspense>
-            <div className="w-full h-full p-6">{children}</div>
-            <footer className="w-full border-t border-t-foreground/10 p-8 flex justify-center text-center text-xs mt-auto">
-              <p>© {new Date().getFullYear()} Crayobois</p>
+    <html lang="en" suppressHydrationWarning>
+      <Providers>
+        <body className={cn("min-h-screen bg-background font-sans antialiased", fontSans.variable)}>
+          <NavBar />
+          <main className="flex flex-col min-h-[calc(100vh-72px)] max-w-screen-xl mx-auto px-6">
+            <div className="w-full h-full py-6 mb-auto">{children}</div>
+            <footer className="w-full border-t p-8">
+              <p className="text-center text-xs">© {new Date().getFullYear()} Crayobois</p>
             </footer>
           </main>
-        </Providers>
-      </body>
+          <Toaster />
+        </body>
+      </Providers>
     </html>
   );
 }
