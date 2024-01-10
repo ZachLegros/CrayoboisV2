@@ -1,5 +1,5 @@
 import ItemsGrid from "@/components/ItemsGrid";
-import { Skeleton } from "@nextui-org/react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Loading() {
   return (
@@ -7,7 +7,7 @@ export default function Loading() {
       <div className="flex flex-col w-full gap-4">
         <ItemsGrid className="md:grid-cols-2 lg:grid-cols-3">
           {[...Array(12).keys()].map((_, index) => (
-            <Skeleton className="w-full h-[400px] rounded-md p-3" key={index} />
+            <Skeleton className="w-full h-[400px] p-3" key={index} />
           ))}
         </ItemsGrid>
       </div>
