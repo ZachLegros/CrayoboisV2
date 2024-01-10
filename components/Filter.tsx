@@ -1,9 +1,10 @@
 "use client";
 
 import CheckButton from "@/components/CheckButton";
-import { Radio, RadioGroup } from "@nextui-org/react";
 import { ReactNode } from "react";
 import { UnmountClosed as Collapse } from "react-collapse";
+import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
+import { Label } from "./ui/label";
 
 function CollapseRadioGroup(props: {
   filter: any;
@@ -14,7 +15,7 @@ function CollapseRadioGroup(props: {
   const { filter, setFilter, isFilterEnabled, children } = props;
   return (
     <Collapse isOpened={isFilterEnabled}>
-      <RadioGroup size="md" value={filter} onValueChange={setFilter} className="mt-2 ml-2">
+      <RadioGroup value={filter} onValueChange={setFilter} className="mt-2 ml-2">
         {children}
       </RadioGroup>
     </Collapse>
@@ -55,17 +56,20 @@ export default function Filter(props: {
         }}
         isDisabled={isDisabled}
       >
-        <p className="text-xl font-bold text-gray-300">{filterName}</p>
+        <p className="text-xl font-bold">{filterName}</p>
       </CheckButton>
       <CollapseRadioGroup
         filter={currentValue}
         isFilterEnabled={filterEnabled && !isDisabled}
         setFilter={setValue}
       >
-        {filterValues.map((filter) => (
-          <Radio key={filter.value} color="primary" value={filter.value}>
-            {filter.label} {filter.amount !== undefined && `(${filter.amount})`}
-          </Radio>
+        {filterValues.map((filter, index) => (
+          <div className="flex items-center space-x-2" key={index}>
+            <RadioGroupItem value={filter.value} id={filter.value}></RadioGroupItem>
+            <Label htmlFor={filter.value} className="cursor-pointer">
+              {filter.label} {filter.amount !== undefined && `(${filter.amount})`}
+            </Label>
+          </div>
         ))}
       </CollapseRadioGroup>
     </div>
