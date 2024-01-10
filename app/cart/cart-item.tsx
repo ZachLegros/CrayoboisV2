@@ -1,12 +1,21 @@
-import { twMerge } from "tailwind-merge";
+import { useState } from "react";
 import { cad } from "@/utils/currencyFormatter";
-import { Chip, Button, Select, SelectItem, Divider } from "@nextui-org/react";
 import { CartItemType, CartProductType, useCartStore } from "./store";
-import { ChangeEvent, useState } from "react";
 import ImageWithLoading from "@/components/ImageWithLoading";
 import Image from "next/image";
 import ImageListWithLoading from "@/components/ImageListWithLoading";
 import { DbProduct, isCustomProductWithComponents, isProduct } from "@/utils/productUtils";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
 
 const getImageComponents = (product: DbProduct) => {
   if (isCustomProductWithComponents(product)) {
@@ -54,24 +63,26 @@ const getImageComponents = (product: DbProduct) => {
 
 export default function CartItem(props: {
   item: CartItemType<CartProductType>;
-  hasDivider?: boolean;
+  hasSeparator?: boolean;
 }) {
-  const { item, hasDivider } = props;
+  const { item, hasSeparator } = props;
   const { product: cartItem } = item;
   const { removeFromCart, setItemQuantity, cartItemData } = useCartStore();
 
   const product = cartItemData[cartItem.id];
   const [quantityRange] = useState([...Array(100 + 1).keys()].slice(1, 100 + 1));
+  const [selectedQuantity, setSelectedQuantity] = useState(1);
 
-  const handleQuantityChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const quantity = parseInt(e.target.value);
+  const handleQuantityChange = (value: string) => {
+    const quantity = parseInt(value);
+    setSelectedQuantity(quantity);
     setItemQuantity(cartItem, quantity);
   };
 
   const Section = (props: { title: string; className?: string; children: React.ReactNode }) => {
     const { title, className, children } = props;
     return (
-      <div className={twMerge("flex flex-col gap-2 text-lg", className)}>
+      <div className={cn("flex flex-col gap-2 text-lg", className)}>
         <span className="font-semibold">{title}</span>
         {children}
       </div>
@@ -91,22 +102,22 @@ export default function CartItem(props: {
         </Section>
         <Section title="Quantité">
           {isCustomProductWithComponents(product) || product.quantity > 1 ? (
-            <Select
-              size="sm"
-              defaultSelectedKeys={[`${item.quantity}`]}
-              onChange={handleQuantityChange}
-              aria-label="Quantité"
-            >
-              {quantityRange.map((quantity) => (
-                <SelectItem key={`${quantity}`} value={`${quantity}`}>
-                  {`${quantity}`}
-                </SelectItem>
-              ))}
+            <Select onValueChange={handleQuantityChange}>
+              <SelectTrigger>
+                <SelectValue placeholder={selectedQuantity} />
+              </SelectTrigger>
+              <SelectContent>
+                {quantityRange.map((quantity) => (
+                  <SelectItem key={`${quantity}`} value={`${quantity}`}>
+                    {`${quantity}`}
+                  </SelectItem>
+                ))}
+              </SelectContent>
             </Select>
           ) : (
-            <Chip color="warning" variant="dot">
-              1 en stock
-            </Chip>
+            <Badge variant="secondary" className="gap-1">
+              <span className="w-2 h-2 bg-primary rounded-full"></span>1 en stock
+            </Badge>
           )}
         </Section>
         <Section title="Sous-total" className="items-end">
@@ -115,7 +126,7 @@ export default function CartItem(props: {
             <Button
               size="sm"
               color="danger"
-              variant="flat"
+              variant="destructive"
               onClick={() => removeFromCart(product)}
               className="w-max ml-auto"
             >
@@ -124,7 +135,7 @@ export default function CartItem(props: {
           </div>
         </Section>
       </div>
-      {hasDivider && <Divider />}
+      {hasSeparator && <Separator />}
     </>
   );
 }
