@@ -4,9 +4,14 @@ import CartItem from "./cart-item";
 import EmptyCart from "./empty-cart";
 import { useCartStore } from "./store";
 import CartBreakdown from "./cart-breakdown";
+import { useEffect } from "react";
 
 export default function Cart() {
-  const { cart } = useCartStore();
+  const { cart, syncCart } = useCartStore();
+
+  useEffect(() => {
+    syncCart();
+  }, []);
 
   if (cart.length === 0) {
     return <EmptyCart />;

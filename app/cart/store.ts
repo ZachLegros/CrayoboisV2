@@ -94,13 +94,13 @@ const syncCart = async (
 };
 
 export type CartStore = {
-  syncCart: () => Promise<void>;
   cart: Cart;
   cartItemData: CartItemData;
   getItemData: (product: CartProductType) => DbProduct | undefined;
   addToCart: (product: DbProduct) => void;
   removeFromCart: (product: CartProductType) => void;
   clearCart: () => void;
+  syncCart: () => Promise<void>;
   setItemQuantity: (product: CartProductType, quantity: number) => void;
   shippingMethods: readonly Shipping[];
   setShippingMethods: (shippingMethods: Shipping[]) => void;
@@ -149,7 +149,7 @@ export const useCartStore = create<CartStore>((set, state) => ({
     set(() => ({ cart: newCart, cartItemData: newCartItemData }));
   },
   setItemQuantity: (product, quantity) => {
-    const newCart = state().cart.map((item) =>
+    const newCart = [...state().cart].map((item) =>
       item.product.id === product.id ? { ...item, quantity } : item
     );
     set(() => ({ cart: newCart }));
