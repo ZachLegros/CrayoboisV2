@@ -28,14 +28,14 @@ export default function CartBreakdown() {
     async function getShipping() {
       const shippingMethods = await fetchShippingMethods();
       setShippingMethods(shippingMethods);
-      setShippingMethod(shippingMethods[0].id);
+      setShippingMethod(shippingMethods[0]?.id);
     }
     if (shippingMethods.length === 0) getShipping();
   }, []);
 
   const freeShipping = useMemo(() => {
     if (isShippingFree()) {
-      setShippingMethod(shippingMethods.filter((method) => method.price === 0)[0].id);
+      setShippingMethod(shippingMethods.filter((method) => method.price === 0)?.[0]?.id);
       return true;
     }
     return false;
@@ -49,7 +49,7 @@ export default function CartBreakdown() {
     <div className="flex flex-col gap-2 w-full text-l">
       <div className="flex flex-col gap-2 mb-2">
         <p>Méthode de livraison</p>
-        <p className="text-gray-400">
+        <p className="text-foreground/50">
           {`La livraison est gratuite pour toutes commandes ayant un sous-total ${cad(
             150
           )} et plus ou
@@ -58,7 +58,7 @@ export default function CartBreakdown() {
         {shippingMethods.length > 0 ? (
           freeShipping ? (
             <Chip color="secondary" size="sm">
-              <p>Livraison gratuite</p>
+              <p className="font-medium text-slate-50">Livraison gratuite</p>
             </Chip>
           ) : (
             <RadioGroup
