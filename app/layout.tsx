@@ -12,18 +12,17 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Next.js and Supabase Starter Kit",
-  description: "The fastest way to build apps with Next.js and Supabase",
+  title: "Crayobois - Le stylo qu'il vous faut",
+  description: `Crayobois est une microentreprise de menuiserie québécoise spécialisée dans la fabrication de stylos en bois divers de haute qualité.`,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="bg-background text-foreground">
+      <body>
         <Providers>
           <main
             className={twMerge(
-              "dark",
               GeistSans.className,
               "flex flex-col items-center min-h-screen max-w-screen-xl mx-auto"
             )}
@@ -34,17 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </Suspense>
             <div className="w-full h-full p-6">{children}</div>
             <footer className="w-full border-t border-t-foreground/10 p-8 flex justify-center text-center text-xs mt-auto">
-              <p>
-                Powered by{" "}
-                <a
-                  href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
-                  target="_blank"
-                  className="font-bold hover:underline"
-                  rel="noreferrer"
-                >
-                  Supabase
-                </a>
-              </p>
+              <p>© {new Date().getFullYear()} Crayobois</p>
             </footer>
           </main>
         </Providers>
