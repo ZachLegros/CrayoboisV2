@@ -51,7 +51,7 @@ export default function Checkout(props: { sessionId?: string }) {
             "Une erreur inattendu est survenue. Veuillez réessayer ou nous contacter.",
           variant: "destructive",
         });
-        console.log(error);
+        console.error(error);
       }
     };
 
@@ -89,14 +89,13 @@ export default function Checkout(props: { sessionId?: string }) {
             // transaction failed or unexpected error
             setError(true);
           }
-          console.log(data);
         } else {
           // cart is empty or shipping method is undefined
           router.push("/cart");
         }
       } catch (err: any) {
         handleErrors(err.message);
-        console.log(err);
+        console.error(err);
         router.push("/cart");
       }
     };
