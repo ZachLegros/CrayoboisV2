@@ -125,8 +125,7 @@ export default function CartItem(props: {
             <span>{cad(product.price * item.quantity)}</span>
             <Button
               size="sm"
-              color="danger"
-              variant="destructive"
+              variant="destructive-faded"
               onClick={() => removeFromCart(product)}
               className="w-max ml-auto"
             >
