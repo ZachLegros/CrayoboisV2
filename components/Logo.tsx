@@ -1,17 +1,18 @@
 "use client";
 
 import Link from "next/link";
+import { cn } from "../lib/utils";
 
 export default function Logo(props: { className?: string }) {
   const { className } = props;
   return (
-    <Link href="/" className={className}>
+    <Link href="/" className={cn("transition-opacity hover:opacity-75", className)}>
       <SvgLogo className="min-w-[100px] text-foreground" />
     </Link>
   );
 }
 
-const SvgLogo = (props: { className?: string }) => {
+export const SvgLogo = (props: { className?: string }) => {
   const { className } = props;
   return (
     <svg
