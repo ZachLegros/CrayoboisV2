@@ -10,6 +10,7 @@ import Cart from "./Cart";
 import { Sheet, SheetContent } from "./ui/sheet";
 import { Button } from "./ui/button";
 import { FaBars } from "react-icons/fa";
+import { cn } from "@/lib/utils";
 
 const items = [
   {
@@ -25,43 +26,6 @@ const items = [
     link: "/contact",
   },
 ];
-
-export function NavLinks(props: {
-  items: { title: string; link: string }[];
-  className?: string;
-  onNavLinkClick?: () => void;
-}) {
-  const pathname = usePathname();
-  const { items, className, onNavLinkClick } = props;
-  return (
-    <ul className={className}>
-      {items.map((item, index) => {
-        return (
-          <li key={index}>
-            <Link
-              href={item.link}
-              className="transition-colors text-md font-medium text-foreground/70 hover:text-foreground aria-[current]:font-sem aria-[current]:text-foreground"
-              aria-current={pathname.startsWith(item.link) ? "page" : undefined}
-              onClick={onNavLinkClick}
-            >
-              {item.title}
-            </Link>
-          </li>
-        );
-      })}
-      <li className="flex items-center lg:hidden">
-        <Link
-          href={"/cart"}
-          className="transition-colors text-md font-medium text-foreground/70 hover:text-foreground aria-[current]:font-semibold aria-[current]:text-foreground"
-          aria-current={pathname.startsWith("/cart") ? "page" : undefined}
-          onClick={onNavLinkClick}
-        >
-          Mon panier
-        </Link>
-      </li>
-    </ul>
-  );
-}
 
 export default function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -93,6 +57,72 @@ export default function NavBar() {
   );
 }
 
+export function NavLinks(props: {
+  items: { title: string; link: string }[];
+  className?: string;
+  onNavLinkClick?: () => void;
+}) {
+  const pathname = usePathname();
+  const { items, className, onNavLinkClick } = props;
+  return (
+    <ul className={className}>
+      {items.map((item, index) => {
+        return (
+          <li key={index}>
+            <Link
+              href={item.link}
+              className="transition-colors text-md font-medium text-foreground/70 hover:text-foreground aria-[current]:font-sem aria-[current]:text-foreground"
+              aria-current={pathname.startsWith(item.link) ? "page" : undefined}
+              onClick={onNavLinkClick}
+            >
+              {item.title}
+            </Link>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+export function MobileNavLinks(props: {
+  items: { title: string; link: string }[];
+  className?: string;
+  onNavLinkClick?: () => void;
+}) {
+  const pathname = usePathname();
+  const { items, className, onNavLinkClick } = props;
+  return (
+    <ul className={cn("pl-2 lg:pl-0", className)}>
+      <li>
+        <ModeToggle className="text-md mb-4 -ml-2" align="start" />
+      </li>
+      {items.map((item, index) => {
+        return (
+          <li key={index}>
+            <Link
+              href={item.link}
+              className="transition-colors text-md font-medium text-foreground/70 hover:text-foreground aria-[current]:font-sem aria-[current]:text-foreground"
+              aria-current={pathname.startsWith(item.link) ? "page" : undefined}
+              onClick={onNavLinkClick}
+            >
+              {item.title}
+            </Link>
+          </li>
+        );
+      })}
+      <li className="flex items-center">
+        <Link
+          href={"/cart"}
+          className="transition-colors text-md font-medium text-foreground/70 hover:text-foreground aria-[current]:font-semibold aria-[current]:text-foreground"
+          aria-current={pathname.startsWith("/cart") ? "page" : undefined}
+          onClick={onNavLinkClick}
+        >
+          Mon panier
+        </Link>
+      </li>
+    </ul>
+  );
+}
+
 export function MobileMenu(props: {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
@@ -101,7 +131,7 @@ export function MobileMenu(props: {
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
       <SheetContent>
-        <NavLinks
+        <MobileNavLinks
           items={items}
           className="flex flex-col lg:hidden space-y-2 mt-12"
           onNavLinkClick={() => onOpenChange(false)}
