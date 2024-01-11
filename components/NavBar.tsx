@@ -11,6 +11,8 @@ import { Sheet, SheetContent } from "./ui/sheet";
 import { Button } from "./ui/button";
 import { FaBars } from "react-icons/fa";
 import { cn } from "@/lib/utils";
+import { useCartStore } from "@/app/cart/store";
+import { Badge } from "./ui/badge";
 
 const items = [
   {
@@ -90,17 +92,20 @@ export function MobileNavLinks(props: {
 }) {
   const pathname = usePathname();
   const { items, className, onNavLinkClick } = props;
+  const { cart } = useCartStore();
+  const linkStyle =
+    "transition-colors text-foreground/70 hover:text-foreground aria-[current]:font-sem aria-[current]:text-foreground";
   return (
-    <ul className={cn("pl-2 lg:pl-0", className)}>
+    <ul className={cn("text-lg font-medium pl-2 lg:pl-0", className)}>
       <li>
-        <ModeToggle className="text-md mb-4 -ml-2" align="start" />
+        <ModeToggle className="mb-4 -ml-2" align="start" />
       </li>
       {items.map((item, index) => {
         return (
           <li key={index}>
             <Link
               href={item.link}
-              className="transition-colors text-md font-medium text-foreground/70 hover:text-foreground aria-[current]:font-sem aria-[current]:text-foreground"
+              className={linkStyle}
               aria-current={pathname.startsWith(item.link) ? "page" : undefined}
               onClick={onNavLinkClick}
             >
@@ -112,12 +117,13 @@ export function MobileNavLinks(props: {
       <li className="flex items-center">
         <Link
           href={"/cart"}
-          className="transition-colors text-md font-medium text-foreground/70 hover:text-foreground aria-[current]:font-semibold aria-[current]:text-foreground"
+          className={linkStyle}
           aria-current={pathname.startsWith("/cart") ? "page" : undefined}
           onClick={onNavLinkClick}
         >
           Mon panier
         </Link>
+        {cart.length > 0 && <Badge className="ml-2">{cart.length}</Badge>}
       </li>
     </ul>
   );
