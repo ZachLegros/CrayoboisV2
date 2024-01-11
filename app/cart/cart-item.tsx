@@ -4,7 +4,11 @@ import { CartItemType, CartProductType, useCartStore } from "./store";
 import ImageWithLoading from "@/components/ImageWithLoading";
 import Image from "next/image";
 import ImageListWithLoading from "@/components/ImageListWithLoading";
-import { DbProduct, isCustomProductWithComponents, isProduct } from "@/utils/productUtils";
+import {
+  DbProduct,
+  isCustomProductWithComponents,
+  isProduct,
+} from "@/utils/productUtils";
 import {
   Select,
   SelectContent,
@@ -71,7 +75,7 @@ export default function CartItem(props: {
 
   const product = cartItemData[cartItem.id];
   const [quantityRange] = useState([...Array(100 + 1).keys()].slice(1, 100 + 1));
-  const [selectedQuantity, setSelectedQuantity] = useState(1);
+  const [selectedQuantity, setSelectedQuantity] = useState(item.quantity);
 
   const handleQuantityChange = (value: string) => {
     const quantity = parseInt(value);
@@ -79,7 +83,11 @@ export default function CartItem(props: {
     setItemQuantity(cartItem, quantity);
   };
 
-  const Section = (props: { title: string; className?: string; children: React.ReactNode }) => {
+  const Section = (props: {
+    title: string;
+    className?: string;
+    children: React.ReactNode;
+  }) => {
     const { title, className, children } = props;
     return (
       <div className={cn("flex flex-col gap-2 text-lg", className)}>
