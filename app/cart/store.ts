@@ -80,7 +80,7 @@ const initializeCartItemDataFromLocalStorage = (
   callback?: (cartItemData: CartItemData) => void
 ): CartItemData => {
   if (typeof localStorage === "undefined") return {};
-  const cartItemDataString = localStorage.getItem("cart");
+  const cartItemDataString = localStorage.getItem("cartItemData");
   const cartItemData = cartItemDataString ? JSON.parse(cartItemDataString) : {};
   callback?.(cartItemData);
   return cartItemData;
@@ -91,6 +91,8 @@ const isProductInCart = (product: CartProductType, cart: Cart) => {
 };
 
 const syncCart = async (cart: Cart, state: () => CartStore) => {
+  const lastSync = localStorage.getItem("lastSync");
+  if (lastSync && Date.now() - parseInt(lastSync) < 1000 * 60 * 60) return;
   const syncedCart = await syncCartAction(cart);
   const newCart: Cart = syncedCart.map(({ product, quantity }) => ({
     product: {
@@ -106,6 +108,7 @@ const syncCart = async (cart: Cart, state: () => CartStore) => {
   }, {} as CartItemData);
   state().setCart(newCart);
   state().setCartItemData(newCartItemData);
+  localStorage.setItem("lastSync", Date.now().toString());
 };
 
 const fetchShipping = async (
