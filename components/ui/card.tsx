@@ -13,6 +13,23 @@ const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElemen
 );
 Card.displayName = "Card";
 
+const CardInteractive = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={cn(
+        `rounded-xl border bg-card text-card-foreground shadow cursor-pointer
+        hover:shadow-lg hover:-translate-y-[2px] transition-[shadow,transform,background]
+        dark:hover:bg-slate-700 active:scale-[0.98] active:shadow-none hover:active:translate-y-0
+        `,
+        className
+      )}
+      {...props}
+    />
+  )
+);
+CardInteractive.displayName = "CardInteractive";
+
 const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
     <div ref={ref} className={cn("flex flex-col space-y-1.5 p-6", className)} {...props} />
@@ -53,4 +70,4 @@ const CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDiv
 );
 CardFooter.displayName = "CardFooter";
 
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent };
+export { Card, CardInteractive, CardHeader, CardFooter, CardTitle, CardDescription, CardContent };
