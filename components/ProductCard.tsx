@@ -82,11 +82,7 @@ export default function ProductCard(props: {
             Ajouter au Panier
           </Button>
         ) : (
-          <Button
-            className="mt-auto border-opacity-100 bg-slate-300 dark:bg-slate-700"
-            variant="outline"
-            disabled
-          >
+          <Button variant="outline" className="mt-auto" disabled>
             Dans le Panier
           </Button>
         )}
