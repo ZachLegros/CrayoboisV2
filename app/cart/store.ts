@@ -1,15 +1,34 @@
 import { Shipping } from "@prisma/client";
 import { create } from "zustand";
-import { syncCart as syncCartAction } from "./actions";
+import { fetchShippingMethods, syncCart as syncCartAction } from "./actions";
 import { DbProduct, getHardwareId, getMaterialId } from "@/utils/productUtils";
+import {
+  getShippingPrice,
+  getTotal,
+  getTotalPrice,
+  getTotalTPS,
+  getTotalTVQ,
+  isShippingFree,
+} from "./utils";
 
 export type CartProduct = { id: string };
-export type CartCustomProduct = CartProduct & { material_id: string; hardware_id: string };
+export type CartCustomProduct = CartProduct & {
+  material_id: string;
+  hardware_id: string;
+};
 export type CartProductType = CartProduct | CartCustomProduct;
 export type CartItemData = {
   [key: string]: DbProduct | undefined;
 };
 export type Cart = CartItemType<CartProductType>[];
+
+export type PriceBreakdown = {
+  subtotal: number;
+  tps: number;
+  tvq: number;
+  shipping: number;
+  total: number;
+};
 
 export const isCartCustomProduct = (
   cartProduct: CartProductType
@@ -71,10 +90,7 @@ const isProductInCart = (product: CartProductType, cart: Cart) => {
   return cart.some((item) => item.product.id === product.id);
 };
 
-const syncCart = async (
-  cart: Cart,
-  set: (arg0: () => { cart: Cart; cartItemData: CartItemData }) => void
-) => {
+const syncCart = async (cart: Cart, state: () => CartStore) => {
   const syncedCart = await syncCartAction(cart);
   const newCart: Cart = syncedCart.map(({ product, quantity }) => ({
     product: {
@@ -88,14 +104,54 @@ const syncCart = async (
     acc[product.id as keyof CartItemData] = product;
     return acc;
   }, {} as CartItemData);
-  storeCartInLocalStorage(newCart);
-  storeCartItemDataInLocalStorage(newCartItemData);
-  set(() => ({ cart: newCart, cartItemData: newCartItemData }));
+  state().setCart(newCart);
+  state().setCartItemData(newCartItemData);
+};
+
+const fetchShipping = async (
+  set: (arg0: {
+    shippingMethods: { id: string; name: string; price: number }[];
+    shippingMethod: Shipping | null;
+  }) => void
+) => {
+  const shippingMethods = await fetchShippingMethods();
+  const currentMethod = shippingMethods.filter((method) => method.price !== 0)[0];
+  set({ shippingMethods, shippingMethod: currentMethod });
+};
+
+const inferShippingMethod = (
+  state: () => CartStore,
+  set: {
+    (arg0: { shippingMethod: { id: string; name: string; price: number } }): void;
+  }
+) => {
+  const { cart, cartItemData } = state();
+  if (isShippingFree(cart, cartItemData)) {
+    const freeMethod = state().shippingMethods.filter(
+      (method) => method.price === 0
+    )[0];
+    set({ shippingMethod: freeMethod });
+  } else if (state().shippingMethod?.price === 0) {
+    set({ shippingMethod: state().shippingMethods[0] });
+  }
+};
+
+const getBreakdown = (state: () => CartStore) => {
+  const { cart, cartItemData, shippingMethod } = state();
+  return {
+    subtotal: getTotalPrice(cart, cartItemData),
+    tps: getTotalTPS(cart, cartItemData),
+    tvq: getTotalTVQ(cart, cartItemData),
+    shipping: getShippingPrice(shippingMethod!),
+    total: getTotal(cart, cartItemData, shippingMethod!),
+  };
 };
 
 export type CartStore = {
   cart: Cart;
+  setCart: (cart: Cart) => void;
   cartItemData: CartItemData;
+  setCartItemData: (cartItemData: CartItemData) => void;
   getItemData: (product: CartProductType) => DbProduct | undefined;
   addToCart: (product: DbProduct) => void;
   removeFromCart: (product: CartProductType) => void;
@@ -103,27 +159,31 @@ export type CartStore = {
   syncCart: () => Promise<void>;
   setItemQuantity: (product: CartProductType, quantity: number) => void;
   shippingMethods: readonly Shipping[];
-  setShippingMethods: (shippingMethods: Shipping[]) => void;
   shippingMethod: Shipping | null;
   setShippingMethod: (id: string) => void;
+  fetchShipping: () => Promise<void>;
   isProductInCart: (product: CartProductType) => boolean;
-  getTotalPrice: () => number;
-  getTotalTPS: () => number;
-  getTotalTVQ: () => number;
-  getCartTotal: () => number;
-  getCartTotalQuantity: () => number;
-  isShippingFree: () => boolean;
-  getShippingPrice: () => number;
-  getTotal: () => number;
+  getBreakdown: () => PriceBreakdown;
 };
 
 export const useCartStore = create<CartStore>((set, state) => ({
-  syncCart: () => syncCart(state().cart, set),
-  cart: initializeCartFromLocalStorage((cart) => syncCart(cart, set)),
+  syncCart: () => syncCart(state().cart, state),
+  cart: initializeCartFromLocalStorage((cart) => syncCart(cart, state)),
+  setCart: (cart: Cart) => {
+    set(() => ({ cart }));
+    storeCartInLocalStorage(cart);
+    inferShippingMethod(state, set);
+  },
   cartItemData: initializeCartItemDataFromLocalStorage(),
+  setCartItemData: (cartItemData: CartItemData) => {
+    set(() => ({ cartItemData }));
+    storeCartItemDataInLocalStorage(cartItemData);
+  },
   getItemData: (product) => state().cartItemData[product.id],
   addToCart: (product) => {
-    const alreadyInCart = state().cart.some((item) => item.product.id === product.id);
+    const alreadyInCart = state().cart.some(
+      (item) => item.product.id === product.id
+    );
     if (alreadyInCart) return;
     const newCart = [
       ...state().cart,
@@ -137,67 +197,33 @@ export const useCartStore = create<CartStore>((set, state) => ({
       },
     ];
     const newCartItemData = { ...state().cartItemData, [product.id]: product };
-    storeCartInLocalStorage(newCart);
-    storeCartItemDataInLocalStorage(newCartItemData);
-    set(() => ({ cart: newCart, cartItemData: newCartItemData }));
+    state().setCart(newCart);
+    state().setCartItemData(newCartItemData);
   },
   removeFromCart: (product) => {
     const newCart = state().cart.filter((item) => item.product.id !== product.id);
     const newCartItemData = { ...state().cartItemData, [product.id]: undefined };
-    storeCartInLocalStorage(newCart);
-    storeCartItemDataInLocalStorage(newCartItemData);
-    set(() => ({ cart: newCart, cartItemData: newCartItemData }));
+    state().setCart(newCart);
+    state().setCartItemData(newCartItemData);
   },
   setItemQuantity: (product, quantity) => {
     const newCart = [...state().cart].map((item) =>
       item.product.id === product.id ? { ...item, quantity } : item
     );
-    set(() => ({ cart: newCart }));
-    storeCartInLocalStorage(newCart);
+    state().setCart(newCart);
   },
   isProductInCart: (product) => isProductInCart(product, state().cart),
   clearCart: () => {
-    set(() => ({ cart: [], cartItemData: {} }));
-    storeCartInLocalStorage([]);
-    storeCartItemDataInLocalStorage({});
+    state().setCart([]);
+    state().setCartItemData({});
   },
   shippingMethods: [],
-  setShippingMethods: (shippingMethods) => set(() => ({ shippingMethods })),
   shippingMethod: null,
-  setShippingMethod: (id) =>
-    set(() => ({ shippingMethod: state().shippingMethods.find((item) => item.id === id) })),
-  getTotalPrice: () => {
-    return state().cart.reduce((acc, item) => {
-      const product = state().cartItemData[item.product.id];
-      if (product === undefined) return acc;
-      return acc + product.price * item.quantity;
-    }, 0);
+  setShippingMethod: (id) => {
+    set(() => ({
+      shippingMethod: state().shippingMethods.find((item) => item.id === id),
+    }));
   },
-  getTotalTPS: () => {
-    return state().getTotalPrice() * 0.05;
-  },
-  getTotalTVQ: () => {
-    return state().getTotalPrice() * 0.09975;
-  },
-  getCartTotal: () => {
-    return state().getTotalPrice() + state().getTotalTPS() + state().getTotalTVQ();
-  },
-  getCartTotalQuantity: () => {
-    return state().cart.reduce((acc, item) => acc + item.quantity, 0);
-  },
-  isShippingFree: () => {
-    return state().getCartTotalQuantity() >= 4 || state().getTotalPrice() >= 150;
-  },
-  getShippingPrice: () => {
-    if (!state().shippingMethod || state().isShippingFree()) return 0;
-    return state().shippingMethod!.price;
-  },
-  getTotal: () => {
-    return (
-      state().getTotalPrice() +
-      state().getTotalTPS() +
-      state().getTotalTVQ() +
-      state().getShippingPrice()
-    );
-  },
+  fetchShipping: () => fetchShipping(set),
+  getBreakdown: () => getBreakdown(state),
 }));
