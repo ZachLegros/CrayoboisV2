@@ -6,11 +6,15 @@ import { useCartStore } from "./store";
 import CartBreakdown from "./cart-breakdown";
 import { useEffect } from "react";
 
-export default function Cart() {
+export default function Cart(props: { refererPathname?: string }) {
+  const { refererPathname } = props;
   const { cart, syncCart } = useCartStore();
 
   useEffect(() => {
-    syncCart();
+    console.log(refererPathname);
+    if (!refererPathname?.startsWith("/checkout")) {
+      syncCart();
+    }
   }, []);
 
   if (cart.length === 0) {
