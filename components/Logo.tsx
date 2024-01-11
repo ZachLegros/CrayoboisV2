@@ -219,7 +219,14 @@ export const SvgLogo = (props: { className?: string }) => {
   A 0.55 0.55 0.0 0 0 757.00 238.04
   Z"
       />
-      <rect fill="currentColor " x="1008.00" y="155.00" width="46.26" height="138.00" rx="0.60" />
+      <rect
+        fill="currentColor "
+        x="1008.00"
+        y="155.00"
+        width="46.26"
+        height="138.00"
+        rx="0.60"
+      />
       <path
         fill="currentColor "
         d="
@@ -292,7 +299,14 @@ export const SvgLogo = (props: { className?: string }) => {
   Q 475.35 354.60 474.95 352.37
   Z"
       />
-      <rect fill="currentColor " x="504.49" y="343.31" width="43.94" height="66.74" rx="0.26" />
+      <rect
+        fill="currentColor "
+        x="504.49"
+        y="343.31"
+        width="43.94"
+        height="66.74"
+        rx="0.26"
+      />
       <path
         fill="currentColor "
         d="

@@ -12,23 +12,40 @@ import { Button } from "./ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 // import { Tooltip } from "./ui/tooltip";
 
-export function ExpandImage(props: { isExpanded?: boolean; src: string; alt: string }) {
+export function ExpandImage(props: {
+  isExpanded?: boolean;
+  src: string;
+  alt: string;
+}) {
   const { isExpanded, src, alt } = props;
   return (
     <Dialog open={isExpanded}>
       <DialogTrigger>
-        <Button variant="ghost" size="icon" className="absolute bottom-0 right-0 m-1">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute bottom-0 right-0 m-1"
+        >
           <FaExpandAlt className="text-lg" />
         </Button>
       </DialogTrigger>
       <DialogContent>
-        <ImageWithLoading src={src} alt={alt} width={500} height={500} quality={80} />
+        <ImageWithLoading
+          src={src}
+          alt={alt}
+          width={500}
+          height={500}
+          quality={80}
+        />
       </DialogContent>
     </Dialog>
   );
 }
 
-export default function ProductCard(props: { product: Product; onClick: () => void }) {
+export default function ProductCard(props: {
+  product: Product;
+  onClick: () => void;
+}) {
   const { product } = props;
   const { toast } = useToast();
   const { addToCart, isProductInCart } = useCartStore();

@@ -8,7 +8,10 @@ import { CardInteractive } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { useTheme } from "next-themes";
 
-export default function MaterialCard(props: { material: Material; onClick: () => void }) {
+export default function MaterialCard(props: {
+  material: Material;
+  onClick: () => void;
+}) {
   const { material, onClick } = props;
   const { theme } = useTheme();
   return (
@@ -36,7 +39,9 @@ export default function MaterialCard(props: { material: Material; onClick: () =>
                 <p>{material.origin}</p>
               </div>
             )}
-            <Badge variant={theme === "dark" ? "default-faded" : "default"}>{material.type}</Badge>
+            <Badge variant={theme === "dark" ? "default-faded" : "default"}>
+              {material.type}
+            </Badge>
           </div>
         </div>
       </div>

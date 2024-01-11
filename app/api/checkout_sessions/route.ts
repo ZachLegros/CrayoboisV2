@@ -83,7 +83,8 @@ function isCartInSync(cart: Cart, syncedCart: CartItemType<DbProduct>[]) {
     syncedCart.some(
       (syncedItem) =>
         item.product.id === syncedItem.product.id &&
-        getCartProductMaterialId(item.product) === getMaterialId(syncedItem.product) &&
+        getCartProductMaterialId(item.product) ===
+          getMaterialId(syncedItem.product) &&
         getCartProductHardwareId(item.product) === getHardwareId(syncedItem.product)
     )
   );
@@ -106,7 +107,10 @@ export async function POST(req: Request) {
       if (isProduct(item.product)) {
         filteredCart.items.push({ product: item.product, quantity: item.quantity });
       } else if (isCustomProductWithComponents(item.product)) {
-        filteredCart.customItems.push({ product: item.product, quantity: item.quantity });
+        filteredCart.customItems.push({
+          product: item.product,
+          quantity: item.quantity,
+        });
       }
     }
 
@@ -152,7 +156,9 @@ export async function POST(req: Request) {
         },
       ],
       mode: "payment",
-      return_url: `${req.headers.get("origin")}/checkout?session_id={CHECKOUT_SESSION_ID}`,
+      return_url: `${req.headers.get(
+        "origin"
+      )}/checkout?session_id={CHECKOUT_SESSION_ID}`,
     });
 
     console.log("New checkout session:", session.id);

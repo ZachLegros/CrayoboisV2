@@ -6,7 +6,10 @@ import ImageWithLoading from "./ImageWithLoading";
 import { CardInteractive } from "./ui/card";
 import { Badge } from "./ui/badge";
 
-export default function HardwareCard(props: { hardware: Hardware; onClick: () => void }) {
+export default function HardwareCard(props: {
+  hardware: Hardware;
+  onClick: () => void;
+}) {
   const { hardware, onClick } = props;
   return (
     <CardInteractive className="p-3" onClick={onClick}>

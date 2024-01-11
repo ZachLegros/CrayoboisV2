@@ -33,8 +33,13 @@ export default function ProductsGrid(props: { products: Product[] }) {
   if (filteredProducts.length === 0)
     return (
       <div className="flex flex-col items-center justify-start w-full h-full mt-8">
-        <p className="text-3xl font-bold">Tous nos produits préfabriqués sont vendus!</p>
-        <Button className="mt-8 font-semibold" onClick={() => router.push("/custom-order")}>
+        <p className="text-3xl font-bold">
+          Tous nos produits préfabriqués sont vendus!
+        </p>
+        <Button
+          className="mt-8 font-semibold"
+          onClick={() => router.push("/custom-order")}
+        >
           Commander un produit sur mesure
         </Button>
       </div>

@@ -7,13 +7,19 @@ import HardwareCard from "@/components/HardwareCard";
 import { Hardware } from "@prisma/client";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export default function Hardwares(props: { onSelect: (hardware: Hardware) => void }) {
+export default function Hardwares(props: {
+  onSelect: (hardware: Hardware) => void;
+}) {
   const { onSelect } = props;
   const { hardwares, typeFilter, priceFilter } = useCustomOrderStore();
 
   const filteredHardwares = useMemo(() => {
     const mats = hardwares.filter((hardware) => {
-      if (typeFilter.enabled && typeFilter.value !== "all" && hardware.name !== typeFilter.value)
+      if (
+        typeFilter.enabled &&
+        typeFilter.value !== "all" &&
+        hardware.name !== typeFilter.value
+      )
         return false;
       return true;
     });
@@ -44,7 +50,11 @@ export default function Hardwares(props: { onSelect: (hardware: Hardware) => voi
   return (
     <ItemsGrid className="w-full">
       {filteredHardwares.map((hardware) => (
-        <HardwareCard hardware={hardware} key={hardware.id} onClick={() => onSelect(hardware)} />
+        <HardwareCard
+          hardware={hardware}
+          key={hardware.id}
+          onClick={() => onSelect(hardware)}
+        />
       ))}
     </ItemsGrid>
   );

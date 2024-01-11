@@ -9,7 +9,10 @@ export type CustomProductWithComponents = CustomProduct & {
 };
 
 export const isProduct = (product: DbProduct): product is Product => {
-  return isCustomProduct(product) === false && isCustomProductWithComponents(product) === false;
+  return (
+    isCustomProduct(product) === false &&
+    isCustomProductWithComponents(product) === false
+  );
 };
 
 export const isCustomProduct = (product: DbProduct): product is CustomProduct => {
@@ -43,12 +46,18 @@ export const getProductMaxQuantity = (product: DbProduct) => {
   return product.quantity;
 };
 
-export const getClosestValidQuantity = (desiredQuantity: number, product: DbProduct) => {
+export const getClosestValidQuantity = (
+  desiredQuantity: number,
+  product: DbProduct
+) => {
   const quantity = Math.min(desiredQuantity, getProductMaxQuantity(product));
   return quantity > 0 ? quantity : 1;
 };
 
-export const generateProductName = (material: Material, hardware: Hardware): string => {
+export const generateProductName = (
+  material: Material,
+  hardware: Hardware
+): string => {
   return `${material.name}, ${hardware.name} ${hardware.color}`;
 };
 

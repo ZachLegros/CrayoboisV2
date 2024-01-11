@@ -11,7 +11,10 @@ import { customProductFactory } from "@/utils/productUtils";
 import AddedToCart from "./added-to-cart";
 import { useToast } from "@/components/ui/use-toast";
 
-export default function OrderBuilder(props: { materials: Material[]; hardwares: Hardware[] }) {
+export default function OrderBuilder(props: {
+  materials: Material[];
+  hardwares: Hardware[];
+}) {
   const { materials, hardwares } = props;
   const { toast } = useToast();
   const { addToCart } = useCartStore();

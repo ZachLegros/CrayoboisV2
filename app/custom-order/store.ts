@@ -27,7 +27,8 @@ export const createFilter = (
 ): Filter => ({
   value: valueInitializer(),
   enabled,
-  setValue: (value: string) => set((state) => ({ [filterKey]: { ...state[filterKey], value } })),
+  setValue: (value: string) =>
+    set((state) => ({ [filterKey]: { ...state[filterKey], value } })),
   setEnabled: (enabled: boolean) =>
     set((state) => ({
       [filterKey]: { ...state[filterKey], enabled, value: valueInitializer() },

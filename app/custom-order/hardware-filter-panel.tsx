@@ -24,7 +24,9 @@ export default function HardwareFilterPanel(props: { isDisabled?: boolean }) {
   return (
     <div
       className={
-        isDisabled ? "flex flex-col gap-4 pointer-events-none opacity-50" : "flex flex-col gap-4"
+        isDisabled
+          ? "flex flex-col gap-4 pointer-events-none opacity-50"
+          : "flex flex-col gap-4"
       }
     >
       <div className="flex w-full justify-between items-center pl-2">

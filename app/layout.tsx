@@ -24,12 +24,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <Providers>
-        <body className={cn("min-h-screen bg-background font-sans antialiased", fontSans.variable)}>
+        <body
+          className={cn(
+            "min-h-screen bg-background font-sans antialiased",
+            fontSans.variable
+          )}
+        >
           <NavBar />
           <main className="flex flex-col min-h-[calc(100vh-72px)] max-w-screen-xl mx-auto px-6">
             <div className="w-full h-full py-6 mb-auto">{children}</div>
             <footer className="w-full border-t p-8">
-              <p className="text-center text-xs">© {new Date().getFullYear()} Crayobois</p>
+              <p className="text-center text-xs">
+                © {new Date().getFullYear()} Crayobois
+              </p>
             </footer>
           </main>
           <Toaster />

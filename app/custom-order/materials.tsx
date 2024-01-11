@@ -7,13 +7,19 @@ import { useCustomOrderStore } from "./store";
 import { Material } from "@prisma/client";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export default function Materials(props: { onSelect: (material: Material) => void }) {
+export default function Materials(props: {
+  onSelect: (material: Material) => void;
+}) {
   const { onSelect } = props;
   const { materials, typeFilter, originFilter, priceFilter } = useCustomOrderStore();
 
   const filteredMaterials = useMemo(() => {
     const mats = materials.filter((material) => {
-      if (typeFilter.enabled && typeFilter.value !== "all" && material.type !== typeFilter.value)
+      if (
+        typeFilter.enabled &&
+        typeFilter.value !== "all" &&
+        material.type !== typeFilter.value
+      )
         return false;
       if (
         originFilter.enabled &&
@@ -50,7 +56,11 @@ export default function Materials(props: { onSelect: (material: Material) => voi
   return (
     <ItemsGrid className="w-full">
       {filteredMaterials.map((material) => (
-        <MaterialCard material={material} key={material.id} onClick={() => onSelect(material)} />
+        <MaterialCard
+          material={material}
+          key={material.id}
+          onClick={() => onSelect(material)}
+        />
       ))}
     </ItemsGrid>
   );

@@ -14,7 +14,11 @@ export default function AddedToCart() {
     <div className="flex flex-col items-center justify-start w-full h-full mt-8">
       <p className="text-3xl font-bold">
         Votre produit a été ajouté au{" "}
-        <Button variant="link" className="text-3xl font-bold p-0 underline" onClick={() => reset()}>
+        <Button
+          variant="link"
+          className="text-3xl font-bold p-0 underline"
+          onClick={() => reset()}
+        >
           <NextLink href="/cart">panier</NextLink>
         </Button>
       </p>

@@ -24,7 +24,16 @@ async function createOrder(event: Stripe.CheckoutSessionCompletedEvent) {
     const city = address?.city;
     const country = address?.country;
     const state = address?.state;
-    if (!email || !name || !address || !line1 || !postal_code || !city || !country || !state)
+    if (
+      !email ||
+      !name ||
+      !address ||
+      !line1 ||
+      !postal_code ||
+      !city ||
+      !country ||
+      !state
+    )
       throw new Error("Missing customer details");
 
     const checkoutSession = await prisma.checkoutSession.findUnique({
@@ -33,7 +42,9 @@ async function createOrder(event: Stripe.CheckoutSessionCompletedEvent) {
     });
     if (!checkoutSession) throw new Error("Checkout session not found");
     const { items, custom_items, shipping_id } = checkoutSession;
-    const shipping = await prisma.shipping.findUnique({ where: { id: shipping_id } });
+    const shipping = await prisma.shipping.findUnique({
+      where: { id: shipping_id },
+    });
     const eventAmount = orZero(event.data.object.amount_total) / 100;
     const totalTax = orZero(0.05 * eventAmount) + orZero(0.09975 * eventAmount);
     const totalShipping = orZero(shipping?.price);
