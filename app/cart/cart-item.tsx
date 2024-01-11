@@ -102,7 +102,7 @@ export default function CartItem(props: {
   return (
     <>
       <div className="grid grid-cols-cart-item gap-4 h-[150px] w-full">
-        <div className="flex rounded-md overflow-hidden w-[150px] h-max">
+        <div className="flex rounded-sm overflow-hidden w-[150px] h-max">
           {getImageComponents(product)}
         </div>
         <Section title={product.name}>
@@ -133,7 +133,7 @@ export default function CartItem(props: {
             <span>{cad(product.price * item.quantity)}</span>
             <Button
               size="sm"
-              variant="destructive-faded"
+              variant="outline"
               onClick={() => removeFromCart(product)}
               className="w-max ml-auto"
             >
