@@ -38,6 +38,6 @@ export const getCartTotalQuantity = (cart: Cart) => {
   return cart.reduce((acc, item) => acc + item.quantity, 0);
 };
 
-export const isShippingFree = (cart: Cart, cartItemData: CartItemData) => {
-  return getCartTotalQuantity(cart) >= 4 || getTotalPrice(cart, cartItemData) >= 150;
+export const isShippingFree = (totalQuantity: number, totalPrice: number) => {
+  return totalQuantity >= 4 || totalPrice >= 150;
 };

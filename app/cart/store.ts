@@ -3,6 +3,7 @@ import { create } from "zustand";
 import { fetchShippingMethods, syncCart as syncCartAction } from "./actions";
 import { DbProduct, getHardwareId, getMaterialId } from "@/utils/productUtils";
 import {
+  getCartTotalQuantity,
   getShippingPrice,
   getTotal,
   getTotalPrice,
@@ -133,7 +134,9 @@ const inferShippingMethod = (
   const nonFreeMethods = state().shippingMethods.filter(
     (method) => method.price !== 0
   );
-  if (isShippingFree(cart, cartItemData)) {
+  if (
+    isShippingFree(getCartTotalQuantity(cart), getTotalPrice(cart, cartItemData))
+  ) {
     set({ shippingMethod: freeMethod });
   } else if (state().shippingMethod?.price === 0) {
     // reset to non-free method
