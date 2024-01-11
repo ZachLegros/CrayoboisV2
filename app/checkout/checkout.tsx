@@ -66,9 +66,7 @@ export default function Checkout(props: { sessionId?: string }) {
             body: JSON.stringify({ cart, shippingId: shippingMethod.id }),
             credentials: "same-origin",
           });
-
           const data = await res.json();
-
           if (res.status === 200) {
             setClientSecret(data.clientSecret);
             localStorage.setItem("checkout_session_id", data.sessionId);

@@ -11,11 +11,12 @@ function CollapseRadioGroup(props: {
   setFilter: (value: any) => void;
   isFilterEnabled: boolean;
   children: ReactNode;
+  className?: string;
 }) {
-  const { filter, setFilter, isFilterEnabled, children } = props;
+  const { filter, setFilter, isFilterEnabled, children, className } = props;
   return (
     <Collapse isOpened={isFilterEnabled}>
-      <RadioGroup value={filter} onValueChange={setFilter} className="mt-2 ml-2">
+      <RadioGroup value={filter} onValueChange={setFilter} className={className}>
         {children}
       </RadioGroup>
     </Collapse>
@@ -48,7 +49,7 @@ export default function Filter(props: {
   } = props;
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full bg-background border rounded-lg">
       <CheckButton
         isChecked={filterEnabled && !isDisabled}
         onClick={() => {
@@ -56,12 +57,13 @@ export default function Filter(props: {
         }}
         isDisabled={isDisabled}
       >
-        <p className="text-xl font-bold">{filterName}</p>
+        {filterName}
       </CheckButton>
       <CollapseRadioGroup
         filter={currentValue}
         isFilterEnabled={filterEnabled && !isDisabled}
         setFilter={setValue}
+        className="p-3"
       >
         {filterValues.map((filter, index) => (
           <div className="flex items-center space-x-2" key={index}>
