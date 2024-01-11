@@ -3,7 +3,6 @@
 import { cad } from "@/utils/currencyFormatter";
 import { useCartStore } from "./store";
 import { useEffect, useMemo, useState } from "react";
-import { fetchShippingMethods } from "./actions";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -13,37 +12,21 @@ import { Label } from "@/components/ui/label";
 
 export default function CartBreakdown() {
   const {
-    cart,
-    shippingMethods,
-    setShippingMethods,
     shippingMethod,
     setShippingMethod,
-    getShippingPrice,
-    getTotal,
-    getTotalPrice,
-    getTotalTPS,
-    getTotalTVQ,
-    isShippingFree,
+    shippingMethods,
+    getBreakdown,
+    fetchShipping,
   } = useCartStore();
+  const { subtotal, tps, tvq, shipping, total } = getBreakdown();
   const router = useRouter();
   const [isButtonLoading, setIsButtonLoading] = useState(false);
 
   useEffect(() => {
-    async function getShipping() {
-      const shippingMethods = await fetchShippingMethods();
-      setShippingMethods(shippingMethods);
-      setShippingMethod(shippingMethods[0]?.id);
+    if (shippingMethods.length === 0) {
+      fetchShipping();
     }
-    if (shippingMethods.length === 0) getShipping();
-  }, []);
-
-  const freeShipping = useMemo(() => {
-    if (isShippingFree()) {
-      setShippingMethod(shippingMethods.filter((method) => method.price === 0)?.[0]?.id);
-      return true;
-    }
-    return false;
-  }, [cart]);
+  }, [shippingMethods]);
 
   const isLoading = useMemo(() => {
     return shippingMethods.length === 0;
@@ -60,7 +43,7 @@ export default function CartBreakdown() {
           l'achat d'au moins 4 produits.`}
         </p>
         {shippingMethods.length > 0 ? (
-          freeShipping ? (
+          shippingMethod?.price === 0 ? (
             <Badge variant="secondary" className="">
               Livraison gratuite!
             </Badge>
@@ -87,23 +70,27 @@ export default function CartBreakdown() {
       </div>
       <div className="flex justify-between mt-2">
         <span>Sous-total</span>
-        <span>{cad(getTotalPrice())}</span>
+        <span>{cad(subtotal)}</span>
       </div>
       <div className="flex justify-between">
         <span>TPS</span>
-        <span>{cad(getTotalTPS())}</span>
+        <span>{cad(tps)}</span>
       </div>
       <div className="flex justify-between">
         <span>TVQ</span>
-        <span>{cad(getTotalTVQ())}</span>
+        <span>{cad(tvq)}</span>
       </div>
       <div className="flex justify-between">
         <span>Livraison</span>
-        {shippingMethod ? cad(getShippingPrice()) : <Skeleton className="w-16" />}
+        {shippingMethod ? cad(shipping) : <Skeleton className="w-16" />}
       </div>
       <div className="flex justify-between text-2xl font-semibold mt-2">
         <span>Total</span>
-        {shippingMethod ? <span>{cad(getTotal())}</span> : <Skeleton className="w-24 h-8" />}
+        {shippingMethod ? (
+          <span>{cad(total)}</span>
+        ) : (
+          <Skeleton className="w-24 h-8" />
+        )}
       </div>
       <Button
         size="lg"
