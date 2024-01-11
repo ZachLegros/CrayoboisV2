@@ -113,6 +113,7 @@ export default function CartBreakdown() {
           setIsButtonLoading(true);
           router.push("/checkout");
         }}
+        isLoading={isButtonLoading}
       >
         Commander
       </Button>
