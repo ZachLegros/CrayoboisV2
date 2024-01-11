@@ -3,13 +3,13 @@
 import { Hardware } from "@prisma/client";
 import { cad } from "@/utils/currencyFormatter";
 import ImageWithLoading from "./ImageWithLoading";
-import { Card } from "./ui/card";
+import { CardInteractive } from "./ui/card";
 import { Badge } from "./ui/badge";
 
 export default function HardwareCard(props: { hardware: Hardware; onClick: () => void }) {
   const { hardware, onClick } = props;
   return (
-    <Card className="p-3" onClick={onClick}>
+    <CardInteractive className="p-3" onClick={onClick}>
       <div className="grid flex-row grid-cols-component-card-sm md:grid-cols-component-card-md lg:grid-cols-component-card-lg gap-4">
         <div className="w-[100px] md:w-[125px] lg:w-[150px]">
           <ImageWithLoading
@@ -27,10 +27,10 @@ export default function HardwareCard(props: { hardware: Hardware; onClick: () =>
             <p>{cad(hardware.price)}</p>
           </div>
           <div className="flex gap-2 flex-wrap">
-            <Badge variant="secondary">{hardware.color}</Badge>
+            <Badge variant="default">{hardware.color}</Badge>
           </div>
         </div>
       </div>
-    </Card>
+    </CardInteractive>
   );
 }
