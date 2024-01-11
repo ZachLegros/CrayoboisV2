@@ -10,6 +10,7 @@ import { useCartStore } from "../cart/store";
 import { customProductFactory } from "@/utils/productUtils";
 import AddedToCart from "./added-to-cart";
 import { useToast } from "@/components/ui/use-toast";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 export default function OrderBuilder(props: {
   materials: Material[];
@@ -24,7 +25,7 @@ export default function OrderBuilder(props: {
     setMaterials,
     setHardwares,
     selectMaterial,
-    // selectHardware,
+    selectHardware,
     selectedMaterial,
   } = useCustomOrderStore();
 
@@ -42,7 +43,7 @@ export default function OrderBuilder(props: {
 
   return (
     <div className="flex flex-col w-full gap-4">
-      {/* {currentStep < 2 && (
+      {currentStep < 2 && (
         <Breadcrumbs
           steps={["Choix du bois", "Choix du matériel", "Ajouter au panier"]}
           currentStep={currentStep}
@@ -57,7 +58,7 @@ export default function OrderBuilder(props: {
             setCurrentStep(stepIndex);
           }}
         />
-      )} */}
+      )}
       {currentStep === 0 && (
         <Materials
           onSelect={(material) => {
