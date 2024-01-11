@@ -18,6 +18,7 @@ import {
 import prisma from "@/lib/prisma";
 import { Product } from "@prisma/client";
 import { getLineItems, getTotalTps, getTotalTvq, inCents } from "../utils";
+import { isShippingFree } from "@/app/cart/utils";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -117,6 +118,20 @@ export async function POST(req: Request) {
     // Create new checkout session
     const shipping = await prisma.shipping.findUnique({ where: { id: shippingId } });
     if (!shipping || isNaN(shipping.price)) throw new Error("shipping_invalid");
+    // Make sure that free shipping is applied only if the conditions are met
+    if (shipping.price === 0) {
+      const totalQuantiy = filteredCart.items.reduce(
+        (acc, item) => acc + item.quantity,
+        0
+      );
+      const totalPrice = filteredCart.items.reduce(
+        (acc, item) => acc + item.product.price * item.quantity,
+        0
+      );
+      if (!isShippingFree(totalQuantiy, totalPrice))
+        throw new Error("shipping_invalid");
+    }
+
     const session = await stripe.checkout.sessions.create({
       ui_mode: "embedded",
       payment_method_types: ["card"],
