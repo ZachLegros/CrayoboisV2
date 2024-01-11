@@ -9,7 +9,7 @@ import { useCartStore } from "../cart/store";
 import { FaCircleCheck } from "react-icons/fa6";
 import { FaExclamationCircle } from "react-icons/fa";
 import { useToast } from "@/components/ui/use-toast";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
 
@@ -107,51 +107,52 @@ export default function Checkout(props: { sessionId?: string }) {
   }, []);
 
   return (
-    <Card id="checkout" className="animate-in max-w-screen-sm mx-auto relative">
-      <CardContent
-        className={clientSecret ? "h-auto" : "flex justify-center items-center h-[650px]"}
-      >
-        {sessionId ? (
-          success ? (
-            <div className="animate-in flex flex-col w-full h-full justify-center items-center gap-2 p-4">
-              <p className="text-xl md:text-2xl font-semibold text-center">
-                Merci de supporter Crayobois!
-              </p>
-              <p className="text-lg md:text-xl text-foreground/60 font-semibold text-center">
-                Vous recevrez un email de confirmation à l'adresse fournie.
-              </p>
-              <FaCircleCheck className="text-6xl text-green-500 mt-4" />
-            </div>
-          ) : error ? (
-            <div className="animate-in flex flex-col w-full h-full justify-center items-center gap-2 p-4">
-              <p className="text-xl md:text-2xl font-semibold text-center">
-                Une erreur est survenue.
-              </p>
-              <p className="text-lg md:text-xl text-foreground/60 font-semibold text-center">
-                Veuillez réessayer ou nous{" "}
-                <Button variant="link" className="text-lg md:text-xl font-semibold">
-                  <NextLink href="/contact">contacter</NextLink>
-                </Button>{" "}
-                afin de nous faire part du problème rencontré.
-              </p>
-              <FaExclamationCircle className="text-6xl text-primary mt-4" />
-            </div>
-          ) : (
-            <Spinner />
-          )
-        ) : clientSecret ? (
-          <EmbeddedCheckoutProvider stripe={stripePromise} options={{ clientSecret }}>
-            <EmbeddedCheckout className="animate-in rounded-lg overflow-hidden" />
-          </EmbeddedCheckoutProvider>
-        ) : (
-          <div className="flex flex-col w-full h-full justify-center items-center gap-4">
+    <Card
+      id="checkout"
+      className={`animate-in max-w-screen-sm mx-auto relative p-3 ${
+        clientSecret ? "h-auto" : "h-[650px] flex justify-center items-center"
+      }`}
+    >
+      {sessionId ? (
+        success ? (
+          <div className="animate-in flex flex-col w-full h-full justify-center items-center gap-2 p-4">
             <p className="text-xl md:text-2xl font-semibold text-center">
-              Création d'une session de paiement sécurisée...
+              Merci de supporter Crayobois!
             </p>
-            <Spinner />
+            <p className="text-lg md:text-xl text-foreground/60 font-semibold text-center">
+              Vous recevrez un email de confirmation à l'adresse fournie.
+            </p>
+            <FaCircleCheck className="text-6xl text-green-500 mt-4" />
           </div>
-        )}
-      </CardContent>
+        ) : error ? (
+          <div className="animate-in flex flex-col w-full h-full justify-center items-center gap-2 p-4">
+            <p className="text-xl md:text-2xl font-semibold text-center">
+              Une erreur est survenue.
+            </p>
+            <p className="text-lg md:text-xl text-foreground/60 font-semibold text-center">
+              Veuillez réessayer ou nous{" "}
+              <Button variant="link" className="text-lg md:text-xl font-semibold p-0 underline">
+                <NextLink href="/contact">contacter</NextLink>
+              </Button>{" "}
+              afin de nous faire part du problème rencontré.
+            </p>
+            <FaExclamationCircle className="text-6xl text-primary mt-4" />
+          </div>
+        ) : (
+          <Spinner className="text-primary w-10 h-10" />
+        )
+      ) : clientSecret ? (
+        <EmbeddedCheckoutProvider stripe={stripePromise} options={{ clientSecret }}>
+          <EmbeddedCheckout className="animate-in rounded-lg overflow-hidden" />
+        </EmbeddedCheckoutProvider>
+      ) : (
+        <div className="flex flex-col w-full h-full justify-center items-center gap-4">
+          <p className="text-xl md:text-2xl font-semibold text-center">
+            Création d'une session de paiement sécurisée...
+          </p>
+          <Spinner className="text-primary w-10 h-10" />
+        </div>
+      )}
     </Card>
   );
 }
