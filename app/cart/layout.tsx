@@ -4,12 +4,12 @@ export default function Layout(props: { children: React.ReactNode }) {
   const { children } = props;
 
   return (
-    <div className="flex w-full h-full flex-col">
-      <div className="flex items-center gap-2 mb-8">
-        <FaShoppingCart className="text-3xl" />
-        <p className="text-3xl font-semibold">Mon panier</p>
+    <div className="flex flex-col">
+      <div className="flex items-center space-x-2 h-8 mb-8 px-3">
+        <FaShoppingCart className="text-2xl" />
+        <p className="text-2xl font-semibold">Mon panier</p>
       </div>
-      <div className="flex w-full h-full gap-16">{children}</div>
+      <div className="flex w-full h-full gap-11">{children}</div>
     </div>
   );
 }
