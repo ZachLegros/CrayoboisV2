@@ -16,6 +16,9 @@
     --primary: 25 100% 40%;
     --primary-foreground: 210 40% 98%;
 
+    --primary-faded: 25 100% 90%;
+    --primary-faded-foreground: 25 100% 40%;
+
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
@@ -27,6 +30,9 @@
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
+
+    --destructive-faded: 0 84.2% 90%;
+    --destructive-faded-foreground: 0 84.2% 60.2%;
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
@@ -50,6 +56,9 @@
     --primary: 25 100% 40%;
     --primary-foreground: 210 40% 98%;
 
+    --primary-faded: 25 100% 15%;
+    --primary-faded-foreground: 25 80% 90%;
+
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
 
@@ -61,6 +70,9 @@
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
+
+    --destructive-faded: 0 62.8% 10%;
+    --destructive-faded-foreground: 0 80% 90%;
 
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;

@@ -29,6 +29,10 @@ module.exports = {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
         },
+        "primary-faded": {
+          DEFAULT: "hsl(var(--primary-faded))",
+          foreground: "hsl(var(--primary-faded-foreground))",
+        },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
@@ -36,6 +40,10 @@ module.exports = {
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
+        },
+        "destructive-faded": {
+          DEFAULT: "hsl(var(--destructive-faded))",
+          foreground: "hsl(var(--destructive-faded-foreground))",
         },
         muted: {
           DEFAULT: "hsl(var(--muted))",
