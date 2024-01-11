@@ -19,7 +19,7 @@ export default function SidePanel() {
           <div className="flex w-full justify-between items-center pl-2">
             <p className="text-xl font-bold">Filtrer</p>
             <Button
-              variant="secondary"
+              variant="default-faded"
               className={`font-semibold ${
                 priceFilter.enabled && !isDisabled ? "visible" : "invisible"
               }`}
