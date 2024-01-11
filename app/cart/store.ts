@@ -112,14 +112,12 @@ const syncCart = async (cart: Cart, state: () => CartStore) => {
 };
 
 const fetchShipping = async (
-  set: (arg0: {
-    shippingMethods: { id: string; name: string; price: number }[];
-    shippingMethod: Shipping | null;
-  }) => void
+  state: () => CartStore,
+  set: (arg0: { [key: string]: any }) => void
 ) => {
   const shippingMethods = await fetchShippingMethods();
-  const currentMethod = shippingMethods.filter((method) => method.price !== 0)[0];
-  set({ shippingMethods, shippingMethod: currentMethod });
+  inferShippingMethod(state, set);
+  set({ shippingMethods: shippingMethods.sort((a, b) => a.price - b.price) });
 };
 
 const inferShippingMethod = (
@@ -129,13 +127,19 @@ const inferShippingMethod = (
   }
 ) => {
   const { cart, cartItemData } = state();
+  const freeMethod = state().shippingMethods.filter(
+    (method) => method.price === 0
+  )[0];
+  const nonFreeMethods = state().shippingMethods.filter(
+    (method) => method.price !== 0
+  );
   if (isShippingFree(cart, cartItemData)) {
-    const freeMethod = state().shippingMethods.filter(
-      (method) => method.price === 0
-    )[0];
     set({ shippingMethod: freeMethod });
   } else if (state().shippingMethod?.price === 0) {
-    set({ shippingMethod: state().shippingMethods[0] });
+    // reset to non-free method
+    set({ shippingMethod: nonFreeMethods[0] });
+  } else {
+    set({ shippingMethod: nonFreeMethods[0] });
   }
 };
 
@@ -165,6 +169,7 @@ export type CartStore = {
   shippingMethod: Shipping | null;
   setShippingMethod: (id: string) => void;
   fetchShipping: () => Promise<void>;
+  inferShippingMethod: () => void;
   isProductInCart: (product: CartProductType) => boolean;
   getBreakdown: () => PriceBreakdown;
 };
@@ -227,6 +232,7 @@ export const useCartStore = create<CartStore>((set, state) => ({
       shippingMethod: state().shippingMethods.find((item) => item.id === id),
     }));
   },
-  fetchShipping: () => fetchShipping(set),
+  fetchShipping: () => fetchShipping(state, set),
+  inferShippingMethod: () => inferShippingMethod(state, set),
   getBreakdown: () => getBreakdown(state),
 }));

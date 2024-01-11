@@ -11,20 +11,26 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 
 export default function CartBreakdown() {
+  const router = useRouter();
   const {
     shippingMethod,
     setShippingMethod,
     shippingMethods,
     getBreakdown,
     fetchShipping,
+    inferShippingMethod,
   } = useCartStore();
   const { subtotal, tps, tvq, shipping, total } = getBreakdown();
-  const router = useRouter();
   const [isButtonLoading, setIsButtonLoading] = useState(false);
+  const nonFreeShippingMethods = useMemo(() => {
+    return shippingMethods.filter((method) => method.price !== 0);
+  }, [shippingMethods]);
 
   useEffect(() => {
     if (shippingMethods.length === 0) {
       fetchShipping();
+    } else if (!shippingMethod) {
+      inferShippingMethod();
     }
   }, [shippingMethods]);
 
@@ -42,26 +48,23 @@ export default function CartBreakdown() {
           )} et plus ou
           l'achat d'au moins 4 produits.`}
         </p>
-        {shippingMethods.length > 0 ? (
+        {nonFreeShippingMethods.length > 0 ? (
           shippingMethod?.price === 0 ? (
-            <Badge variant="secondary" className="">
-              Livraison gratuite!
-            </Badge>
+            <Badge variant="default-faded">Livraison gratuite!</Badge>
           ) : (
-            <RadioGroup
-              defaultValue={`${shippingMethods[0].id}`}
-              onValueChange={(id: string) => setShippingMethod(id)}
-            >
-              {shippingMethods
-                .filter((method) => method.price !== 0)
-                .map((method, index) => (
-                  <div className="flex items-center space-x-2" key={index}>
-                    <RadioGroupItem value={`${method.id}`} id={method.id} />
-                    <Label htmlFor={method.id} className="cursor-pointer">
-                      {method.name} ({cad(method.price)})
-                    </Label>
-                  </div>
-                ))}
+            <RadioGroup onValueChange={(id: string) => setShippingMethod(id)}>
+              {nonFreeShippingMethods.map((method, index) => (
+                <div className="flex items-center space-x-2" key={index}>
+                  <RadioGroupItem
+                    checked={shippingMethod?.id === method.id}
+                    value={`${method.id}`}
+                    id={method.id}
+                  />
+                  <Label htmlFor={method.id} className="cursor-pointer">
+                    {method.name} ({cad(method.price)})
+                  </Label>
+                </div>
+              ))}
             </RadioGroup>
           )
         ) : (
