@@ -3,7 +3,7 @@
 import React, { useMemo } from "react";
 import { useCustomOrderStore } from "./store";
 import Filter from "../../components/Filter";
-import { Button } from "@/components/ui/button";
+import { ResetButton } from "./material-filter-panel";
 
 export default function HardwareFilterPanel(props: { isDisabled?: boolean }) {
   const { isDisabled } = props;
@@ -31,15 +31,12 @@ export default function HardwareFilterPanel(props: { isDisabled?: boolean }) {
     >
       <div className="flex w-full justify-between items-center pl-2">
         <p className="text-xl font-bold">Filtrer</p>
-        <Button
-          variant="secondary"
-          className={`font-semibold ${
+        <ResetButton
+          className={`${
             typeFilter.enabled || priceFilter.enabled ? "visible" : "invisible"
           }`}
           onClick={handleReset}
-        >
-          Réinitialiser
-        </Button>
+        />
       </div>
       <Filter
         filterName="Par type"

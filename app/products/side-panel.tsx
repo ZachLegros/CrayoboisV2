@@ -2,7 +2,7 @@
 
 import { useProductsStore } from "./store";
 import Filter from "../../components/Filter";
-import { Button } from "@/components/ui/button";
+import { ResetButton } from "../custom-order/material-filter-panel";
 
 export default function SidePanel() {
   const { products, priceFilter } = useProductsStore();
@@ -18,15 +18,14 @@ export default function SidePanel() {
         <>
           <div className="flex w-full justify-between items-center pl-2">
             <p className="text-xl font-bold">Filtrer</p>
-            <Button
-              variant="default-faded"
+            <ResetButton
               className={`font-semibold ${
                 priceFilter.enabled && !isDisabled ? "visible" : "invisible"
               }`}
               onClick={handleReset}
             >
               Réinitialiser
-            </Button>
+            </ResetButton>
           </div>
           <Filter
             filterName="Par prix"

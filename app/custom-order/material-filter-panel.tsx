@@ -3,7 +3,15 @@
 import React, { useMemo } from "react";
 import { useCustomOrderStore } from "./store";
 import Filter from "../../components/Filter";
-import { Button } from "@/components/ui/button";
+import { Button, ButtonProps } from "@/components/ui/button";
+
+export function ResetButton(props: ButtonProps) {
+  return (
+    <Button variant="outline" size="sm" {...props}>
+      Réinitialiser
+    </Button>
+  );
+}
 
 export default function MaterialFilterPanel() {
   const { materials, originFilter, typeFilter, priceFilter } = useCustomOrderStore();
@@ -32,17 +40,14 @@ export default function MaterialFilterPanel() {
     <div className="flex flex-col gap-4">
       <div className="flex w-full justify-between items-center pl-2">
         <p className="text-xl font-bold">Filtrer</p>
-        <Button
-          variant="default-faded"
-          className={`font-semibold ${
+        <ResetButton
+          className={`${
             typeFilter.enabled || originFilter.enabled || priceFilter.enabled
               ? "visible"
               : "invisible"
           }`}
           onClick={handleReset}
-        >
-          Réinitialiser
-        </Button>
+        />
       </div>
       <Filter
         filterName="Par type"
