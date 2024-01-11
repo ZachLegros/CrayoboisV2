@@ -1,9 +1,10 @@
-import NextLink from "next/link";
 import { useCustomOrderStore } from "./store";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 export default function AddedToCart() {
+  const router = useRouter();
   const { reset } = useCustomOrderStore();
 
   useEffect(() => {
@@ -12,19 +13,22 @@ export default function AddedToCart() {
 
   return (
     <div className="flex flex-col items-center justify-start w-full h-full mt-8">
-      <p className="text-3xl font-bold">
-        Votre produit a été ajouté au{" "}
+      <p className="text-3xl font-bold">Votre produit a été ajouté au panier.</p>
+      <div className="flex mt-8 gap-4 items-center">
+        <Button variant="outline" onClick={() => reset()}>
+          Créer un autre produit
+        </Button>{" "}
+        ou
         <Button
-          variant="link"
-          className="text-3xl font-bold p-0 underline"
-          onClick={() => reset()}
+          variant="default"
+          onClick={() => {
+            router.push("/cart");
+            reset();
+          }}
         >
-          <NextLink href="/cart">panier</NextLink>
+          Aller au panier
         </Button>
-      </p>
-      <Button color="primary" className="mt-8 font-semibold" onClick={() => reset()}>
-        Créer un autre produit
-      </Button>
+      </div>
     </div>
   );
 }
