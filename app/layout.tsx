@@ -31,7 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           )}
         >
           <NavBar />
-          <main className="flex flex-col min-h-[calc(100vh-72px)] max-w-screen-xl mx-auto px-2 md:px-4 lg:px-6 overflow-x-hidden">
+          <main className="flex flex-col min-h-[calc(100vh-72px)] max-w-screen-xl mx-auto px-3 md:px-4 lg:px-6 overflow-x-hidden">
             <div className="flex-grow py-6">{children}</div>
             <footer className="w-full border-t p-8 mt-auto">
               <p className="text-center text-xs">
