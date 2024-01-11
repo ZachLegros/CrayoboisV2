@@ -35,21 +35,23 @@ export default function Checkout(props: { sessionId?: string }) {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    const handleErrors = (data: { error: string }) => {
-      if (data.error === "cart_is_empty") {
+    const handleErrors = (error: string) => {
+      if (error === "cart_is_empty") {
         toast({ title: "Votre panier est vide." });
-      } else if (data.error === "cart_out_of_sync") {
+      } else if (error === "cart_out_of_sync") {
         syncCart();
         toast({
-          title: "Un ou plusieurs produits de votre panier ne sont plus disponibles.",
+          title:
+            "Un ou plusieurs produits de votre panier ne sont plus disponibles.",
           variant: "destructive",
         });
       } else {
         toast({
-          title: "Une erreur inattendu est survenue. Veuillez réessayer ou nous contacter.",
+          title:
+            "Une erreur inattendu est survenue. Veuillez réessayer ou nous contacter.",
           variant: "destructive",
         });
-        console.log(data.error);
+        console.log(error);
       }
     };
 
@@ -71,7 +73,8 @@ export default function Checkout(props: { sessionId?: string }) {
             setClientSecret(data.clientSecret);
             localStorage.setItem("checkout_session_id", data.sessionId);
           } else {
-            handleErrors(data);
+            // cart out of sync or empty
+            handleErrors(data.error);
             router.push("/cart");
           }
         } else if (sessionId) {
@@ -83,17 +86,16 @@ export default function Checkout(props: { sessionId?: string }) {
             clearCart();
             setSuccess(true);
           } else {
+            // transaction failed or unexpected error
             setError(true);
           }
           console.log(data);
         } else {
+          // cart is empty or shipping method is undefined
           router.push("/cart");
         }
-      } catch (err) {
-        toast({
-          title: "Une erreur inattendu est survenue. Veuillez réessayer ou nous contacter.",
-          variant: "destructive",
-        });
+      } catch (err: any) {
+        handleErrors(err.message);
         console.log(err);
         router.push("/cart");
       }
@@ -131,7 +133,10 @@ export default function Checkout(props: { sessionId?: string }) {
             </p>
             <p className="text-lg md:text-xl text-foreground/60 font-semibold text-center">
               Veuillez réessayer ou nous{" "}
-              <Button variant="link" className="text-lg md:text-xl font-semibold p-0 underline">
+              <Button
+                variant="link"
+                className="text-lg md:text-xl font-semibold p-0 underline"
+              >
                 <NextLink href="/contact">contacter</NextLink>
               </Button>{" "}
               afin de nous faire part du problème rencontré.
