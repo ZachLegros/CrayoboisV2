@@ -110,8 +110,8 @@ export default function Checkout(props: { sessionId?: string }) {
   return (
     <Card
       id="checkout"
-      className={`animate-in max-w-screen-sm mx-auto relative p-3 ${
-        clientSecret ? "h-auto" : "h-[650px] flex justify-center items-center"
+      className={`animate-in max-w-screen-sm mx-auto relative p-3 min-h-[650px] ${
+        !clientSecret && "flex justify-center items-center"
       }`}
     >
       {sessionId ? (
