@@ -9,15 +9,14 @@ import Hardwares from "./hardwares";
 import { useCartStore } from "../cart/store";
 import { customProductFactory } from "@/utils/productUtils";
 import AddedToCart from "./added-to-cart";
-import { useToast } from "@/components/ui/use-toast";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import useFloatingBarStore from "../floating-bar-store";
 
 export default function OrderBuilder(props: {
   materials: Material[];
   hardwares: Hardware[];
 }) {
   const { materials, hardwares } = props;
-  const { toast } = useToast();
   const { addToCart } = useCartStore();
   const {
     currentStep,
@@ -28,23 +27,26 @@ export default function OrderBuilder(props: {
     selectHardware,
     selectedMaterial,
   } = useCustomOrderStore();
+  const { onOpenChange } = useFloatingBarStore();
 
   const handleAddToCart = (material: Material, hardware: Hardware) => {
     const customProduct = customProductFactory(material, hardware);
     addToCart(customProduct);
     setCurrentStep(currentStep + 1);
-    toast({ title: "Votre produit a été ajouté au panier" });
+    onOpenChange(false);
   };
 
   useEffect(() => {
     setMaterials(materials);
     setHardwares(hardwares);
+    onOpenChange(true);
   }, [materials, hardwares]);
 
   return (
-    <div className="flex flex-col w-full gap-4">
+    <>
       {currentStep < 2 && (
         <Breadcrumbs
+          className="hidden sm:flex"
           steps={["Choix du bois", "Choix du matériel", "Ajouter au panier"]}
           currentStep={currentStep}
           onAction={(stepIndex) => {
@@ -76,6 +78,6 @@ export default function OrderBuilder(props: {
         />
       )}
       {currentStep === 2 && <AddedToCart />}
-    </div>
+    </>
   );
 }
