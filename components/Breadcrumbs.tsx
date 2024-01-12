@@ -1,16 +1,23 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import { FaChevronRight as ChevronRight } from "react-icons/fa";
 
 export function Breadcrumbs(props: {
   steps: string[];
   currentStep: number;
   onAction?: (stepIndex: number) => void;
+  className?: string;
 }) {
-  const { steps, currentStep } = props;
+  const { steps, currentStep, onAction, className } = props;
 
   return (
-    <ol className="bg-card border h-8 w-max px-3 flex items-center rounded-md">
+    <ol
+      className={cn(
+        "bg-card border h-8 w-max px-3 flex items-center rounded-md",
+        className
+      )}
+    >
       {steps.map((step, index) => (
         <li key={index}>
           <div className="relative flex items-center">
@@ -31,8 +38,8 @@ export function Breadcrumbs(props: {
                 data-previous={index < currentStep}
                 data-next={index > currentStep}
                 onClick={() => {
-                  if (index < currentStep && props.onAction) {
-                    props.onAction(index);
+                  if (index < currentStep && onAction) {
+                    onAction(index);
                   }
                 }}
               >
