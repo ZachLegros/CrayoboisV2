@@ -1,20 +1,47 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import HardwareFilterPanel from "./hardware-filter-panel";
 import MaterialFilterPanel from "./material-filter-panel";
 import { useCustomOrderStore } from "./store";
+import { Drawer, DrawerContent } from "@/components/ui/drawer";
+import useDrawerStore from "../drawer-store";
 
-export default function SidePanel() {
+export default function SidePanel(props: { className?: string }) {
+  const { className } = props;
   const { currentStep } = useCustomOrderStore();
+  const { isOpen, onOpenChange } = useDrawerStore();
+
+  const panelContent = (
+    <>
+      {currentStep === 0 && <MaterialFilterPanel />}
+      {currentStep === 1 && <HardwareFilterPanel />}
+    </>
+  );
 
   return (
-    <div className="w-64 h-max overflow-hidden sticky top-0 -mt-[calc(4rem+1.5rem+1px)] pt-[calc(4rem+1.5rem+1px)]">
-      <div className="h-[calc(100vh-4rem-1.5rem-1px)] overflow-y-auto pr-3">
-        {currentStep === 0 && <MaterialFilterPanel />}
-        {(currentStep === 1 || currentStep === 2) && (
-          <HardwareFilterPanel isDisabled={currentStep === 2} />
-        )}
+    <div
+      className={cn(
+        "h-max sticky top-0 -mt-[calc(4rem+1.5rem+1px)] pt-[calc(4rem+1.5rem+1px)]",
+        className
+      )}
+    >
+      <div className="hidden md:flex w-full h-[calc(100vh-4rem-1.5rem-1px)] overflow-y-auto pr-3">
+        {panelContent}
       </div>
+      {isOpen && (
+        <Drawer
+          open={isOpen}
+          onOpenChange={(isOpen) => {
+            if (!isOpen) window.scrollTo(0, 0);
+            onOpenChange(isOpen);
+          }}
+        >
+          <DrawerContent className="h-[600px] p-3 space-y-4">
+            {panelContent}
+          </DrawerContent>
+        </Drawer>
+      )}
     </div>
   );
 }
