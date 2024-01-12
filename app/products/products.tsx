@@ -33,7 +33,7 @@ export default function ProductsGrid(props: { products: Product[] }) {
   if (filteredProducts.length === 0)
     return (
       <div className="flex flex-col items-center justify-start w-full h-full mt-8">
-        <p className="text-3xl font-bold">
+        <p className="text-3xl text-center font-bold p-3">
           Tous nos produits préfabriqués sont vendus!
         </p>
         <Button
@@ -46,7 +46,7 @@ export default function ProductsGrid(props: { products: Product[] }) {
     );
 
   return (
-    <ItemsGrid className="md:grid-cols-2 lg:grid-cols-3">
+    <ItemsGrid className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
       {filteredProducts.map((product) => (
         <ProductCard key={product.id} product={product} onClick={() => {}} />
       ))}
