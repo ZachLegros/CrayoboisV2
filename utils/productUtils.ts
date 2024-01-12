@@ -31,6 +31,20 @@ export const isCustomProductWithComponents = (
   );
 };
 
+export const isMaterial = (
+  component: Material | Hardware
+): component is Material => {
+  return (component as Material).origin !== undefined;
+};
+
+export const isHardware = (
+  component: Material | Hardware
+): component is Hardware => {
+  return (
+    (component as Hardware).color !== undefined && isMaterial(component) === false
+  );
+};
+
 export const getMaterialId = (product: DbProduct) => {
   return isCustomProduct(product) ? product.material_id : undefined;
 };
