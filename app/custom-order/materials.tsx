@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo } from "react";
 import ItemsGrid from "@/components/ItemsGrid";
-import MaterialCard from "@/components/MaterialCard";
+import ProductComponentCard from "@/components/ProductComponentCard";
 import { useCustomOrderStore } from "./store";
 import { Material } from "@prisma/client";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -56,8 +56,8 @@ export default function Materials(props: {
   return (
     <ItemsGrid className="w-full">
       {filteredMaterials.map((material) => (
-        <MaterialCard
-          material={material}
+        <ProductComponentCard
+          component={material}
           key={material.id}
           onClick={() => onSelect(material)}
         />

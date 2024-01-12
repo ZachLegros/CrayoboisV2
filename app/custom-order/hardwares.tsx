@@ -3,7 +3,7 @@
 import { useEffect, useMemo } from "react";
 import ItemsGrid from "@/components/ItemsGrid";
 import { useCustomOrderStore } from "./store";
-import HardwareCard from "@/components/HardwareCard";
+import ProductComponentCard from "@/components/ProductComponentCard";
 import { Hardware } from "@prisma/client";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -50,8 +50,8 @@ export default function Hardwares(props: {
   return (
     <ItemsGrid className="w-full">
       {filteredHardwares.map((hardware) => (
-        <HardwareCard
-          hardware={hardware}
+        <ProductComponentCard
+          component={hardware}
           key={hardware.id}
           onClick={() => onSelect(hardware)}
         />
