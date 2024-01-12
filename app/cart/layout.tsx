@@ -9,7 +9,7 @@ export default function Layout(props: { children: React.ReactNode }) {
         <FaShoppingCart className="text-2xl" />
         <p className="text-2xl font-semibold">Mon panier</p>
       </div>
-      <div className="flex w-full h-full gap-11">{children}</div>
+      <div className="flex w-full h-full space-x-11">{children}</div>
     </div>
   );
 }
