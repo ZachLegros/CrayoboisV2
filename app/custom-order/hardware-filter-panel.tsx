@@ -23,11 +23,8 @@ export default function HardwareFilterPanel(props: { isDisabled?: boolean }) {
 
   return (
     <div
-      className={
-        isDisabled
-          ? "flex flex-col gap-4 pointer-events-none opacity-50"
-          : "flex flex-col gap-4"
-      }
+      className="flex flex-col w-full h-full overflow-y-auto gap-4 aria-disabled:pointer-events-none aria-disabled:opacity-50"
+      aria-disabled={isDisabled}
     >
       <div className="flex w-full justify-between items-center pl-2">
         <p className="text-xl font-bold">Filtrer</p>

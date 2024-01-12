@@ -37,7 +37,7 @@ export default function MaterialFilterPanel() {
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col w-full h-full overflow-y-auto gap-4">
       <div className="flex w-full justify-between items-center pl-2">
         <p className="text-xl font-bold">Filtrer</p>
         <ResetButton
