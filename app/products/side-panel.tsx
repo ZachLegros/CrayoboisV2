@@ -43,16 +43,18 @@ export default function SidePanel(props: { className?: string }) {
     >
       <div className="flex flex-col w-full h-full gap-4 overflow-y-auto overflow-x-hidden pr-2">
         {panelContent}
-        <FloatingBar className="flex md:hidden">
-          <Drawer>
-            <DrawerTrigger className="ml-auto">
-              <FloatingFilterTrigger />
-            </DrawerTrigger>
-            <DrawerContent className="p-3 space-y-4">
-              <ProductFilters />
-            </DrawerContent>
-          </Drawer>
-        </FloatingBar>
+        {products.length > 0 && (
+          <FloatingBar className="flex md:hidden">
+            <Drawer>
+              <DrawerTrigger className="ml-auto">
+                <FloatingFilterTrigger />
+              </DrawerTrigger>
+              <DrawerContent className="p-3 space-y-4">
+                <ProductFilters />
+              </DrawerContent>
+            </Drawer>
+          </FloatingBar>
+        )}
       </div>
     </div>
   );
