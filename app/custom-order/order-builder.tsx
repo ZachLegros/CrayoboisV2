@@ -71,7 +71,7 @@ export default function OrderBuilder(props: {
               selectMaterial(material);
             }}
           />
-          <FloatingBar>
+          <FloatingBar className="flex md:hidden">
             <Drawer>
               <DrawerTrigger className="ml-auto">
                 <FloatingFilterTrigger />
@@ -91,7 +91,7 @@ export default function OrderBuilder(props: {
               handleAddToCart(selectedMaterial, hardware);
             }}
           />
-          <FloatingBar>
+          <FloatingBar className="flex md:hidden">
             <Button
               size="lg"
               className="m-3 mb-6 text-lg drop-shadow-lg p-4 pointer-events-auto mr-auto"
@@ -111,7 +111,18 @@ export default function OrderBuilder(props: {
           </FloatingBar>
         </>
       )}
-      {currentStep === 2 && <AddedToCart />}
+      {currentStep === 2 && (
+        <>
+          <AddedToCart />
+          <FloatingBar className="flex md:hidden">
+            <Drawer open={true}>
+              <DrawerContent className="p-3 mb-8">
+                <AddedToCart />
+              </DrawerContent>
+            </Drawer>
+          </FloatingBar>
+        </>
+      )}
     </>
   );
 }
