@@ -22,13 +22,14 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <Providers>
         <body
           className={cn(
             "bg-background-content text-foreground font-sans antialiased min-h-screen",
             fontSans.variable
           )}
+          suppressHydrationWarning={true}
         >
           <NavBar />
           <main className="flex flex-col min-h-[calc(100vh-72px)] max-w-screen-xl mx-auto px-3 md:px-4 lg:px-6">
