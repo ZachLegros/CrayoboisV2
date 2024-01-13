@@ -2,17 +2,13 @@ import { useCustomOrderStore } from "./store";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import useDrawerStore from "../drawer-store";
-import { Drawer, DrawerContent } from "@/components/ui/drawer";
 
 export default function AddedToCart() {
   const router = useRouter();
   const { reset } = useCustomOrderStore();
-  const { isOpen, onOpenChange } = useDrawerStore();
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    onOpenChange(true);
   }, []);
 
   return (
@@ -36,7 +32,7 @@ export default function AddedToCart() {
           </Button>
         </div>
       </div>
-      {isOpen && (
+      {/* {isOpen && (
         <Drawer open={isOpen} onOpenChange={onOpenChange}>
           <DrawerContent className="flex md:hidden h-52 p-3 space-y-4">
             <div className="flex flex-col w-full h-full text-center">
@@ -67,7 +63,7 @@ export default function AddedToCart() {
             </div>
           </DrawerContent>
         </Drawer>
-      )}
+      )} */}
     </div>
   );
 }
