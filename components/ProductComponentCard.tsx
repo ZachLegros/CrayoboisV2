@@ -27,11 +27,11 @@ export default function ProductComponentCard(props: {
             quality={80}
           />
         </div>
-        <div className="flex flex-col flex-grow gap-2">
-          <div className="flex justify-between gap-4 text-sm md:text-md xl:text-lg">
+        <div className="flex flex-col flex-grow gap-1">
+          <div className="flex justify-between text-sm md:text-md xl:text-lg">
             <b>{component.name}</b>
           </div>
-          <div className="flex gap-2 flex-wrap">
+          <div className="flex gap-x-2 gap-y-1 flex-wrap">
             <ComponentDetails component={component} />
           </div>
           <p className="absolute bottom-0 right-0 text-sm md:text-md lg:text-lg p-2 sm:p-3">
@@ -51,7 +51,7 @@ function ComponentDetails(props: { component: Material | Hardware }) {
     return (
       <>
         {component.origin !== "Inconnu" && (
-          <div className="flex text-xs md:text-sm items-center gap-1">
+          <div className="hidden sm:flex text-xs md:text-sm items-center gap-1">
             <FaEarthAmericas />
             <p>{component.origin}</p>
           </div>
