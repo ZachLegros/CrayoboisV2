@@ -1,15 +1,15 @@
 "use client";
 
 import { useProductsStore } from "./store";
-import Filter from "../../components/Filter";
 import { ResetButton } from "../custom-order/material-filter-panel";
 import { cn } from "@/lib/utils";
-import { Drawer, DrawerContent } from "@/components/ui/drawer";
-import useDrawerStore from "../drawer-store";
+import ProductFilters from "./products-filters";
+import FloatingBar from "@/components/FloatingBar";
+import FloatingFilterTrigger from "@/components/FloatingFilterTrigger";
+import { Drawer, DrawerTrigger, DrawerContent } from "@/components/ui/drawer";
 
 export default function SidePanel(props: { className?: string }) {
   const { className } = props;
-  const { isOpen, onOpenChange } = useDrawerStore();
   const { products, priceFilter } = useProductsStore();
   const isDisabled = products.length === 0;
 
@@ -30,18 +30,7 @@ export default function SidePanel(props: { className?: string }) {
           Réinitialiser
         </ResetButton>
       </div>
-      <Filter
-        filterName="Par prix"
-        filterValues={[
-          { value: "desc", label: "Prix descendant" },
-          { value: "asc", label: "Prix ascendant" },
-        ]}
-        currentValue={priceFilter.value}
-        setValue={priceFilter.setValue}
-        filterEnabled={priceFilter.enabled}
-        setFilterEnabled={priceFilter.setEnabled}
-        isDisabled={isDisabled}
-      />
+      <ProductFilters />
     </>
   );
 
@@ -54,13 +43,16 @@ export default function SidePanel(props: { className?: string }) {
     >
       <div className="flex flex-col w-full h-full gap-4 overflow-y-auto overflow-x-hidden pr-2">
         {panelContent}
-        {isOpen && (
-          <Drawer open={isOpen} onOpenChange={onOpenChange}>
-            <DrawerContent className="h-96 p-3 space-y-4">
-              {panelContent}
+        <FloatingBar className="flex md:hidden">
+          <Drawer>
+            <DrawerTrigger className="ml-auto">
+              <FloatingFilterTrigger />
+            </DrawerTrigger>
+            <DrawerContent className="p-3 space-y-4">
+              <ProductFilters />
             </DrawerContent>
           </Drawer>
-        )}
+        </FloatingBar>
       </div>
     </div>
   );
