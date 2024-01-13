@@ -38,20 +38,19 @@ export default function NavBar() {
         <div className="flex space-x-4 items-center flex-grow justify-between lg:justify-start">
           <Logo className="flex mr-4" />
           <NavLinks items={items} className="hidden lg:flex space-x-4" />
-          <Button
-            size="icon"
-            className="flex lg:hidden"
-            onClick={() => setIsMenuOpen(true)}
-          >
-            <FaBars />
-          </Button>
         </div>
         <div className="hidden lg:flex gap-2 items-center">
-          <ModeToggle />
           <Cart />
+          <ModeToggle />
           <Suspense>
             <AuthButton />
           </Suspense>
+        </div>
+        <div className="flex gap-2 lg:hidden">
+          <Cart />
+          <Button size="icon" onClick={() => setIsMenuOpen(true)}>
+            <FaBars />
+          </Button>
         </div>
       </div>
       <MobileMenu isOpen={isMenuOpen} onOpenChange={setIsMenuOpen} />
