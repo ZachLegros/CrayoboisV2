@@ -17,6 +17,10 @@ export default function ProductsGrid(props: { products: Product[] }) {
     setProducts(products);
   }, []);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [products, priceFilter]);
+
   const filteredProducts = useMemo(() => {
     if (products.length === 0) return [];
     const prods = [...products];
