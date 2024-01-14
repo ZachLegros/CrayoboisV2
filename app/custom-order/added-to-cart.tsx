@@ -32,38 +32,6 @@ export default function AddedToCart() {
           </Button>
         </div>
       </div>
-      {/* {isOpen && (
-        <Drawer open={isOpen} onOpenChange={onOpenChange}>
-          <DrawerContent className="flex md:hidden h-52 p-3 space-y-4">
-            <div className="flex flex-col w-full h-full text-center">
-              <p className="text-xl font-bold">
-                Votre produit a été ajouté au panier.
-              </p>
-              <div className="flex mt-8 gap-4 justify-center items-center flex-wrap">
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    reset();
-                    onOpenChange(false);
-                  }}
-                >
-                  Créer un autre produit
-                </Button>
-                <Button
-                  variant="default"
-                  onClick={() => {
-                    router.push("/cart");
-                    reset();
-                    onOpenChange(false);
-                  }}
-                >
-                  Aller au panier
-                </Button>
-              </div>
-            </div>
-          </DrawerContent>
-        </Drawer>
-      )} */}
     </div>
   );
 }
