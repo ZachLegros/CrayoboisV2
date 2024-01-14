@@ -6,7 +6,7 @@ import Link from "next/link";
 import AuthButton from "./AuthButton";
 import Logo from "./Logo";
 import { ModeToggle } from "./ModeToggle";
-import Cart from "./Cart";
+import CartButton from "./CartButton";
 import { Sheet, SheetContent } from "./ui/sheet";
 import { Button } from "./ui/button";
 import { FaBars } from "react-icons/fa";
@@ -40,14 +40,14 @@ export default function NavBar() {
           <NavLinks items={items} className="hidden lg:flex space-x-4" />
         </div>
         <div className="hidden lg:flex gap-2 items-center">
-          <Cart />
+          <CartButton />
           <ModeToggle />
           <Suspense>
             <AuthButton />
           </Suspense>
         </div>
         <div className="flex gap-2 lg:hidden">
-          <Cart />
+          <CartButton />
           <Button size="icon" onClick={() => setIsMenuOpen(true)}>
             <FaBars />
           </Button>
