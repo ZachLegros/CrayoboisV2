@@ -6,9 +6,14 @@ import CartBreakdown from "./cart-breakdown";
 import { useEffect } from "react";
 import { useCartStore } from "./store";
 import { Card } from "@/components/ui/card";
+import FloatingBar from "@/components/FloatingBar";
+import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
+import { Button } from "@/components/ui/button";
+import { cad } from "@/utils/currencyFormatter";
 
 export default function Cart() {
-  const { cart, syncCart } = useCartStore();
+  const { cart, syncCart, getBreakdown } = useCartStore();
+  const { subtotal } = getBreakdown();
 
   useEffect(() => {
     syncCart();
@@ -26,10 +31,26 @@ export default function Cart() {
             <CartItem item={item} hasSeparator={index !== cart.length - 1} />
           </div>
         ))}
+        <div className="flex md:hidden justify-between text-xl">
+          <span>Sous-total</span>
+          <span>{cad(subtotal)}</span>
+        </div>
       </Card>
-      <div className="hidden lg:flex min-w-80 max-w-80 h-max flex-grow sticky top-0 -mt-[calc(4rem+1.5rem+1px)] pt-[calc(1.5rem+2rem+2rem+1px)]">
+      <div className="hidden md:flex min-w-60 max-w-60 lg:min-w-80 lg:max-w-80 h-max flex-grow sticky top-0 -mt-[calc(4rem+1.5rem+1px)] pt-[calc(1.5rem+2rem+2rem+1px)]">
         <CartBreakdown />
       </div>
+      <FloatingBar className="flex md:hidden">
+        <Drawer>
+          <DrawerTrigger className="w-full m-3 mb-6">
+            <Button size="lg" className="w-full pointer-events-auto">
+              Passer une commande
+            </Button>
+          </DrawerTrigger>
+          <DrawerContent>
+            <CartBreakdown className="p-3" />
+          </DrawerContent>
+        </Drawer>
+      </FloatingBar>
     </>
   );
 }
