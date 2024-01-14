@@ -1,7 +1,7 @@
 import { Shipping } from "@prisma/client";
 import { create } from "zustand";
 import { fetchShippingMethods, syncCart as syncCartAction } from "./actions";
-import { DbProduct, getHardwareId, getMaterialId } from "@/utils/productUtils";
+import { DbProduct, getHardwareId, getMaterialId } from "@/lib/productUtils";
 import {
   getCartTotalQuantity,
   getShippingPrice,

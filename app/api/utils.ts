@@ -1,4 +1,4 @@
-import { DbProduct } from "@/utils/productUtils";
+import { DbProduct } from "@/lib/productUtils";
 import { CartItemType } from "../cart/store";
 import Stripe from "stripe";
 

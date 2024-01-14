@@ -1,6 +1,6 @@
 "use client";
 
-import { cad } from "@/utils/currencyFormatter";
+import { cad } from "@/lib/currencyFormatter";
 import { useCartStore } from "./store";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";

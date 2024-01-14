@@ -1,6 +1,6 @@
 "use client";
 
-import { cad } from "@/utils/currencyFormatter";
+import { cad } from "@/lib/currencyFormatter";
 import ImageWithLoading from "./ImageWithLoading";
 import { useCartStore } from "@/app/cart/store";
 import { useState } from "react";

@@ -2,12 +2,12 @@
 
 import { Hardware, Material } from "@prisma/client";
 import { FaEarthAmericas } from "react-icons/fa6";
-import { cad } from "@/utils/currencyFormatter";
+import { cad } from "@/lib/currencyFormatter";
 import ImageWithLoading from "./ImageWithLoading";
 import { CardInteractive } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { useTheme } from "next-themes";
-import { isMaterial } from "@/utils/productUtils";
+import { isMaterial } from "@/lib/productUtils";
 
 export default function ProductComponentCard(props: {
   component: Material | Hardware;

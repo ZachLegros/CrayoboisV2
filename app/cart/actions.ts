@@ -4,7 +4,7 @@ import {
   CustomProductWithComponents,
   customProductFactory,
   getClosestValidQuantity,
-} from "@/utils/productUtils";
+} from "@/lib/productUtils";
 import prisma from "@/lib/prisma";
 import { Product } from "@prisma/client";
 import {

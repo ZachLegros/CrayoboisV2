@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 
 export default async function OrdersPage() {

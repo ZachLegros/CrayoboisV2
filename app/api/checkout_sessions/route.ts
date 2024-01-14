@@ -14,7 +14,7 @@ import {
   getMaterialId,
   isCustomProductWithComponents,
   isProduct,
-} from "@/utils/productUtils";
+} from "@/lib/productUtils";
 import prisma from "@/lib/prisma";
 import { Product } from "@prisma/client";
 import { getLineItems, getTotalTps, getTotalTvq, inCents } from "../utils";
