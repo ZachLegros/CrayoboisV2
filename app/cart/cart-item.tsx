@@ -25,7 +25,7 @@ const getImageComponents = (product: DbProduct) => {
   if (isCustomProductWithComponents(product)) {
     const { material, hardware } = product;
     return (
-      <ImageListWithLoading itemsNo={2}>
+      <ImageListWithLoading className="flex-col md:flex-row" itemsNo={2}>
         {(onLoad) => (
           <>
             <Image
@@ -84,62 +84,84 @@ export default function CartItem(props: {
   };
 
   const Section = (props: {
-    title: string;
+    title?: string;
     className?: string;
     children: React.ReactNode;
   }) => {
     const { title, className, children } = props;
     return (
-      <div className={cn("flex flex-col gap-2 text-lg", className)}>
-        <span className="font-semibold">{title}</span>
+      <div
+        className={cn(
+          "flex flex-col gap-1 md:gap-4 text-sm md:text-md lg:text-lg",
+          className
+        )}
+      >
+        {!!title && <span className="font-semibold line-clamp-2">{title}</span>}
         {children}
       </div>
     );
   };
 
+  const quantityContent = (product: DbProduct) =>
+    isCustomProductWithComponents(product) || product.quantity > 1 ? (
+      <Select onValueChange={handleQuantityChange}>
+        <SelectTrigger className="text-xs h-8 w-16 md:text-sm">
+          <SelectValue placeholder={selectedQuantity} />
+        </SelectTrigger>
+        <SelectContent className="h-52 md:h-96">
+          {quantityRange.map((quantity) => (
+            <SelectItem value={`${quantity}`} key={`${quantity}`}>
+              {`${quantity}`}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    ) : (
+      <Badge variant="secondary" className="gap-1 h-8">
+        <span className="w-2 h-2 bg-primary rounded-full"></span>1 en stock
+      </Badge>
+    );
+
   if (product === undefined) return null;
 
   return (
     <>
-      <div className="grid grid-cols-cart-item gap-4 h-[150px] w-full">
-        <div className="flex rounded-sm overflow-hidden w-[150px] h-max">
+      <div className="grid grid-cols-cart-item gap-2 md:gap-4 md:grid-cols-cart-item-md h-[150px] w-full">
+        <div className="flex rounded-sm overflow-hidden max-w-[150px] h-max">
           {getImageComponents(product)}
         </div>
         <Section title={product.name}>
           <span>{cad(product.price)}</span>
-        </Section>
-        <Section title="Quantité">
-          {isCustomProductWithComponents(product) || product.quantity > 1 ? (
-            <Select onValueChange={handleQuantityChange}>
-              <SelectTrigger>
-                <SelectValue placeholder={selectedQuantity} />
-              </SelectTrigger>
-              <SelectContent>
-                {quantityRange.map((quantity) => (
-                  <SelectItem key={`${quantity}`} value={`${quantity}`}>
-                    {`${quantity}`}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          ) : (
-            <Badge variant="secondary" className="gap-1">
-              <span className="w-2 h-2 bg-primary rounded-full"></span>1 en stock
-            </Badge>
-          )}
-        </Section>
-        <Section title="Sous-total" className="items-end">
-          <div className="flex flex-col justify-between h-full">
-            <span>{cad(product.price * item.quantity)}</span>
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => removeFromCart(product)}
-              className="w-max ml-auto"
-            >
-              Retirer
-            </Button>
+          {/* Mobile quantity */}
+          <div className="flex flex-col gap-2 mt-auto md:hidden">
+            <p className="font-semibold">Quantité</p>
+            {quantityContent(product)}
           </div>
+        </Section>
+        <Section title="Quantité" className="hidden md:flex">
+          {quantityContent(product)}
+        </Section>
+        <Section title="Sous-total" className="hidden md:flex w-full items-end">
+          <span className="h-8">{cad(product.price * item.quantity)}</span>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => removeFromCart(product)}
+            className="w-max ml-auto mt-auto"
+          >
+            Retirer
+          </Button>
+        </Section>
+        {/* Mobile remove */}
+        <Section title="" className="flex md:hidden">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => removeFromCart(product)}
+            className="w-max ml-auto mt-auto"
+          >
+            Retirer
+          </Button>
         </Section>
       </div>
       {hasSeparator && <Separator />}
