@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import type { Hardware, Material } from "@prisma/client";
 import Materials from "./materials";
 import Hardwares from "./hardwares";
@@ -28,6 +28,7 @@ export default function OrderBuilder(props: {
   const {
     currentStep,
     setCurrentStep,
+    reset,
     setMaterials,
     setHardwares,
     selectMaterial,
@@ -41,6 +42,10 @@ export default function OrderBuilder(props: {
     addToCart(customProduct);
     setCurrentStep(currentStep + 1);
   };
+
+  useLayoutEffect(() => {
+    if (currentStep === 2) reset();
+  }, []);
 
   useEffect(() => {
     setMaterials(materials);
