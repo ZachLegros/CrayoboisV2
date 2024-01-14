@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { cad } from "@/utils/currencyFormatter";
+import { useCallback, useMemo, useState } from "react";
+import { cad } from "@/lib/currencyFormatter";
 import { CartItemType, CartProductType, useCartStore } from "./store";
 import ImageWithLoading from "@/components/ImageWithLoading";
 import Image from "next/image";
@@ -8,7 +8,7 @@ import {
   DbProduct,
   isCustomProductWithComponents,
   isProduct,
-} from "@/utils/productUtils";
+} from "@/lib/productUtils";
 import {
   Select,
   SelectContent,
@@ -21,7 +21,84 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
-const getImageComponents = (product: DbProduct) => {
+export default function CartItem(props: {
+  item: CartItemType<CartProductType>;
+  product: DbProduct;
+  hasSeparator?: boolean;
+}) {
+  const { item, product, hasSeparator } = props;
+  const { removeFromCart, setItemQuantity } = useCartStore();
+
+  const [selectedQuantity, setSelectedQuantity] = useState(item.quantity);
+
+  const handleQuantityChange = (value: string) => {
+    const quantity = parseInt(value);
+    setSelectedQuantity(quantity);
+    setItemQuantity(product, quantity);
+  };
+
+  const quantityContent = useMemo(
+    () => (
+      <QuantityContent
+        product={product}
+        selectedQuantity={selectedQuantity}
+        onQuantityChange={handleQuantityChange}
+      />
+    ),
+    [product, selectedQuantity]
+  );
+
+  const handleRemoveFromCart = useCallback(() => removeFromCart(product), [product]);
+
+  if (product === undefined) return null;
+
+  return (
+    <>
+      <div className="grid grid-cols-cart-item gap-2 md:gap-4 md:grid-cols-cart-item-md h-[150px] w-full">
+        <div className="flex rounded-sm overflow-hidden max-w-[150px] h-max">
+          <ItemImages product={product} />
+        </div>
+        <Section title={product.name}>
+          <span>{cad(product.price)}</span>
+          {/* Mobile quantity */}
+          <div className="flex flex-col gap-2 mt-auto md:hidden">
+            <p className="font-semibold">Quantité</p>
+            {quantityContent}
+          </div>
+        </Section>
+        <Section title="Quantité" className="hidden md:flex">
+          {quantityContent}
+        </Section>
+        <Section title="Sous-total" className="hidden md:flex w-full items-end">
+          <span className="h-8">{cad(product.price * item.quantity)}</span>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={handleRemoveFromCart}
+            className="w-max ml-auto mt-auto"
+          >
+            Retirer
+          </Button>
+        </Section>
+        {/* Mobile remove */}
+        <Section title="" className="flex md:hidden">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={handleRemoveFromCart}
+            className="w-max ml-auto mt-auto"
+          >
+            Retirer
+          </Button>
+        </Section>
+      </div>
+      {hasSeparator && <Separator />}
+    </>
+  );
+}
+
+const ItemImages = (props: { product: DbProduct }) => {
+  const { product } = props;
   if (isCustomProductWithComponents(product)) {
     const { material, hardware } = product;
     return (
@@ -65,46 +142,36 @@ const getImageComponents = (product: DbProduct) => {
   return null;
 };
 
-export default function CartItem(props: {
-  item: CartItemType<CartProductType>;
-  hasSeparator?: boolean;
-}) {
-  const { item, hasSeparator } = props;
-  const { product: cartItem } = item;
-  const { removeFromCart, setItemQuantity, cartItemData } = useCartStore();
+const Section = (props: {
+  title?: string;
+  className?: string;
+  children: React.ReactNode;
+}) => {
+  const { title, className, children } = props;
+  return (
+    <div
+      className={cn(
+        "flex flex-col gap-1 md:gap-4 text-sm md:text-md lg:text-lg",
+        className
+      )}
+    >
+      {!!title && <span className="font-semibold line-clamp-2">{title}</span>}
+      {children}
+    </div>
+  );
+};
 
-  const product = cartItemData[cartItem.id];
+const QuantityContent = (props: {
+  product: DbProduct;
+  selectedQuantity: number;
+  onQuantityChange: (value: string) => void;
+}) => {
+  const { product, selectedQuantity, onQuantityChange } = props;
   const [quantityRange] = useState([...Array(100 + 1).keys()].slice(1, 100 + 1));
-  const [selectedQuantity, setSelectedQuantity] = useState(item.quantity);
 
-  const handleQuantityChange = (value: string) => {
-    const quantity = parseInt(value);
-    setSelectedQuantity(quantity);
-    setItemQuantity(cartItem, quantity);
-  };
-
-  const Section = (props: {
-    title?: string;
-    className?: string;
-    children: React.ReactNode;
-  }) => {
-    const { title, className, children } = props;
+  if (isCustomProductWithComponents(product) || product.quantity > 1) {
     return (
-      <div
-        className={cn(
-          "flex flex-col gap-1 md:gap-4 text-sm md:text-md lg:text-lg",
-          className
-        )}
-      >
-        {!!title && <span className="font-semibold line-clamp-2">{title}</span>}
-        {children}
-      </div>
-    );
-  };
-
-  const quantityContent = (product: DbProduct) =>
-    isCustomProductWithComponents(product) || product.quantity > 1 ? (
-      <Select onValueChange={handleQuantityChange}>
+      <Select onValueChange={onQuantityChange}>
         <SelectTrigger className="text-xs h-8 w-16 md:text-sm">
           <SelectValue placeholder={selectedQuantity} />
         </SelectTrigger>
@@ -116,55 +183,11 @@ export default function CartItem(props: {
           ))}
         </SelectContent>
       </Select>
-    ) : (
-      <Badge variant="secondary" className="gap-1 h-8">
-        <span className="w-2 h-2 bg-primary rounded-full"></span>1 en stock
-      </Badge>
     );
-
-  if (product === undefined) return null;
-
+  }
   return (
-    <>
-      <div className="grid grid-cols-cart-item gap-2 md:gap-4 md:grid-cols-cart-item-md h-[150px] w-full">
-        <div className="flex rounded-sm overflow-hidden max-w-[150px] h-max">
-          {getImageComponents(product)}
-        </div>
-        <Section title={product.name}>
-          <span>{cad(product.price)}</span>
-          {/* Mobile quantity */}
-          <div className="flex flex-col gap-2 mt-auto md:hidden">
-            <p className="font-semibold">Quantité</p>
-            {quantityContent(product)}
-          </div>
-        </Section>
-        <Section title="Quantité" className="hidden md:flex">
-          {quantityContent(product)}
-        </Section>
-        <Section title="Sous-total" className="hidden md:flex w-full items-end">
-          <span className="h-8">{cad(product.price * item.quantity)}</span>
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => removeFromCart(product)}
-            className="w-max ml-auto mt-auto"
-          >
-            Retirer
-          </Button>
-        </Section>
-        {/* Mobile remove */}
-        <Section title="" className="flex md:hidden">
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => removeFromCart(product)}
-            className="w-max ml-auto mt-auto"
-          >
-            Retirer
-          </Button>
-        </Section>
-      </div>
-      {hasSeparator && <Separator />}
-    </>
+    <Badge variant="secondary" className="gap-1 h-8">
+      <span className="w-2 h-2 bg-primary rounded-full"></span>1 en stock
+    </Badge>
   );
-}
+};
