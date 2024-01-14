@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
 import { useTheme } from "next-themes";
 
@@ -12,18 +11,24 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { gtLg } from "@/lib/mediaQueries";
+import { useMediaQuery } from "@uidotdev/usehooks";
 
 export function ModeToggle(props: {
   align?: "center" | "end" | "start";
   className?: string;
 }) {
-  const { theme, setTheme } = useTheme();
   const { align = "end", className } = props;
+  const { theme, setTheme } = useTheme();
+  const isLargerScreen = useMediaQuery(gtLg);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className={cn("p-2", className)}>
-          <span className="inline-flex mr-2 lg:hidden lg:mr-0">Thème</span>
+          {!isLargerScreen && (
+            <span className="inline-flex mr-2 lg:hidden lg:mr-0">Thème</span>
+          )}
           <SunIcon
             aria-hidden={theme === "dark"}
             className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 aria-hidden:hidden"
