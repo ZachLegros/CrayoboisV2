@@ -10,8 +10,13 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
-export default function CartBreakdown() {
+export default function CartBreakdown(props: {
+  className?: string;
+  hasAction?: boolean;
+}) {
+  const { className, hasAction = true } = props;
   const router = useRouter();
   const {
     shippingMethod,
@@ -40,7 +45,12 @@ export default function CartBreakdown() {
   }, [shippingMethods]);
 
   return (
-    <Card className="flex flex-col gap-2 w-full text-lg p-3 dark:bg-background dark:border-none dark:shadow-none">
+    <Card
+      className={cn(
+        "flex flex-col gap-2 w-full text-sm md:text-md lg:text-lg dark:bg-background dark:border-none dark:shadow-none",
+        className
+      )}
+    >
       <div className="flex flex-col gap-2 mb-2">
         <p className="font-semibold">Méthode de livraison</p>
         <p>
@@ -90,7 +100,7 @@ export default function CartBreakdown() {
         <span>Livraison</span>
         {shippingMethod ? cad(shipping) : <Skeleton className="w-16" />}
       </div>
-      <div className="flex justify-between text-2xl font-semibold mt-2">
+      <div className="flex justify-between text-lg md:text-xl lg:text-2xl font-semibold mt-2">
         <span>Total</span>
         {shippingMethod ? (
           <span>{cad(total)}</span>
@@ -98,18 +108,20 @@ export default function CartBreakdown() {
           <Skeleton className="w-24 h-8" />
         )}
       </div>
-      <Button
-        size="lg"
-        className="mt-2"
-        disabled={isLoading || isButtonLoading}
-        onClick={() => {
-          setIsButtonLoading(true);
-          router.push("/checkout");
-        }}
-        isLoading={isButtonLoading}
-      >
-        Commander
-      </Button>
+      {hasAction && (
+        <Button
+          size="lg"
+          className="mt-2"
+          disabled={isLoading || isButtonLoading}
+          onClick={() => {
+            setIsButtonLoading(true);
+            router.push("/checkout");
+          }}
+          isLoading={isButtonLoading}
+        >
+          Commander
+        </Button>
+      )}
     </Card>
   );
 }
