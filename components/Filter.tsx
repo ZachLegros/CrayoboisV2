@@ -69,7 +69,8 @@ export default function Filter(props: {
           <div className="flex items-center space-x-2" key={index}>
             <RadioGroupItem value={filter.value} id={filter.value} />
             <Label htmlFor={filter.value} className="cursor-pointer text-md">
-              {filter.label} {filter.amount !== undefined && `(${filter.amount})`}
+              {filter.label}
+              {/* {filter.amount !== undefined && `(${filter.amount})`} */}
             </Label>
           </div>
         ))}
