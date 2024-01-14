@@ -3,18 +3,36 @@
 import CartItem from "./cart-item";
 import EmptyCart from "./empty-cart";
 import CartBreakdown from "./cart-breakdown";
-import { useEffect } from "react";
+import { ReactNode, useEffect, useMemo } from "react";
 import { useCartStore } from "./store";
 import { Card } from "@/components/ui/card";
 import FloatingBar from "@/components/FloatingBar";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
-import { cad } from "@/utils/currencyFormatter";
+import { cad } from "@/lib/currencyFormatter";
 import { Separator } from "@/components/ui/separator";
 
 export default function Cart() {
-  const { cart, syncCart, getBreakdown } = useCartStore();
+  const { cart, cartItemData, syncCart, getBreakdown } = useCartStore();
   const { subtotal } = getBreakdown();
+
+  const cartItems = useMemo(() => {
+    const items: ReactNode[] = [];
+    cart.toReversed().forEach((item, index) => {
+      const product = cartItemData[item.product.id];
+      if (product === undefined) return;
+      items.push(
+        <div className="flex flex-col gap-4" key={index}>
+          <CartItem
+            item={item}
+            product={product}
+            hasSeparator={index !== cart.length - 1}
+          />
+        </div>
+      );
+    });
+    return items;
+  }, [cart]);
 
   useEffect(() => {
     syncCart();
@@ -27,11 +45,7 @@ export default function Cart() {
   return (
     <>
       <Card className="animate-in w-full h-max space-y-4 dark:bg-background dark:border-none dark:shadow-none">
-        {cart.toReversed().map((item, index) => (
-          <div className="flex flex-col gap-4" key={index}>
-            <CartItem item={item} hasSeparator={index !== cart.length - 1} />
-          </div>
-        ))}
+        {cartItems}
         <Separator className="flex md:hidden" />
         <div className="flex md:hidden justify-between text-xl py-4">
           <span>Sous-total</span>
