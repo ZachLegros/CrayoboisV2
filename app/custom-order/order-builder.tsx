@@ -6,7 +6,7 @@ import Materials from "./materials";
 import Hardwares from "./hardwares";
 import { useCustomOrderStore } from "./store";
 import { useCartStore } from "../cart/store";
-import { customProductFactory } from "@/utils/productUtils";
+import { customProductFactory } from "@/lib/productUtils";
 import AddedToCart from "./added-to-cart";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import FloatingBar from "@/components/FloatingBar";
@@ -16,6 +16,8 @@ import HardwareFilters from "./hardware-filters";
 import MaterialFilters from "./material-filters";
 import { Button } from "@/components/ui/button";
 import { FaChevronLeft } from "react-icons/fa";
+import { useMediaQuery } from "@uidotdev/usehooks";
+import { gtMd } from "@/lib/mediaQueries";
 
 export default function OrderBuilder(props: {
   materials: Material[];
@@ -32,6 +34,7 @@ export default function OrderBuilder(props: {
     selectHardware,
     selectedMaterial,
   } = useCustomOrderStore();
+  const isLargeScreen = useMediaQuery(gtMd);
 
   const handleAddToCart = (material: Material, hardware: Hardware) => {
     const customProduct = customProductFactory(material, hardware);
@@ -114,13 +117,13 @@ export default function OrderBuilder(props: {
       {currentStep === 2 && (
         <>
           <AddedToCart />
-          <FloatingBar className="flex md:hidden">
+          {!isLargeScreen && (
             <Drawer open={true}>
               <DrawerContent className="p-3 mb-8">
                 <AddedToCart />
               </DrawerContent>
             </Drawer>
-          </FloatingBar>
+          )}
         </>
       )}
     </>
