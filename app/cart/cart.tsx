@@ -44,7 +44,7 @@ export default function Cart() {
 
   return (
     <>
-      <Card className="animate-in w-full h-max space-y-4 dark:bg-background dark:border-none dark:shadow-none">
+      <Card className="animate-in w-full h-max space-y-4 p-3 dark:bg-background dark:border-none dark:shadow-none">
         {cartItems}
         <Separator className="flex md:hidden" />
         <div className="flex md:hidden justify-between text-xl py-4">
@@ -53,7 +53,9 @@ export default function Cart() {
         </div>
       </Card>
       <div className="hidden md:flex min-w-60 max-w-60 lg:min-w-80 lg:max-w-80 h-max flex-grow sticky top-0 -mt-[calc(4rem+1.5rem+1px)] pt-[calc(1.5rem+2rem+2rem+1px)]">
-        <CartBreakdown />
+        <Card className="flex flex-col gap-2 w-full text-sm p-3 md:text-md lg:text-lg dark:bg-background dark:border-none dark:shadow-none">
+          <CartBreakdown />
+        </Card>
       </div>
       <FloatingBar className="flex md:hidden">
         <Drawer>
@@ -62,8 +64,8 @@ export default function Cart() {
               Passer une commande
             </Button>
           </DrawerTrigger>
-          <DrawerContent>
-            <CartBreakdown className="p-3 mb-3" />
+          <DrawerContent className="p-3 mb-3">
+            <CartBreakdown />
           </DrawerContent>
         </Drawer>
       </FloatingBar>
