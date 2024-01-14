@@ -8,7 +8,7 @@ export default function AddedToCart() {
   const { reset } = useCustomOrderStore();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0 });
   }, []);
 
   return (
