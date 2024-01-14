@@ -98,7 +98,8 @@ module.exports = {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
       gridTemplateColumns: {
-        "cart-item": "150px auto 125px 150px",
+        "cart-item": "75px auto 72px",
+        "cart-item-md": "150px auto 125px 125px",
         "component-card-lg": "150px auto",
         "component-card-md": "125px auto",
         "component-card-sm": "100px auto",
