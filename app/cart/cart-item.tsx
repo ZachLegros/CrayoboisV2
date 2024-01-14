@@ -21,6 +21,8 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
+const quantityRange = [...Array(100 + 1).keys()].slice(1, 100 + 1);
+
 export default function CartItem(props: {
   item: CartItemType<CartProductType>;
   product: DbProduct;
@@ -42,6 +44,7 @@ export default function CartItem(props: {
       <QuantityContent
         product={product}
         selectedQuantity={selectedQuantity}
+        quantityRange={quantityRange}
         onQuantityChange={handleQuantityChange}
       />
     ),
@@ -164,10 +167,10 @@ const Section = (props: {
 const QuantityContent = (props: {
   product: DbProduct;
   selectedQuantity: number;
+  quantityRange: number[];
   onQuantityChange: (value: string) => void;
 }) => {
-  const { product, selectedQuantity, onQuantityChange } = props;
-  const [quantityRange] = useState([...Array(100 + 1).keys()].slice(1, 100 + 1));
+  const { product, selectedQuantity, quantityRange, onQuantityChange } = props;
 
   if (isCustomProductWithComponents(product) || product.quantity > 1) {
     return (
