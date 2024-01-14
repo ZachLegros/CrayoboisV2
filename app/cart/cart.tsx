@@ -10,6 +10,7 @@ import FloatingBar from "@/components/FloatingBar";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import { cad } from "@/utils/currencyFormatter";
+import { Separator } from "@/components/ui/separator";
 
 export default function Cart() {
   const { cart, syncCart, getBreakdown } = useCartStore();
@@ -31,7 +32,8 @@ export default function Cart() {
             <CartItem item={item} hasSeparator={index !== cart.length - 1} />
           </div>
         ))}
-        <div className="flex md:hidden justify-between text-xl">
+        <Separator className="flex md:hidden" />
+        <div className="flex md:hidden justify-between text-xl py-4">
           <span>Sous-total</span>
           <span>{cad(subtotal)}</span>
         </div>
@@ -47,7 +49,7 @@ export default function Cart() {
             </Button>
           </DrawerTrigger>
           <DrawerContent>
-            <CartBreakdown className="p-3" />
+            <CartBreakdown className="p-3 mb-3" />
           </DrawerContent>
         </Drawer>
       </FloatingBar>
