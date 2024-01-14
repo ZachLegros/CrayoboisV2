@@ -9,14 +9,9 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Card } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
 
-export default function CartBreakdown(props: {
-  className?: string;
-  hasAction?: boolean;
-}) {
-  const { className, hasAction = true } = props;
+export default function CartBreakdown(props: { hasAction?: boolean }) {
+  const { hasAction = true } = props;
   const router = useRouter();
   const {
     shippingMethod,
@@ -45,12 +40,7 @@ export default function CartBreakdown(props: {
   }, [shippingMethods]);
 
   return (
-    <Card
-      className={cn(
-        "flex flex-col gap-2 w-full text-sm md:text-md lg:text-lg dark:bg-background dark:border-none dark:shadow-none",
-        className
-      )}
-    >
+    <>
       <div className="flex flex-col gap-2 mb-2">
         <p className="font-semibold">Méthode de livraison</p>
         <p>
@@ -122,6 +112,6 @@ export default function CartBreakdown(props: {
           Commander
         </Button>
       )}
-    </Card>
+    </>
   );
 }
