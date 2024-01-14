@@ -12,7 +12,7 @@ export default function SidePanel(props: { className?: string }) {
   const panelContent = (
     <>
       {currentStep === 0 && <MaterialFilterPanel />}
-      {currentStep === 1 && <HardwareFilterPanel />}
+      {currentStep >= 1 && <HardwareFilterPanel isDisabled={currentStep > 1} />}
     </>
   );
 
