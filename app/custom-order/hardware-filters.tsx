@@ -1,6 +1,6 @@
 import Filter from "@/components/Filter";
 import { useCustomOrderStore } from "./store";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { cn } from "@/lib/utils";
 
 export default function HardwareFilters(props: { className?: string }) {
@@ -13,6 +13,10 @@ export default function HardwareFilters(props: { className?: string }) {
       return acc;
     }, {} as any);
   }, [hardwares]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [hardwares, typeFilter, priceFilter]);
 
   return (
     <div className={cn("flex flex-col gap-2 overflow-y-auto", className)}>
