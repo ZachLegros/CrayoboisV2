@@ -18,6 +18,7 @@ export default function Cart() {
 
   const cartItems = useMemo(() => {
     const items: ReactNode[] = [];
+    if (Array.isArray(cart) === false) return [];
     cart.toReversed().forEach((item, index) => {
       const product = cartItemData[item.product.id];
       if (product === undefined) return;
