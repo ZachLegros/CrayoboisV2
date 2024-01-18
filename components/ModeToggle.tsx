@@ -2,7 +2,6 @@
 
 import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
 import { useTheme } from "next-themes";
-
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { gtLg } from "@/lib/mediaQueries";
-import { useMediaQuery } from "@uidotdev/usehooks";
+import { useMediaQuery } from "@/lib/hooks";
 
 export function ModeToggle(props: {
   align?: "center" | "end" | "start";

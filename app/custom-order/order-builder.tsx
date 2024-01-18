@@ -16,8 +16,8 @@ import HardwareFilters from "./hardware-filters";
 import MaterialFilters from "./material-filters";
 import { Button } from "@/components/ui/button";
 import { FaChevronLeft } from "react-icons/fa";
-import { useMediaQuery } from "@uidotdev/usehooks";
 import { gtMd } from "@/lib/mediaQueries";
+import { useMediaQuery } from "@/lib/hooks";
 
 export default function OrderBuilder(props: {
   materials: Material[];
