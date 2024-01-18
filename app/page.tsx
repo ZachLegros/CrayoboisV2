@@ -65,7 +65,7 @@ export default function Index() {
   );
 }
 
-export function Quebec(props: { className?: string }) {
+function Quebec(props: { className?: string }) {
   const { className } = props;
   return (
     <svg
