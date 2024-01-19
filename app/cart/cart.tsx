@@ -68,8 +68,10 @@ export default function Cart() {
               Passer une commande
             </Button>
           </DrawerTrigger>
-          <DrawerContent className="p-3 mb-3">
-            <CartBreakdown />
+          <DrawerContent className="mb-3">
+            <div className="p-3 flex flex-col">
+              <CartBreakdown />
+            </div>
           </DrawerContent>
         </Drawer>
       </FloatingBar>
