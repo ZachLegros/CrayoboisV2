@@ -33,7 +33,7 @@ export default function Index() {
         <div className="h-full absolute z-10">
           <video className="h-full object-cover" autoPlay loop muted>
             <source
-              src="/crayobois.mp4"
+              src="https://crayobois.s3.amazonaws.com/crayobois.mp4"
               type="video/mp4"
               className="scale-105 tranlate-y-5"
             />
@@ -65,6 +65,7 @@ export default function Index() {
           height={363}
           alt="image de menuisier"
           className="w-full h-full rounded-md"
+          loading="eager"
         />
       </div>
     </div>
