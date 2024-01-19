@@ -16,21 +16,21 @@
     "incremental": true,
     "plugins": [
       {
-        "name": "next"
-      }
+        "name": "next",
+      },
     ],
     "paths": {
       "@/*": ["./*"],
-      "react": ["./node_modules/@types/react"]
+      "react": ["./node_modules/@types/react"],
     },
-    "types": ["node", "react", "react-dom"]
+    "types": ["node", "react", "react-dom"],
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "global.d.ts"
+    "global.d.ts",
   ],
-  "exclude": ["node_modules", "data", "backup"]
+  "exclude": ["node_modules", "data", "backup"],
 }
