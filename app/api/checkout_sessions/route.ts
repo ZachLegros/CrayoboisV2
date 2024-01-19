@@ -72,11 +72,16 @@ async function createCheckoutSessionInDB(params: {
 }
 
 export async function deleteCheckoutSessionInDB(checkoutSid: string) {
-  return prisma.checkoutSession.delete({
-    where: {
-      sid: checkoutSid,
-    },
-  });
+  try {
+    const deleted = await prisma.checkoutSession.delete({
+      where: {
+        sid: checkoutSid,
+      },
+    });
+    return deleted;
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 function isCartInSync(cart: Cart, syncedCart: CartItemType<DbProduct>[]) {
@@ -132,7 +137,6 @@ export async function POST(req: Request) {
           (acc, item) => acc + item.product.price * item.quantity,
           0
         );
-      console.log(totalQuantiy, totalPrice);
       if (!isShippingFree(totalQuantiy, totalPrice))
         throw new Error("shipping_invalid");
     }
@@ -231,7 +235,6 @@ export async function DELETE(req: Request) {
     const sessionId = searchParams.get("session_id");
     if (!sessionId) throw new Error("missing_session_id");
     const session = await stripe.checkout.sessions.expire(sessionId);
-    await deleteCheckoutSessionInDB(sessionId);
     return new Response(
       JSON.stringify({
         status: session.status,
