@@ -19,19 +19,22 @@ export default function Cart() {
   const cartItems = useMemo(() => {
     const items: ReactNode[] = [];
     if (Array.isArray(cart) === false) return [];
-    cart.toReversed().forEach((item, index) => {
-      const product = cartItemData[item.product.id];
-      if (product === undefined) return;
-      items.push(
-        <div className="flex flex-col gap-4" key={index}>
-          <CartItem
-            item={item}
-            product={product}
-            hasSeparator={index !== cart.length - 1}
-          />
-        </div>
-      );
-    });
+    cart
+      .slice()
+      .reverse()
+      .forEach((item, index) => {
+        const product = cartItemData[item.product.id];
+        if (product === undefined) return;
+        items.push(
+          <div className="flex flex-col gap-4" key={index}>
+            <CartItem
+              item={item}
+              product={product}
+              hasSeparator={index !== cart.length - 1}
+            />
+          </div>
+        );
+      });
     return items;
   }, [cart]);
 
