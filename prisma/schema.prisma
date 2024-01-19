@@ -34,6 +34,7 @@ model Material {
   image         String
   price         Float
   quantity      Int             @default(1)
+  enabled       Boolean         @default(true)
   CustomProduct CustomProduct[]
 
   @@map("material")
@@ -46,6 +47,7 @@ model Hardware {
   image         String
   price         Float
   quantity      Int             @default(1)
+  enabled       Boolean         @default(true)
   CustomProduct CustomProduct[]
 
   @@map("hardware")
