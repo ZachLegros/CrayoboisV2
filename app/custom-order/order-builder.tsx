@@ -73,6 +73,7 @@ export default function OrderBuilder(props: {
       )}
       {currentStep === 0 && (
         <>
+          <p className="flex sm:hidden text-xl font-semibold">Choix du bois</p>
           <Materials
             onSelect={(material) => {
               setCurrentStep(currentStep + 1);
@@ -93,6 +94,7 @@ export default function OrderBuilder(props: {
       )}
       {currentStep === 1 && (
         <>
+          <p className="flex sm:hidden text-xl font-semibold">Choix du matériel</p>
           <Hardwares
             onSelect={(hardware) => {
               if (!selectedMaterial || !hardware) return; // error
