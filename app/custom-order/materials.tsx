@@ -6,6 +6,7 @@ import ProductComponentCard from "@/components/ProductComponentCard";
 import { useCustomOrderStore } from "./store";
 import { Material } from "@prisma/client";
 import { Skeleton } from "@/components/ui/skeleton";
+import NoFilterResult from "./no-filter-result";
 
 export default function Materials(props: {
   onSelect: (material: Material) => void;
@@ -47,6 +48,10 @@ export default function Materials(props: {
         <Skeleton className="w-full h-[149px] p-3" key={index} />
       ))}
     </ItemsGrid>;
+  }
+
+  if (filteredMaterials.length === 0) {
+    return <NoFilterResult />;
   }
 
   return (
