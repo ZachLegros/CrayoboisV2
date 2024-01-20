@@ -97,7 +97,7 @@ export function MobileNavLinks(props: {
   return (
     <ul className={cn("text-lg font-medium pl-2 lg:pl-0", className)}>
       <li>
-        <ModeToggle className="mb-4 -ml-2" align="start" />
+        <ModeToggle className="mb-4 -ml-2" />
       </li>
       {items.map((item, index) => {
         return (
