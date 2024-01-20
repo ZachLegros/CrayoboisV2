@@ -32,9 +32,10 @@ async function createCheckoutSessionInDB(params: {
   cart: FilteredCart;
   expiresAt: Date;
   shippingId: string;
+  userId?: string;
 }) {
   try {
-    const { sessionId, cart, expiresAt, shippingId } = params;
+    const { sessionId, cart, expiresAt, shippingId, userId } = params;
     await prisma.checkoutSession.create({
       data: {
         sid: sessionId,
@@ -60,6 +61,7 @@ async function createCheckoutSessionInDB(params: {
           })),
         },
         shipping_id: shippingId,
+        ...(userId && { user_id: userId }),
       },
       include: {
         items: true,
@@ -98,10 +100,11 @@ function isCartInSync(cart: Cart, syncedCart: CartItemType<DbProduct>[]) {
 
 export async function POST(req: Request) {
   try {
-    const { cart, shippingId } = (await req.json()) as {
-      cart: CartItemType<CartProductType>[];
-      shippingId: string;
-    };
+    const data = await req.json();
+    const cart = data.cart as CartItemType<CartProductType>[];
+    const shippingId = data.shippingId as string;
+    const userId = data.userId as string | undefined;
+
     if (!Array.isArray(cart) || !cart.length) throw new Error("cart_is_empty");
     // Sync cart with DB
     const syncedCart = await syncCartWithComponents(cart);
@@ -193,6 +196,7 @@ export async function POST(req: Request) {
       cart: filteredCart,
       expiresAt,
       shippingId,
+      userId,
     });
 
     return new Response(
