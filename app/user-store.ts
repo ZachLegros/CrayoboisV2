@@ -1,11 +1,13 @@
 import { create } from "zustand";
 import { createClient } from "@/lib/supabase/client";
 import { User } from "@supabase/supabase-js";
+import { Role } from "@prisma/client";
 
 type UserStore = {
   user?: User;
   id?: string;
   email?: string;
+  role?: Role;
   supabase: any;
   getCurrentSession: () => Promise<void>;
   signOut: () => Promise<void>;
@@ -17,6 +19,7 @@ export const useUserStore = create<UserStore>((set, get) => ({
   user: undefined,
   id: undefined,
   email: undefined,
+  role: undefined,
   supabase: createClient(),
 
   getCurrentSession: async () => {
@@ -46,6 +49,12 @@ export const useUserStore = create<UserStore>((set, get) => ({
         id: currentUser.id,
         email: currentUser.email,
       });
+      const userData = await fetch(`/api/user_role?user_id=${currentUser.id}`).then(
+        (res) => res.json()
+      );
+      if (userData?.role) {
+        set({ role: userData.role });
+      }
     }
   },
 
@@ -54,6 +63,7 @@ export const useUserStore = create<UserStore>((set, get) => ({
       user: undefined,
       id: undefined,
       email: undefined,
+      role: undefined,
     });
   },
 }));
