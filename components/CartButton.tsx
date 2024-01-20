@@ -12,12 +12,12 @@ export default function Cart() {
 
   return (
     <Button
-      className="flex items-center justify-center"
+      className="flex items-center justify-center p-2"
       variant="outline"
-      size="icon"
       aria-label="cart"
       onClick={() => router.push("/cart")}
     >
+      <p className="hidden sm:flex sm:mr-1">Mon panier</p>
       <div className="relative">
         <FaShoppingCart className="text-xl" />
         {cart.length > 0 && (
