@@ -74,44 +74,46 @@ export default function CartBreakdown(props: { hasAction?: boolean }) {
           )}
         </div>
       </div>
-      <div className="flex justify-between mt-2">
-        <span>Sous-total</span>
-        <span>{cad(subtotal)}</span>
-      </div>
-      <div className="flex justify-between">
-        <span>TPS</span>
-        <span>{cad(tps)}</span>
-      </div>
-      <div className="flex justify-between">
-        <span>TVQ</span>
-        <span>{cad(tvq)}</span>
-      </div>
-      <div className="flex justify-between">
-        <span>Livraison</span>
-        {shippingMethod ? cad(shipping) : <Skeleton className="w-16" />}
-      </div>
-      <div className="flex justify-between text-lg md:text-xl lg:text-2xl font-semibold mt-2">
-        <span>Total</span>
-        {shippingMethod ? (
-          <span>{cad(total)}</span>
-        ) : (
-          <Skeleton className="w-24 h-8" />
+      <div className="flex flex-col min-w-60">
+        <div className="flex justify-between mt-2">
+          <span>Sous-total</span>
+          <span>{cad(subtotal)}</span>
+        </div>
+        <div className="flex justify-between">
+          <span>TPS</span>
+          <span>{cad(tps)}</span>
+        </div>
+        <div className="flex justify-between">
+          <span>TVQ</span>
+          <span>{cad(tvq)}</span>
+        </div>
+        <div className="flex justify-between">
+          <span>Livraison</span>
+          {shippingMethod ? cad(shipping) : <Skeleton className="w-16" />}
+        </div>
+        <div className="flex justify-between text-lg md:text-xl lg:text-2xl font-semibold mt-2">
+          <span>Total</span>
+          {shippingMethod ? (
+            <span>{cad(total)}</span>
+          ) : (
+            <Skeleton className="w-24 h-8" />
+          )}
+        </div>
+        {hasAction && (
+          <Button
+            size="lg"
+            className="mt-2"
+            disabled={isLoading || isButtonLoading}
+            onClick={() => {
+              setIsButtonLoading(true);
+              router.push("/checkout");
+            }}
+            isLoading={isButtonLoading}
+          >
+            Commander
+          </Button>
         )}
       </div>
-      {hasAction && (
-        <Button
-          size="lg"
-          className="mt-2"
-          disabled={isLoading || isButtonLoading}
-          onClick={() => {
-            setIsButtonLoading(true);
-            router.push("/checkout");
-          }}
-          isLoading={isButtonLoading}
-        >
-          Commander
-        </Button>
-      )}
     </>
   );
 }

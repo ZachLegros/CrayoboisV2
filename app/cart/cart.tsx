@@ -56,8 +56,8 @@ export default function Cart() {
           <span>{cad(subtotal)}</span>
         </div>
       </Card>
-      <div className="hidden md:flex min-w-60 max-w-60 lg:min-w-80 lg:max-w-80 h-max flex-grow sticky top-0 -mt-[calc(4rem+1.5rem+1px)] pt-[calc(1.5rem+2rem+2rem+1px)]">
-        <Card className="flex flex-col gap-2 w-full text-sm p-3 md:text-md lg:text-lg dark:bg-background dark:border-none dark:shadow-none">
+      <div className="hidden md:flex w-full lg:min-w-80 lg:max-w-80 h-max flex-grow sticky top-0 -mt-[calc(4rem+1.5rem+1px)] pt-[calc(1.5rem+2rem+2rem+1px)]">
+        <Card className="grid grid-flow-col lg:grid-flow-row gap-2 w-full text-sm p-3 md:text-md lg:text-lg dark:bg-background dark:border-none dark:shadow-none">
           <CartBreakdown />
         </Card>
       </div>
