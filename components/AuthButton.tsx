@@ -4,10 +4,11 @@ import { useRouter } from "next/navigation";
 import { useUserStore } from "@/app/user-store";
 import { useCartStore } from "@/app/cart/store";
 import { Button } from "./ui/button";
+import { useEffect } from "react";
 
 export default function AuthButton() {
   const router = useRouter();
-  const { user, signOut } = useUserStore();
+  const { user, signOut, getCurrentUser } = useUserStore();
   const { clearCart } = useCartStore();
 
   const handleLogin = () => {
@@ -19,6 +20,10 @@ export default function AuthButton() {
     clearCart();
     router.push("/");
   };
+
+  useEffect(() => {
+    if (!user) getCurrentUser();
+  }, [user]);
 
   return (
     <div className="flex gap-2">
