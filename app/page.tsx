@@ -107,7 +107,7 @@ export default function Index() {
           </p>
           <Button
             className="w-max mt-4"
-            onClick={() => router.push("/custom-product")}
+            onClick={() => router.push("/custom-order")}
           >
             Créez votre stylo
           </Button>
