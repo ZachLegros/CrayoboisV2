@@ -9,7 +9,7 @@ export default async function OrdersPage() {
 
   const orders = await prisma.clientOrder.findMany({
     where: {
-      user_id: data.user?.id,
+      OR: [{ user_id: data.user?.id }, { payer_email: data.user?.email }],
     },
     include: {
       products: true,
