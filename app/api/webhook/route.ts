@@ -41,10 +41,20 @@ async function createOrder(event: Stripe.CheckoutSessionCompletedEvent) {
       include: { items: true, custom_items: true },
     });
     if (!checkoutSession) throw new Error("Checkout session not found");
-    const { items, custom_items, shipping_id } = checkoutSession;
+    const { items, custom_items, shipping_id, user_id } = checkoutSession;
+
+    // Get shipping object
     const shipping = await prisma.shipping.findUnique({
       where: { id: shipping_id },
     });
+
+    // Get profile id from user id if it exists
+    let profileId: string | undefined;
+    const profile = await prisma.profile.findUnique({
+      where: { id: user_id as string | undefined },
+    });
+    if (profile) profileId = profile.id;
+
     const eventAmount = orZero(event.data.object.amount_total) / 100;
     const totalTax = orZero(0.05 * eventAmount) + orZero(0.09975 * eventAmount);
     const totalShipping = orZero(shipping?.price);
@@ -67,6 +77,7 @@ async function createOrder(event: Stripe.CheckoutSessionCompletedEvent) {
         shipping: totalShipping,
         amount: totalAmount,
         tax: totalTax,
+        user_id: profileId,
       },
     });
     console.log("Order created:", order.id);
