@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
@@ -7,10 +8,23 @@ import { FaChevronRight } from "react-icons/fa";
 import { useMediaQuery } from "@/lib/hooks";
 import { gtSm } from "@/lib/mediaQueries";
 import Image from "next/image";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
+import ImageWithLoading from "@/components/ImageWithLoading";
+import { getProductImages } from "./actions";
 
 export default function Index() {
   const router = useRouter();
   const isNotMobile = useMediaQuery(gtSm);
+  const [productImages, setProductImages] = useState<string[]>([]);
+
+  useEffect(() => {
+    const getImages = async () => {
+      const images = await getProductImages(10);
+      setProductImages(images);
+    };
+    getImages();
+  }, []);
 
   return (
     <div className="animate-in w-full h-full flex flex-col gap-10 md:gap-15 lg:gap-20 items-center">
@@ -44,6 +58,38 @@ export default function Index() {
       <div className="grid grid-cols-1 md:grid-cols-2 w-full rounded-lg md:rounded-2xl gap-5">
         <div className="flex flex-col gap-3">
           <h3 className="inline-flex items-center text-lg sm:text-xl md:text-2xl font-bold h-9">
+            Nos produits
+          </h3>
+          <p className="text-lg p-0 md:pr-5">
+            Explorez notre séléction de produits préfabriqués de{" "}
+            <b>qualité supérieure</b>, comprenant des <b>éditions spéciales</b>.
+            Parmi notre gamme, retrouvez des stylos, des rasoirs, des porte-clés, des
+            porte-mines, et bien d'autres articles.
+          </p>
+          <Button className="w-max mt-4" onClick={() => router.push("/products")}>
+            Explorer les produits
+          </Button>
+        </div>
+        <Carousel plugins={[Autoplay({ delay: 2000 })]} className="w-full">
+          <CarouselContent className="-ml-1">
+            {productImages.map((image, index) => (
+              <CarouselItem key={index} className="pl-1 basis-1/2 lg:basis-1/3">
+                <ImageWithLoading
+                  src={image}
+                  width={200}
+                  height={200}
+                  alt="produit"
+                  className="rounded-md"
+                  quality={60}
+                />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 w-full rounded-lg md:rounded-2xl gap-5">
+        <div className="flex flex-col gap-3">
+          <h3 className="inline-flex items-center text-lg sm:text-xl md:text-2xl font-bold h-9">
             Fait à la main au Québec{" "}
             <Image
               src="/quebec.jpg"
@@ -54,10 +100,10 @@ export default function Index() {
             />
           </h3>
           <p className="text-lg p-0 md:pr-5">
-            Explorez nos stylos uniques, façonnés avec soin par <b>Vincent Legros</b>{" "}
-            et fièrement assemblés en <b>Outaouais, au Québec</b>. Personnalisez-les
-            selon vos préférences - bois, style, matériaux. Exprimez votre style avec
-            élégance.
+            Découvrez nos stylos uniques, façonnés avec soin par{" "}
+            <b>Vincent Legros</b> et fièrement assemblés en{" "}
+            <b>Outaouais, au Québec</b>. Personnalisez-les selon vos préférences -
+            bois, style, matériaux. Exprimez votre style avec élégance.
           </p>
         </div>
         <Image
