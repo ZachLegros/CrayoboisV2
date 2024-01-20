@@ -14,7 +14,7 @@ export async function middleware(request: NextRequest) {
       const userData: { role: Role } = await fetch(
         `${request.nextUrl.origin}/api/user_role?user_id=${userId}`
       ).then((res) => res.json());
-      if (userData.role !== "admin")
+      if (userData?.role !== "admin")
         return NextResponse.redirect(new URL("/", request.url));
     } catch {
       return NextResponse.redirect(new URL("/", request.url));
