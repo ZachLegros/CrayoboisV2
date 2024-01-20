@@ -16,7 +16,7 @@ export default function Index() {
     <div className="animate-in w-full h-full flex flex-col gap-10 md:gap-15 lg:gap-20 items-center">
       <AspectRatio
         ratio={isNotMobile ? 16 / 9 : 1}
-        className="relative text-white rounded-lg md:rounded-2xl overflow-hidden"
+        className="relative text-white rounded-lg md:rounded-2xl overflow-hidden max-h-[693px]"
       >
         <div className="flex flex-col w-full h-full items-center justify-center absolute z-20 bg-black/50 gap-4 md:gap-8 p-5">
           <h1 className="text-2xl md:text-4xl lg:text-6xl font-black drop-shadow-2xl text-center">
@@ -49,7 +49,7 @@ export default function Index() {
               width={50}
               height={30.3}
               alt="quebec"
-              className="inline-flex w-9 md:w-12 h-max object-contain rounded-sm mx-3 shadow-lg"
+              className="inline-flex w-9 md:w-12 h-max object-contain rounded-sm mx-3 shadow-md"
             />
           </h3>
           <p className="text-lg p-0 md:pr-5">
