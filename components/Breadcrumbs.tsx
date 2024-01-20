@@ -1,5 +1,6 @@
 "use client";
 
+import { Fragment } from "react";
 import { FaChevronRight as ChevronRight } from "react-icons/fa";
 
 export function Breadcrumbs(props: {
@@ -19,7 +20,7 @@ export function Breadcrumbs(props: {
           </li>
         );
         return (
-          <>
+          <Fragment key={index}>
             {separator}
             <li
               className="text-foreground text-sm font-medium data-[previous=true]:underline data-[previous=true]:cursor-pointer data-[next=true]:opacity-50 truncate"
@@ -34,7 +35,7 @@ export function Breadcrumbs(props: {
             >
               {step}
             </li>
-          </>
+          </Fragment>
         );
       })}
     </ol>
