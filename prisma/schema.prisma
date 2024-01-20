@@ -152,6 +152,7 @@ model CheckoutSession {
   status       CheckoutSessionStatus @default(ongoing)
   expires_at   DateTime              @default(now())
   shipping_id  String                @db.Uuid
+  user_id      String?               @db.Uuid
   shipping     Shipping              @relation(fields: [shipping_id], references: [id])
   items        CartItem[]
   custom_items CartCustomItem[]
