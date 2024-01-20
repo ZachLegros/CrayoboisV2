@@ -63,7 +63,7 @@ export default function Cart() {
       </div>
       <FloatingBar className="flex md:hidden">
         <Drawer>
-          <DrawerTrigger className="w-full m-3 mb-6">
+          <DrawerTrigger className="w-full m-3 mb-6" asChild>
             <Button size="lg" className="w-full pointer-events-auto">
               Passer une commande
             </Button>

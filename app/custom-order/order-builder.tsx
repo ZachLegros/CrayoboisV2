@@ -82,7 +82,7 @@ export default function OrderBuilder(props: {
           />
           <FloatingBar className="flex md:hidden">
             <Drawer>
-              <DrawerTrigger className="ml-auto">
+              <DrawerTrigger className="ml-auto" asChild>
                 <FloatingFilterTrigger />
               </DrawerTrigger>
               <DrawerContent className="h-[625px] p-3 space-y-4">
@@ -111,7 +111,7 @@ export default function OrderBuilder(props: {
               Retour
             </Button>
             <Drawer>
-              <DrawerTrigger className="ml-auto">
+              <DrawerTrigger className="ml-auto" asChild>
                 <FloatingFilterTrigger />
               </DrawerTrigger>
               <DrawerContent className="h-[625px] p-3 space-y-4">

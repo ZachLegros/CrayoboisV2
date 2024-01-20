@@ -46,7 +46,7 @@ export default function SidePanel(props: { className?: string }) {
         {products.length > 0 && (
           <FloatingBar className="flex md:hidden">
             <Drawer>
-              <DrawerTrigger className="ml-auto">
+              <DrawerTrigger className="ml-auto" asChild>
                 <FloatingFilterTrigger />
               </DrawerTrigger>
               <DrawerContent className="p-3 space-y-4">

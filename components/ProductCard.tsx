@@ -59,7 +59,7 @@ export default function ProductCard(props: {
           <div className="absolute bottom-0 right-0 m-1 ">
             <TooltipProvider>
               <Tooltip>
-                <TooltipTrigger>
+                <TooltipTrigger asChild>
                   <Button
                     variant="secondary"
                     size="icon"
