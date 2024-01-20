@@ -119,7 +119,7 @@ export default function Checkout(props: { sessionId?: string }) {
               Merci de supporter Crayobois!
             </p>
             <p className="text-lg md:text-xl text-foreground/60 font-semibold text-center">
-              Vous recevrez un email de confirmation à l'adresse fournie.
+              Vous recevrez un email de confirmation à l'adresse courriel fournie.
             </p>
             <FaCircleCheck className="text-6xl text-green-500 mt-4" />
           </div>
