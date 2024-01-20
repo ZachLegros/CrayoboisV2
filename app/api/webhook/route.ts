@@ -50,10 +50,12 @@ async function createOrder(event: Stripe.CheckoutSessionCompletedEvent) {
 
     // Get profile id from user id if it exists
     let profileId: string | undefined;
-    const profile = await prisma.profile.findUnique({
-      where: { id: user_id as string | undefined },
+    const profile = await prisma.profile.findMany({
+      where: {
+        OR: [{ id: user_id as string | undefined }, { email }],
+      },
     });
-    if (profile) profileId = profile.id;
+    if (profile[0]) profileId = profile[0].id;
 
     const eventAmount = orZero(event.data.object.amount_total) / 100;
     const totalTax = orZero(0.05 * eventAmount) + orZero(0.09975 * eventAmount);
