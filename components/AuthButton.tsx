@@ -5,7 +5,6 @@ import { useUserStore } from "@/app/user-store";
 import { useCartStore } from "@/app/cart/store";
 import { Button } from "./ui/button";
 import { useEffect } from "react";
-import { User } from "@supabase/supabase-js";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -38,7 +37,7 @@ export default function AuthButton() {
   return (
     <div className="flex gap-2">
       {user ? (
-        <UserMenu user={user} onLogout={handleLogout} />
+        <UserMenu onLogout={handleLogout} />
       ) : (
         <Button onClick={handleLogin}>Connexion</Button>
       )}
@@ -46,8 +45,9 @@ export default function AuthButton() {
   );
 }
 
-export function UserMenu(props: { user: User; onLogout: () => void }) {
-  const { user, onLogout } = props;
+export function UserMenu(props: { onLogout: () => void }) {
+  const { onLogout } = props;
+  const { email, role } = useUserStore();
   const router = useRouter();
 
   return (
@@ -58,8 +58,13 @@ export function UserMenu(props: { user: User; onLogout: () => void }) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-44">
-        <DropdownMenuLabel>{user.email?.split("@")[0]}</DropdownMenuLabel>
+        <DropdownMenuLabel>{email?.split("@")[0]}</DropdownMenuLabel>
         <DropdownMenuSeparator />
+        {role === "admin" && (
+          <DropdownMenuItem onClick={() => router.push("/admin")}>
+            Admin
+          </DropdownMenuItem>
+        )}
         <DropdownMenuItem onClick={() => router.push("/orders")}>
           Mes commandes
         </DropdownMenuItem>
