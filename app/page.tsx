@@ -24,10 +24,11 @@ export default function Index() {
           </h1>
           <Button
             size={isNotMobile ? "lg" : "default"}
-            className="flex items-center gap-2"
+            className="flex items-center gap-1"
             onClick={() => router.push("/custom-order")}
           >
-            Créez le vôtre <FaChevronRight />
+            Créez votre stylo
+            <FaChevronRight />
           </Button>
         </div>
         <div className="h-full absolute z-10">
