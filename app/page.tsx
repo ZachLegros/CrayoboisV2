@@ -105,6 +105,12 @@ export default function Index() {
             <b>Outaouais, au Québec</b>. Personnalisez-les selon vos préférences -
             bois, style, matériaux. Exprimez votre style avec élégance.
           </p>
+          <Button
+            className="w-max mt-4"
+            onClick={() => router.push("/custom-product")}
+          >
+            Créez votre stylo
+          </Button>
         </div>
         <Image
           src="/DSC01677.jpg"
