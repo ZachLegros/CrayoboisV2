@@ -33,7 +33,7 @@ export default function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="flex items-center sticky top-0 w-full h-16 z-50 border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+    <header className="flex items-center sticky top-0 w-full h-16 z-50 border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/90">
       <div className="flex justify-between items-center self-center w-full max-w-screen-xl mx-auto px-3 lg:px-6">
         <div className="flex space-x-4 items-center flex-grow justify-between lg:justify-start">
           <Logo className="flex mr-4" />
