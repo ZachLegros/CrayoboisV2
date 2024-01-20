@@ -12,6 +12,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Card } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
+import useUserStore from "../user-store";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
@@ -30,6 +31,7 @@ export default function Checkout(props: { sessionId?: string }) {
   const router = useRouter();
   const { toast } = useToast();
   const { cart, syncCart, shippingMethod, clearCart } = useCartStore();
+  const { user } = useUserStore();
   const [clientSecret, setClientSecret] = useState("");
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
@@ -63,7 +65,11 @@ export default function Checkout(props: { sessionId?: string }) {
         if (cart.length > 0 && shippingMethod && !sessionId && !clientSecret) {
           const res = await fetch("/api/checkout_sessions", {
             method: "POST",
-            body: JSON.stringify({ cart, shippingId: shippingMethod.id }),
+            body: JSON.stringify({
+              cart,
+              shippingId: shippingMethod.id,
+              userId: user?.id,
+            }),
             credentials: "same-origin",
           });
           const data = await res.json();
