@@ -16,12 +16,15 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "./ui/tooltip";
+import { ToastAction } from "./ui/toast";
+import { useRouter } from "next/navigation";
 
 export default function ProductCard(props: {
   product: Product;
   onClick: () => void;
 }) {
   const { product } = props;
+  const router = useRouter();
   const { toast } = useToast();
   const { addToCart, isProductInCart } = useCartStore();
   const [isInCart, setIsInCart] = useState(isProductInCart(product));
@@ -30,7 +33,14 @@ export default function ProductCard(props: {
   const handleAddToCart = () => {
     addToCart(product);
     setIsInCart(true);
-    toast({ title: `"${product.name}" a été ajouté à votre panier.` });
+    toast({
+      title: `"${product.name}" a été ajouté à votre panier.`,
+      action: (
+        <ToastAction altText="Aller au panier" onClick={() => router.push("/cart")}>
+          Aller au panier
+        </ToastAction>
+      ),
+    });
   };
 
   return (
