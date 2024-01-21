@@ -26,7 +26,7 @@ export default function SidePanel(props: { className?: string }) {
         {routes.map((route, index) => (
           <li
             key={index}
-            className="p-2 hover:bg-secondary rounded-md cursor-pointer aria-[current]:bg-secondary"
+            className="transition-colors p-2 hover:bg-background hover:shadow-md dark:hover:bg-secondary rounded-md cursor-pointer aria-[current]:bg-background aria-[current]:shadow-md aria-[current]:font-semibold dark:aria-[current]:bg-secondary"
             onClick={() => router.push(route.href)}
             aria-current={pathname.startsWith(route.href) ? "page" : undefined}
           >
