@@ -1,6 +1,7 @@
 import { DbProduct } from "@/lib/productUtils";
 import { CartItemType } from "../cart/store";
 import Stripe from "stripe";
+import { getTps, getTvq } from "@/lib/utils";
 
 export function getTotalAmount(cart: CartItemType<DbProduct>[]) {
   return cart.reduce((total, item) => {
@@ -9,11 +10,11 @@ export function getTotalAmount(cart: CartItemType<DbProduct>[]) {
 }
 
 export function getTotalTps(cart: CartItemType<DbProduct>[]) {
-  return 0.05 * getTotalAmount(cart);
+  return getTps(getTotalAmount(cart));
 }
 
 export function getTotalTvq(cart: CartItemType<DbProduct>[]) {
-  return 0.09975 * getTotalAmount(cart);
+  return getTvq(getTotalAmount(cart));
 }
 
 export function inCents(price: number) {

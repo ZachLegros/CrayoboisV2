@@ -1,5 +1,6 @@
 import { Shipping } from "@prisma/client";
 import { Cart, CartItemData } from "./store";
+import { getTps, getTvq } from "@/lib/utils";
 
 export const getTotalPrice = (cart: Cart, cartItemData: CartItemData) => {
   return cart.reduce((acc, item) => {
@@ -10,11 +11,11 @@ export const getTotalPrice = (cart: Cart, cartItemData: CartItemData) => {
 };
 
 export const getTotalTPS = (cart: Cart, cartItemData: CartItemData) => {
-  return getTotalPrice(cart, cartItemData) * 0.05;
+  return getTps(getTotalPrice(cart, cartItemData));
 };
 
 export const getTotalTVQ = (cart: Cart, cartItemData: CartItemData) => {
-  return getTotalPrice(cart, cartItemData) * 0.09975;
+  return getTvq(getTotalPrice(cart, cartItemData));
 };
 
 export const getShippingPrice = (shippingMethod: Shipping) => {

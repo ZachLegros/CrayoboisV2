@@ -2,6 +2,7 @@ import Stripe from "stripe";
 import prisma from "@/lib/prisma";
 import { deleteCheckoutSessionInDB } from "../checkout_sessions/route";
 import { orZero } from "../utils";
+import { getTps, getTvq } from "@/lib/utils";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
@@ -58,7 +59,7 @@ async function createOrder(event: Stripe.CheckoutSessionCompletedEvent) {
     if (profile[0]) profileId = profile[0].id;
 
     const eventAmount = orZero(event.data.object.amount_total) / 100;
-    const totalTax = orZero(0.05 * eventAmount) + orZero(0.09975 * eventAmount);
+    const totalTax = orZero(getTps(eventAmount)) + orZero(getTvq(eventAmount));
     const totalShipping = orZero(shipping?.price);
     const totalAmount = orZero(eventAmount) - totalShipping - totalTax;
     const order = await prisma.clientOrder.create({
