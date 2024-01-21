@@ -3,6 +3,7 @@ import { useMemo } from "react";
 import Metric from "./metric";
 import { cad, cadPrecision } from "@/lib/currencyFormatter";
 import { dayjs } from "@/lib/utils";
+import { Card } from "@/components/ui/card";
 
 export default function Metrics(props: { orders: ClientOrder[] }) {
   const { orders } = props;
@@ -51,10 +52,15 @@ export default function Metrics(props: { orders: ClientOrder[] }) {
   }, [orders]);
 
   return (
-    <div className="flex flex-wrap gap-3">
+    <Card className="flex flex-wrap gap-x-3 lg:bg-background-content lg:border-none lg:shadow-none">
       {Object.values(metrics).map((metric) => (
-        <Metric key={metric.name} {...metric} />
+        <Card
+          key={metric.name}
+          className="bg-none border-none shadow-none lg:bg-card lg:border lg:shadow-md"
+        >
+          <Metric {...metric} />
+        </Card>
       ))}
-    </div>
+    </Card>
   );
 }
