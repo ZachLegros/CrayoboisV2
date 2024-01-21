@@ -51,10 +51,12 @@ export default function Metric(props: {
   }
 
   return (
-    <div className="p-2 max-w-60">
-      <Stat name={name} value={currentValue} />
+    <div className="max-w-60 overflow-hidden rounded-xl">
+      <Stat name={name} value={currentValue} className="p-3" />
       {displayChart && (
-        <Chart options={options} series={series} type="area" height={80} />
+        <div className="-mb-0.5">
+          <Chart options={options} series={series} type="area" height={80} />
+        </div>
       )}
     </div>
   );

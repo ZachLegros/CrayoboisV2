@@ -117,7 +117,7 @@ export default function NetRevenueChart(props: { orders: ClientOrder[] }) {
   }
 
   return (
-    <Card className="p-2 w-full">
+    <Card className="p-3 w-full">
       <div className="flex gap-4 flex-wrap">
         <Stat
           name="Revenu net"
