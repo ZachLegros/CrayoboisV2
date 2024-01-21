@@ -2,10 +2,8 @@
 
 import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
-import { useTheme } from "next-themes";
 import { Card } from "@/components/ui/card";
-import { dayjs } from "@/lib/utils";
-import { primaryColor } from "./common";
+import { chartPrimary } from "./common";
 
 export default function Metric(props: {
   name: string;
@@ -13,7 +11,6 @@ export default function Metric(props: {
   currentValue: string;
 }) {
   const { name, data, currentValue } = props;
-  const { resolvedTheme } = useTheme();
   const options: ApexOptions = {
     chart: {
       sparkline: {
@@ -21,28 +18,19 @@ export default function Metric(props: {
       },
     },
     stroke: {
-      curve: "straight",
-      colors: [primaryColor],
+      curve: "smooth",
+      colors: [chartPrimary],
     },
     fill: {
       opacity: 0.3,
-      colors: [primaryColor],
-    },
-    xaxis: {
-      crosshairs: {
-        width: 1,
-      },
-      type: "datetime",
-      labels: {
-        formatter: (value) => dayjs(value).format("D MMMM YYYY"),
-      },
+      colors: [chartPrimary],
     },
     yaxis: {
       min: 0,
       show: false,
     },
     tooltip: {
-      theme: resolvedTheme,
+      enabled: false,
     },
   };
 
@@ -50,7 +38,7 @@ export default function Metric(props: {
     {
       name,
       data,
-      color: primaryColor,
+      color: chartPrimary,
     },
   ];
 
