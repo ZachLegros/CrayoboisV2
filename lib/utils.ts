@@ -2,6 +2,11 @@ import React from "react";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import ASCIIFolder from "fold-to-ascii";
+import dayjslib from "dayjs";
+import "dayjs/locale/fr-ca";
+
+dayjslib.locale("fr-ca");
+export const dayjs = dayjslib;
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -48,4 +53,12 @@ export function shuffleArray(array: any[]) {
     [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
   }
   return newArray;
+}
+
+export function getTps(amount: number) {
+  return amount * 0.05;
+}
+
+export function getTvq(amount: number) {
+  return amount * 0.09975;
 }
