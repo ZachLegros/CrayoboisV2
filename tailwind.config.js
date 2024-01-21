@@ -103,6 +103,7 @@ module.exports = {
         "component-card-lg": "150px auto",
         "component-card-md": "125px auto",
         "component-card-sm": "100px auto",
+        "admin-panel": "200px auto",
       },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
