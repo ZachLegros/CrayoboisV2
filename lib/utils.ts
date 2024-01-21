@@ -62,3 +62,23 @@ export function getTps(amount: number) {
 export function getTvq(amount: number) {
   return amount * 0.09975;
 }
+
+export function map(
+  value: number,
+  oldRange: [number, number],
+  newRange: [number, number]
+) {
+  const newValue =
+    ((value - oldRange[0]) * (newRange[1] - newRange[0])) /
+      (oldRange[1] - oldRange[0]) +
+    newRange[0];
+  return Math.round(Math.min(Math.max(newValue, newRange[0]), newRange[1]));
+}
+
+export function hexTransp(value: number) {
+  if (value > 100 || value < 0) return "ff";
+  const byteValue = map(value, [0, 100], [0, 255]);
+  let hexValue = byteValue.toString(16);
+  if (hexValue.length === 1) hexValue = `0${hexValue}`;
+  return hexValue;
+}
