@@ -72,6 +72,7 @@ export default function LoginForm() {
               <Label htmlFor="email">Email</Label>
               <Input
                 type="email"
+                name="email"
                 id="email"
                 placeholder="vous@example.com"
                 required
