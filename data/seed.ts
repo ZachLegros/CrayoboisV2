@@ -7,20 +7,32 @@ import products from "./products.json";
 const prisma = new PrismaClient();
 
 try {
-  const hardware = await prisma.hardware.createMany({
+  await prisma.$transaction([
+    prisma.cartCustomItem.deleteMany(),
+    prisma.cartItem.deleteMany(),
+    prisma.checkoutSession.deleteMany(),
+    prisma.product.deleteMany(),
+    prisma.customProduct.deleteMany(),
+    prisma.hardware.deleteMany(),
+    prisma.material.deleteMany(),
+    prisma.shipping.deleteMany(),
+    prisma.clientOrder.deleteMany(),
+  ]);
+
+  const hardwareTx = await prisma.hardware.createMany({
     data: hardwares,
   });
-  const material = await prisma.material.createMany({
+  const materialTx = await prisma.material.createMany({
     data: materials,
   });
-  console.log({ hardware, material });
+  console.log({ hardwareTx, materialTx });
 
-  const product = await prisma.product.createMany({
+  const productTx = await prisma.product.createMany({
     data: products,
   });
-  console.log({ product });
+  console.log({ productTx });
 
-  const shipping = await prisma.shipping.createMany({
+  const shippingTx = await prisma.shipping.createMany({
     data: [
       {
         name: "Sans suivi du colis",
@@ -36,19 +48,16 @@ try {
       },
     ],
   });
-  console.log({ shipping });
+  console.log({ shippingTx });
 
   const createOrderPromises: any[] = [];
-
   for (const orderData of orders) {
     const { custom_products, ...order } = orderData;
     const createQuery = prisma.clientOrder.create({
       data: {
         ...order,
         status: order.status as OrderStatus,
-        user_id: await prisma.profile
-          .findFirst({ where: { email: order.payer_email } })
-          .then((profile) => profile?.id),
+        user: undefined,
         custom_products: {
           create: custom_products.map((custom_product) => ({
             id: custom_product.id,
@@ -68,6 +77,7 @@ try {
     createOrderPromises.push(createQuery);
   }
   await Promise.all(createOrderPromises);
+
   console.log("Orders created:", orders.length);
 } catch (error) {
   console.error(error);
