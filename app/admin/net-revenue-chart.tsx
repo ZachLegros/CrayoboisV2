@@ -7,9 +7,15 @@ import { Card } from "@/components/ui/card";
 import { dayjs, getTps } from "@/lib/utils";
 import { ClientOrder } from "@prisma/client";
 import { useMemo } from "react";
-import { getNetAmount, primaryColor } from "./common";
 import { cad, cadPrecision } from "@/lib/currencyFormatter";
-import { getTvq } from "../../lib/utils";
+import { getTvq } from "@/lib/utils";
+import {
+  chartPrimary,
+  chartBgDark,
+  chartBgLight,
+  getNetAmount,
+  chartSecondary,
+} from "./common";
 
 export default function NetRevenueChart(props: { orders: ClientOrder[] }) {
   const { orders } = props;
@@ -40,45 +46,63 @@ export default function NetRevenueChart(props: { orders: ClientOrder[] }) {
     return orders.reduce((acc, order) => acc + getTvq(getNetAmount(order)), 0);
   }, [orders]);
 
-  const options: ApexOptions = {
-    chart: {
-      sparkline: {
-        enabled: true,
+  const options: ApexOptions = useMemo(() => {
+    return {
+      chart: {
+        background: resolvedTheme === "dark" ? chartBgDark : chartBgLight,
       },
-    },
-    stroke: {
-      curve: "straight",
-      colors: [primaryColor],
-    },
-    fill: {
-      opacity: 0.3,
-      colors: [primaryColor],
-    },
-    xaxis: {
-      crosshairs: {
-        width: 1,
+      theme: {
+        mode: resolvedTheme as "light" | "dark",
       },
-      type: "datetime",
-      labels: {
-        formatter: (value) => dayjs(value).format("D MMMM YYYY"),
+      dataLabels: {
+        enabled: false,
       },
-    },
-    yaxis: {
-      min: 0,
-      show: false,
-    },
-    tooltip: {
-      theme: resolvedTheme,
-    },
-  };
+      stroke: {
+        curve: "smooth",
+        colors: [chartPrimary],
+      },
+      grid: {
+        borderColor: chartSecondary,
+        xaxis: {
+          lines: {
+            show: true,
+          },
+        },
+      },
+      markers: {
+        size: 2,
+        strokeWidth: 1,
+        hover: {
+          size: 3,
+        },
+      },
+      xaxis: {
+        crosshairs: {
+          width: 1,
+        },
+        type: "datetime",
+        labels: {
+          formatter: (value) => dayjs(value).format("D MMMM YYYY"),
+        },
+        tooltip: {
+          enabled: false,
+        },
+      },
+      tooltip: {
+        theme: resolvedTheme,
+      },
+    };
+  }, [resolvedTheme]);
 
-  const series: ApexAxisChartSeries = [
-    {
-      name: "Revenu net",
-      data: revenueSeries.x.map((x, i) => ({ x, y: revenueSeries.y[i] })),
-      color: primaryColor,
-    },
-  ];
+  const series: ApexAxisChartSeries = useMemo(() => {
+    return [
+      {
+        name: "Revenu net",
+        data: revenueSeries.x.map((x, i) => ({ x, y: revenueSeries.y[i] })),
+        color: chartPrimary,
+      },
+    ];
+  }, [revenueSeries]);
 
   if (typeof window === "undefined") {
     return null;
