@@ -16,10 +16,14 @@ import {
   getNetAmount,
   chartSecondary,
 } from "./common";
+import Stat from "@/components/Stat";
+import { useMediaQuery } from "@uidotdev/usehooks";
+import { gtMd } from "@/lib/mediaQueries";
 
 export default function NetRevenueChart(props: { orders: ClientOrder[] }) {
   const { orders } = props;
   const { resolvedTheme } = useTheme();
+  const showChartLabels = useMediaQuery(gtMd);
 
   const revenueSeries = useMemo(() => {
     const x = orders.map((order) => dayjs(order.created_at).valueOf());
@@ -68,12 +72,9 @@ export default function NetRevenueChart(props: { orders: ClientOrder[] }) {
             show: true,
           },
         },
-      },
-      markers: {
-        size: 2,
-        strokeWidth: 1,
-        hover: {
-          size: 3,
+        padding: {
+          ...(!showChartLabels && { left: 0 }),
+          ...(!showChartLabels && { right: 0 }),
         },
       },
       xaxis: {
@@ -83,16 +84,23 @@ export default function NetRevenueChart(props: { orders: ClientOrder[] }) {
         type: "datetime",
         labels: {
           formatter: (value) => dayjs(value).format("D MMMM YYYY"),
+          show: showChartLabels,
         },
         tooltip: {
           enabled: false,
+        },
+      },
+      yaxis: {
+        labels: {
+          formatter: (value) => cad(value),
+          show: showChartLabels,
         },
       },
       tooltip: {
         theme: resolvedTheme,
       },
     };
-  }, [resolvedTheme]);
+  }, [resolvedTheme, showChartLabels]);
 
   const series: ApexAxisChartSeries = useMemo(() => {
     return [
@@ -111,24 +119,13 @@ export default function NetRevenueChart(props: { orders: ClientOrder[] }) {
   return (
     <Card className="p-2 w-full">
       <div className="flex gap-4 flex-wrap">
-        <div>
-          <h3 className="text-foreground/70 font-medium">Revenu net</h3>
-          <h1 className="text-xl font-semibold mb-2">
-            {cad(revenueSeries.y[revenueSeries.y.length - 1])}
-          </h1>
-        </div>
-        <div>
-          <h3 className="text-foreground/70 font-medium">TVQ</h3>
-          <h1 className="text-xl font-semibold mb-2">{cad(tvq)}</h1>
-        </div>
-        <div>
-          <h3 className="text-foreground/70 font-medium">TPS</h3>
-          <h1 className="text-xl font-semibold mb-2">{cad(tps)}</h1>
-        </div>
-        <div>
-          <h3 className="text-foreground/70 font-medium">Livraison</h3>
-          <h1 className="text-xl font-semibold mb-2">{cad(shipping)}</h1>
-        </div>
+        <Stat
+          name="Revenu net"
+          value={cad(revenueSeries.y[revenueSeries.y.length - 1])}
+        />
+        <Stat name="TVQ" value={cad(tvq)} />
+        <Stat name="TPS" value={cad(tps)} />
+        <Stat name="Livraison" value={cad(shipping)} />
       </div>
       <Chart options={options} series={series} type="area" height={400} />
     </Card>

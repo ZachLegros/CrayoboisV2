@@ -2,8 +2,10 @@
 
 import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
-import { Card } from "@/components/ui/card";
 import { chartPrimary } from "./common";
+import { useMediaQuery } from "@uidotdev/usehooks";
+import { gtMd } from "@/lib/mediaQueries";
+import Stat from "@/components/Stat";
 
 export default function Metric(props: {
   name: string;
@@ -11,6 +13,8 @@ export default function Metric(props: {
   currentValue: string;
 }) {
   const { name, data, currentValue } = props;
+  const displayChart = useMediaQuery(gtMd);
+
   const options: ApexOptions = {
     chart: {
       sparkline: {
@@ -47,10 +51,11 @@ export default function Metric(props: {
   }
 
   return (
-    <Card className="p-2 max-w-60">
-      <h3 className="text-foreground/70 font-medium">{name}</h3>
-      <h1 className="text-xl font-semibold mb-2">{currentValue}</h1>
-      <Chart options={options} series={series} type="area" height={80} />
-    </Card>
+    <div className="p-2 max-w-60">
+      <Stat name={name} value={currentValue} />
+      {displayChart && (
+        <Chart options={options} series={series} type="area" height={80} />
+      )}
+    </div>
   );
 }
