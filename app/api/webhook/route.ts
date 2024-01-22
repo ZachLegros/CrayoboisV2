@@ -62,14 +62,51 @@ async function createOrder(event: Stripe.CheckoutSessionCompletedEvent) {
     const totalTax = orZero(getTps(eventAmount)) + orZero(getTvq(eventAmount));
     const totalShipping = orZero(shipping?.price);
     const totalAmount = orZero(eventAmount) - totalShipping - totalTax;
+    const [products, customProducts] = await Promise.all([
+      prisma.product.findMany({
+        where: {
+          id: {
+            in: items?.map((item) => item.productId) || [],
+          },
+        },
+        select: {
+          id: true,
+          name: true,
+          price: true,
+          image: true,
+        },
+      }),
+      prisma.customProduct.findMany({
+        where: {
+          id: {
+            in: custom_items?.map((item) => item.customProductId) || [],
+          },
+        },
+        include: {
+          material: {
+            select: {
+              id: true,
+              name: true,
+              price: true,
+              image: true,
+            },
+          },
+          hardware: {
+            select: {
+              id: true,
+              name: true,
+              price: true,
+              image: true,
+            },
+          },
+        },
+      }),
+    ]);
+
     const order = await prisma.clientOrder.create({
       data: {
-        products: {
-          connect: items?.map((item) => ({ id: item.productId })) || [],
-        },
-        custom_products: {
-          connect: custom_items?.map((item) => ({ id: item.customProductId })) || [],
-        },
+        products: products,
+        custom_products: customProducts,
         payer_email: email,
         payer_name: name,
         address_street: line1,
@@ -93,14 +130,17 @@ async function createOrder(event: Stripe.CheckoutSessionCompletedEvent) {
 async function handleSuccess(event: Stripe.CheckoutSessionCompletedEvent) {
   const checkoutSessionId = event.data.object.id;
   console.log("Checkout session completed:", checkoutSessionId);
-  await createOrder(event);
-  return await setCheckoutSessionCompleted(checkoutSessionId);
+  setCheckoutSessionCompleted(checkoutSessionId);
+  const order = await createOrder(event);
+  if (!order) throw new Error("Order not created");
+  return new Response(JSON.stringify({ order_id: order.id }), { status: 200 });
 }
 
 async function handleExpire(event: Stripe.CheckoutSessionExpiredEvent) {
   const checkoutSid = event.data.object.id;
   console.log("Checkout session expired:", checkoutSid);
-  return await deleteCheckoutSessionInDB(checkoutSid);
+  await deleteCheckoutSessionInDB(checkoutSid);
+  return new Response(null, { status: 200 });
 }
 
 export async function POST(req: Request) {
@@ -121,18 +161,15 @@ export async function POST(req: Request) {
   try {
     switch (event.type) {
       case "checkout.session.completed":
-        await handleSuccess(event);
-        break;
+        return await handleSuccess(event);
       case "checkout.session.expired":
-        await handleExpire(event);
-        break;
+        return await handleExpire(event);
       default:
         console.log(`Unhandled event type ${event.type} for ${event.id}`);
+        throw new Error(`Unhandled event type ${event.type} for ${event.id}`);
     }
   } catch (error: any) {
     console.error(error);
     return new Response(JSON.stringify({ error: error.message }), { status: 500 });
   }
-
-  return new Response(JSON.stringify({ received: true }), { status: 200 });
 }
