@@ -1,12 +1,16 @@
-import { ClientOrder } from "@prisma/client";
-import { useMemo } from "react";
+"use client";
+
+import { useEffect, useMemo } from "react";
 import Metric from "./metric";
 import { cad, cadPrecision } from "@/lib/currencyFormatter";
 import { dayjs } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
+import useAdminStore from "./store";
+import { ClientOrder } from "@prisma/client";
 
 export default function Metrics(props: { orders: ClientOrder[] }) {
   const { orders } = props;
+  const { setOrders } = useAdminStore();
 
   const metrics = useMemo(() => {
     const x = orders.map((order) => dayjs(order.created_at).valueOf());
@@ -49,6 +53,10 @@ export default function Metrics(props: { orders: ClientOrder[] }) {
         currentValue: `${clientsY[clientsY.length - 1]}`,
       },
     };
+  }, [orders]);
+
+  useEffect(() => {
+    setOrders(orders);
   }, [orders]);
 
   return (
