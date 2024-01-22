@@ -4,7 +4,6 @@ import { useEffect, useMemo } from "react";
 import Metric from "./metric";
 import { cad, cadPrecision } from "@/lib/currencyFormatter";
 import { dayjs } from "@/lib/utils";
-import { Card } from "@/components/ui/card";
 import useAdminStore from "./store";
 import { ClientOrder } from "@prisma/client";
 
@@ -60,15 +59,15 @@ export default function Metrics(props: { orders: ClientOrder[] }) {
   }, [orders]);
 
   return (
-    <Card className="flex flex-wrap gap-x-3 lg:bg-background-content lg:border-none lg:shadow-none">
+    <div className="flex flex-wrap gap-3 bg-card rounded-xl border lg:bg-transparent lg:border-none">
       {Object.values(metrics).map((metric) => (
-        <Card
+        <div
           key={metric.name}
-          className="bg-none border-none shadow-none lg:bg-card lg:border lg:shadow-md"
+          className="bg-transparent shadow-none rounded-xl lg:bg-card lg:border lg:shadow-none"
         >
           <Metric {...metric} />
-        </Card>
+        </div>
       ))}
-    </Card>
+    </div>
   );
 }
