@@ -11,10 +11,6 @@ export default async function OrdersPage() {
     where: {
       OR: [{ user_id: data.user?.id }, { payer_email: data.user?.email }],
     },
-    include: {
-      products: true,
-      custom_products: true,
-    },
   });
 
   return <pre>{JSON.stringify(orders, null, 2)}</pre>;
