@@ -1,12 +1,11 @@
 "use client";
 
-import Chart from "react-apexcharts";
-import { ApexOptions } from "apexcharts";
+import type { ApexOptions } from "apexcharts";
+import type { ClientOrder } from "@prisma/client";
 import { useTheme } from "next-themes";
 import { Card } from "@/components/ui/card";
 import { dayjs, getTps } from "@/lib/utils";
-import { ClientOrder } from "@prisma/client";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { cad, cadPrecision } from "@/lib/currencyFormatter";
 import { getTvq } from "@/lib/utils";
 import {
@@ -17,11 +16,14 @@ import {
   chartSecondary,
 } from "./common";
 import Stat from "@/components/Stat";
-import { useMediaQuery } from "@uidotdev/usehooks";
+import { useMediaQuery } from "@/lib/hooks";
 import { gtMd } from "@/lib/mediaQueries";
+import useAdminStore from "./store";
+import Chart from "./chart";
 
 export default function NetRevenueChart(props: { orders: ClientOrder[] }) {
   const { orders } = props;
+  const { setOrders } = useAdminStore();
   const { resolvedTheme } = useTheme();
   const showChartLabels = useMediaQuery(gtMd);
 
@@ -112,9 +114,9 @@ export default function NetRevenueChart(props: { orders: ClientOrder[] }) {
     ];
   }, [revenueSeries]);
 
-  if (typeof window === "undefined") {
-    return null;
-  }
+  useEffect(() => {
+    setOrders(orders);
+  }, [orders]);
 
   return (
     <Card className="p-3 w-full">
@@ -127,7 +129,9 @@ export default function NetRevenueChart(props: { orders: ClientOrder[] }) {
         <Stat name="TPS" value={cad(tps)} />
         <Stat name="Livraison" value={cad(shipping)} />
       </div>
-      <Chart options={options} series={series} type="area" height={400} />
+      <div className="h-[425px]">
+        <Chart options={options} series={series} type="area" height={425} />
+      </div>
     </Card>
   );
 }
