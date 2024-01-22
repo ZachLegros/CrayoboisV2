@@ -88,6 +88,5 @@ export const customProductFactory = (
     material,
     hardware_id: hardware.id,
     hardware,
-    clientOrderId: null,
   };
 };
