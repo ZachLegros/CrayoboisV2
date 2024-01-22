@@ -51,7 +51,7 @@ try {
   console.log({ shippingTx });
 
   const createOrderPromises: any[] = [];
-  for (const orderData of orders) {
+  for (const orderData of orders.sort((a, b) => a.order_no - b.order_no)) {
     const { custom_products, ...order } = orderData;
     await prisma.customProduct.createMany({
       data: custom_products.map((custom_product) => ({
@@ -94,6 +94,7 @@ try {
         ...order,
         status: order.status as OrderStatus,
         user: undefined,
+        order_no: undefined,
         custom_products: customProducts,
       },
     });

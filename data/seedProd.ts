@@ -40,9 +40,45 @@ try {
 
   const createOrderPromises: any[] = [];
 
-  for (const orderData of orders) {
+  for (const orderData of orders.sort((a, b) => a.order_no - b.order_no)) {
     const { custom_products, ...order } = orderData;
     const { email, ...orderWithoutEmail } = order;
+    await prisma.customProduct.createMany({
+      data: custom_products.map((custom_product) => ({
+        id: custom_product.id,
+        name: custom_product.name,
+        quantity: custom_product.quantity,
+        price: custom_product.price,
+        material_id: custom_product.material_id,
+        hardware_id: custom_product.hardware_id,
+      })),
+    });
+    const customProducts = await prisma.customProduct.findMany({
+      where: {
+        id: {
+          in: custom_products.map((custom_product) => custom_product.id),
+        },
+      },
+      include: {
+        material: {
+          select: {
+            id: true,
+            name: true,
+            price: true,
+            image: true,
+          },
+        },
+        hardware: {
+          select: {
+            id: true,
+            name: true,
+            price: true,
+            image: true,
+          },
+        },
+      },
+    });
+
     const createQuery = prisma.clientOrder.create({
       // @ts-ignore
       data: {
@@ -50,9 +86,8 @@ try {
         user_id: await prisma.profile
           .findFirst({ where: { email } })
           .then((profile) => profile?.id),
-        custom_products: {
-          create: custom_products,
-        },
+        order_no: undefined,
+        custom_products: customProducts,
       },
     });
     createOrderPromises.push(createQuery);
