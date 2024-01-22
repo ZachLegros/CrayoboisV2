@@ -100,7 +100,7 @@ export default function CartItem(props: {
   );
 }
 
-const ItemImages = (props: { product: DbProduct }) => {
+export const ItemImages = (props: { product: DbProduct }) => {
   const { product } = props;
   if (isCustomProductWithComponents(product)) {
     const { material, hardware } = product;
@@ -145,7 +145,7 @@ const ItemImages = (props: { product: DbProduct }) => {
   return null;
 };
 
-const Section = (props: {
+export const Section = (props: {
   title?: string;
   className?: string;
   children: React.ReactNode;
