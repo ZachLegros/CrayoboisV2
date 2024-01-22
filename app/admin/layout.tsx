@@ -3,6 +3,7 @@ import SidePanel from "./side-panel";
 
 export default function Layout(props: { children: ReactNode }) {
   const { children } = props;
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-admin-panel gap-8">
       <SidePanel className="hidden md:flex" />
