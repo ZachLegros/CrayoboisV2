@@ -44,7 +44,7 @@ export default function Metric(props: {
   ];
 
   return (
-    <div className="lg:w-60 overflow-hidden rounded-xl">
+    <div className="w-60 overflow-hidden rounded-xl">
       <Stat name={name} value={currentValue} className="p-3" />
       <div className="hidden lg:flex -mb-0.5 h-[80px] w-[240px]">
         <Chart
