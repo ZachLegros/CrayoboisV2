@@ -54,13 +54,12 @@ model Hardware {
 }
 
 model Product {
-  id          String        @id @default(uuid()) @db.Uuid
+  id          String     @id @default(uuid()) @db.Uuid
   name        String
   price       Float
-  quantity    Int           @default(1)
+  quantity    Int        @default(1)
   image       String
   description String?
-  orders      ClientOrder[]
   CartItem    CartItem[]
 
   @@map("product")
@@ -75,8 +74,6 @@ model CustomProduct {
   hardware_id    String          @db.Uuid
   material       Material        @relation(fields: [material_id], references: [id])
   hardware       Hardware        @relation(fields: [hardware_id], references: [id])
-  order          ClientOrder?    @relation(fields: [clientOrderId], references: [id])
-  clientOrderId  String?         @db.Uuid
   cartCustomItem CartCustomItem?
 
   @@map("customProduct")
@@ -94,17 +91,18 @@ model Shipping {
 enum OrderStatus {
   pending
   shipped
+  cancelled
 }
 
 model ClientOrder {
-  id              String          @id @default(uuid()) @db.Uuid
-  order_no        Int             @unique @default(autoincrement())
-  created_at      DateTime        @default(now())
-  status          OrderStatus     @default(pending)
+  id              String      @id @default(uuid()) @db.Uuid
+  order_no        Int         @unique @default(autoincrement())
+  created_at      DateTime    @default(now())
+  status          OrderStatus @default(pending)
   payer_email     String
   payer_name      String
-  user_id         String?         @db.Uuid
-  user            Profile?        @relation(fields: [user_id], references: [id])
+  user_id         String?     @db.Uuid
+  user            Profile?    @relation(fields: [user_id], references: [id])
   amount          Float
   tax             Float
   shipping        Float
@@ -113,8 +111,8 @@ model ClientOrder {
   address_state   String
   address_country String
   address_zip     String
-  products        Product[]
-  custom_products CustomProduct[]
+  products        Json?
+  custom_products Json?
 
   @@map("clientOrder")
 }
