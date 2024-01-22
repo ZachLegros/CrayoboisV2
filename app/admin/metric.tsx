@@ -1,11 +1,9 @@
 "use client";
 
-import Chart from "react-apexcharts";
-import { ApexOptions } from "apexcharts";
+import type { ApexOptions } from "apexcharts";
 import { chartPrimary } from "./common";
-import { useMediaQuery } from "@uidotdev/usehooks";
-import { gtMd } from "@/lib/mediaQueries";
 import Stat from "@/components/Stat";
+import Chart from "./chart";
 
 export default function Metric(props: {
   name: string;
@@ -13,7 +11,6 @@ export default function Metric(props: {
   currentValue: string;
 }) {
   const { name, data, currentValue } = props;
-  const displayChart = useMediaQuery(gtMd);
 
   const options: ApexOptions = {
     chart: {
@@ -46,18 +43,18 @@ export default function Metric(props: {
     },
   ];
 
-  if (typeof window === "undefined") {
-    return null;
-  }
-
   return (
-    <div className="max-w-60 overflow-hidden rounded-xl">
+    <div className="lg:w-60 overflow-hidden rounded-xl">
       <Stat name={name} value={currentValue} className="p-3" />
-      {displayChart && (
-        <div className="-mb-0.5">
-          <Chart options={options} series={series} type="area" height={80} />
-        </div>
-      )}
+      <div className="hidden lg:flex -mb-0.5 h-[80px] w-[240px]">
+        <Chart
+          options={options}
+          series={series}
+          type="area"
+          height={80}
+          width={240}
+        />
+      </div>
     </div>
   );
 }
