@@ -37,7 +37,6 @@ export const verifyOtp = async (email: string, code: string) => {
 export const createProfileIfNotExists = async (user: User) => {
   "use server";
 
-  console.log(user);
   if (!user.email) return false;
 
   await prisma.profile.upsert({
