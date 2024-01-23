@@ -33,7 +33,7 @@ export default function OrdersTable(props: { orders: ClientOrder[] }) {
           <TableRow
             className="h-10 cursor-pointer"
             key={order.id}
-            onClick={() => router.push(`/admin/order/${order.id}`)}
+            onClick={() => router.push(`/admin/orders/${order.id}`)}
           >
             <TableCell className="font-medium">#{order.order_no}</TableCell>
             <TableCell>{dayjs(order.created_at).format("D MMM YYYY")}</TableCell>
