@@ -5,17 +5,13 @@ import NavBar from "@/components/NavBar";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toaster";
 
-export const fontSans = FontSans({
+const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
 });
 
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "http://localhost:3000";
-
 export const metadata = {
-  metadataBase: new URL(defaultUrl),
+  metadataBase: new URL("https://crayobois.ca"),
   title: "Crayobois - Le stylo qu'il vous faut",
   description: `Crayobois est une microentreprise de menuiserie québécoise spécialisée dans la fabrication de stylos en bois divers de haute qualité.`,
 };
