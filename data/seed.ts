@@ -1,7 +1,7 @@
 import { OrderStatus, PrismaClient } from "@prisma/client";
 import hardwares from "./hardwares.json";
 import materials from "./materials.json";
-import orders from "./clientOrdersDev.json";
+import orders from "./clientOrders.json";
 import products from "./products.json";
 
 const prisma = new PrismaClient();
@@ -17,6 +17,7 @@ try {
     prisma.material.deleteMany(),
     prisma.shipping.deleteMany(),
     prisma.clientOrder.deleteMany(),
+    prisma.$queryRaw`TRUNCATE TABLE "clientOrder" RESTART IDENTITY`,
   ]);
 
   const hardwareTx = await prisma.hardware.createMany({
@@ -50,9 +51,9 @@ try {
   });
   console.log({ shippingTx });
 
-  const createOrderPromises: any[] = [];
   for (const orderData of orders.sort((a, b) => a.order_no - b.order_no)) {
     const { custom_products, ...order } = orderData;
+    const { payer_email } = order;
     await prisma.customProduct.createMany({
       data: custom_products.map((custom_product) => ({
         id: custom_product.id,
@@ -89,18 +90,21 @@ try {
       },
     });
 
-    const createQuery = prisma.clientOrder.create({
+    const createQuery = await prisma.clientOrder.create({
       data: {
         ...order,
         status: order.status as OrderStatus,
-        user: undefined,
+        user: {
+          connect: {
+            email: payer_email,
+          },
+        },
         order_no: undefined,
         custom_products: customProducts,
       },
     });
-    createOrderPromises.push(createQuery);
+    console.log("Created order #", createQuery.order_no);
   }
-  await Promise.all(createOrderPromises);
 
   console.log("Orders created:", orders.length);
 } catch (error) {
