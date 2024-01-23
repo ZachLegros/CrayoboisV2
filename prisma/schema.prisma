@@ -11,15 +11,9 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-enum Role {
-  admin
-  user
-}
-
 model Profile {
   id     String        @id @db.Uuid
   email  String        @unique
-  role   Role          @default(user)
   orders ClientOrder[]
 
   @@map("profile")
