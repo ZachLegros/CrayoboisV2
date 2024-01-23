@@ -14,6 +14,7 @@ async function createUserTriggers() {
     create or replace function public.handle_new_user()
     returns trigger as $$
     begin
+      update auth.users set raw_user_meta_data = '{"role":"user"}' where id = new.id;
       insert into public.profile (id, email)
       values (new.id, new.email);
       return new;
