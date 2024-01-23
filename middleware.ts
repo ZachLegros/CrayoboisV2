@@ -1,6 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/middleware";
-import { Role } from "@prisma/client";
 
 export async function middleware(request: NextRequest) {
   const { supabase, response } = createClient(request);
@@ -9,13 +8,8 @@ export async function middleware(request: NextRequest) {
 
   if (request.nextUrl.pathname.startsWith("/admin")) {
     try {
-      const userId = data?.session?.user.id;
-      if (!userId) throw new Error("missing_user_id");
-      const userData: { role: Role } = await fetch(
-        `${request.nextUrl.origin}/api/user_role?user_id=${userId}`
-      ).then((res) => res.json());
-      if (userData?.role !== "admin")
-        return NextResponse.redirect(new URL("/", request.url));
+      const role = data.session?.user.user_metadata.role;
+      if (role !== "admin") return NextResponse.redirect(new URL("/", request.url));
     } catch {
       return NextResponse.redirect(new URL("/", request.url));
     }
