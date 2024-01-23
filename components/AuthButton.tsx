@@ -16,16 +16,18 @@ import {
 import { FaUser } from "react-icons/fa";
 import { getUserMenuItems } from "@/app/actions";
 
+const defaultItems = [
+  {
+    label: "Mes commandes",
+    href: "/orders",
+  },
+];
+
 export default function AuthButton() {
   const router = useRouter();
   const { user, signOut, getCurrentUser } = useUserStore();
   const { clearCart } = useCartStore();
-  const [items, setItems] = useState([
-    {
-      label: "Mes commandes",
-      href: "/orders",
-    },
-  ]);
+  const [items, setItems] = useState(defaultItems);
 
   const handleLogin = () => {
     router.push("/login");
@@ -44,6 +46,7 @@ export default function AuthButton() {
   useEffect(() => {
     if (user)
       getUserMenuItems().then((items) => setItems((prev) => [...items, ...prev]));
+    else setItems(defaultItems);
   }, [user]);
 
   return (
