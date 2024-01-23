@@ -9,5 +9,6 @@
         "cmd": "bunx prisma format"
       }
     ]
-  }
+  },
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
