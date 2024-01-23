@@ -42,3 +42,4 @@ data/*
 !data/products.json
 !data/seed.ts
 !data/seedProd.ts
+certificates
