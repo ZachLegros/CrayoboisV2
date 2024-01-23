@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useUserStore } from "@/app/user-store";
 import { useCartStore } from "@/app/cart/store";
 import { Button } from "./ui/button";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -14,11 +14,18 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { FaUser } from "react-icons/fa";
+import { getUserMenuItems } from "@/app/actions";
 
 export default function AuthButton() {
   const router = useRouter();
   const { user, signOut, getCurrentUser } = useUserStore();
   const { clearCart } = useCartStore();
+  const [items, setItems] = useState([
+    {
+      label: "Mes commandes",
+      href: "/orders",
+    },
+  ]);
 
   const handleLogin = () => {
     router.push("/login");
@@ -34,10 +41,15 @@ export default function AuthButton() {
     if (!user) getCurrentUser();
   }, [user]);
 
+  useEffect(() => {
+    if (user)
+      getUserMenuItems().then((items) => setItems((prev) => [...items, ...prev]));
+  }, [user]);
+
   return (
     <div className="flex gap-2">
       {user ? (
-        <UserMenu onLogout={handleLogout} />
+        <UserMenu items={items} onLogout={handleLogout} />
       ) : (
         <Button onClick={handleLogin}>Connexion</Button>
       )}
@@ -45,9 +57,12 @@ export default function AuthButton() {
   );
 }
 
-export function UserMenu(props: { onLogout: () => void }) {
-  const { onLogout } = props;
-  const { email, role } = useUserStore();
+export function UserMenu(props: {
+  items: { label: string; href: string }[];
+  onLogout: () => void;
+}) {
+  const { items, onLogout } = props;
+  const { email } = useUserStore();
   const router = useRouter();
 
   return (
@@ -60,14 +75,11 @@ export function UserMenu(props: { onLogout: () => void }) {
       <DropdownMenuContent align="end" className="min-w-44">
         <DropdownMenuLabel>{email?.split("@")[0]}</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {role === "admin" && (
-          <DropdownMenuItem onClick={() => router.push("/admin")}>
-            Admin
+        {items.map((item, index) => (
+          <DropdownMenuItem onClick={() => router.push(item.href)} key={index}>
+            {item.label}
           </DropdownMenuItem>
-        )}
-        <DropdownMenuItem onClick={() => router.push("/orders")}>
-          Mes commandes
-        </DropdownMenuItem>
+        ))}
         <DropdownMenuItem onClick={onLogout}>Déconnexion</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
