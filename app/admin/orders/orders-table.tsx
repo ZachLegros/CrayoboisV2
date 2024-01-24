@@ -12,10 +12,17 @@ import {
 } from "@/components/ui/table";
 import { cad } from "@/lib/currencyFormatter";
 import { useRouter } from "next/navigation";
+import useAdminStore from "../store";
+import { useEffect } from "react";
 
 export default function OrdersTable(props: { orders: ClientOrder[] }) {
-  const { orders } = props;
+  const { orders: ordersFromDb } = props;
   const router = useRouter();
+  const { orders, setOrders } = useAdminStore();
+
+  useEffect(() => {
+    setOrders(ordersFromDb);
+  }, [ordersFromDb]);
 
   return (
     <Table>
