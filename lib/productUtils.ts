@@ -15,7 +15,9 @@ export const isProduct = (product: DbProduct): product is Product => {
   );
 };
 
-export const isCustomProduct = (product: DbProduct): product is CustomProduct => {
+export const isCustomProduct = (
+  product: DbProduct
+): product is CustomProduct => {
   return (
     (product as CustomProduct).material_id !== undefined &&
     (product as CustomProduct).hardware_id !== undefined
@@ -41,7 +43,8 @@ export const isHardware = (
   component: Material | Hardware
 ): component is Hardware => {
   return (
-    (component as Hardware).color !== undefined && isMaterial(component) === false
+    (component as Hardware).color !== undefined &&
+    isMaterial(component) === false
   );
 };
 

@@ -12,7 +12,8 @@ export default function Materials(props: {
   onSelect: (material: Material) => void;
 }) {
   const { onSelect } = props;
-  const { materials, typeFilter, originFilter, priceFilter } = useCustomOrderStore();
+  const { materials, typeFilter, originFilter, priceFilter } =
+    useCustomOrderStore();
 
   const filteredMaterials = useMemo(() => {
     const mats = materials.filter((material) => {

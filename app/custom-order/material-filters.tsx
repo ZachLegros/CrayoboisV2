@@ -5,7 +5,8 @@ import { cn } from "@/lib/utils";
 
 export default function MaterialFilters(props: { className?: string }) {
   const { className } = props;
-  const { materials, originFilter, typeFilter, priceFilter } = useCustomOrderStore();
+  const { materials, originFilter, typeFilter, priceFilter } =
+    useCustomOrderStore();
 
   const materialTypes: { [type: string]: number } = useMemo(() => {
     return materials.reduce((acc, material) => {
@@ -16,7 +17,9 @@ export default function MaterialFilters(props: { className?: string }) {
 
   const materialOrigins = useMemo(() => {
     return materials.reduce((acc, material) => {
-      acc[material.origin] = acc[material.origin] ? acc[material.origin] + 1 : 1;
+      acc[material.origin] = acc[material.origin]
+        ? acc[material.origin] + 1
+        : 1;
       return acc;
     }, {} as any);
   }, [materials]);
@@ -56,7 +59,11 @@ export default function MaterialFilters(props: { className?: string }) {
       <Filter
         filterName="Par origine"
         filterValues={[
-          { value: "all", label: "Toutes les origines", amount: materials.length },
+          {
+            value: "all",
+            label: "Toutes les origines",
+            amount: materials.length,
+          },
           ...Object.keys(materialOrigins).map((origin) => ({
             value: origin,
             label: origin,

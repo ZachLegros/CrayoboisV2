@@ -11,7 +11,9 @@ export default function NoFilterResult() {
           Aucun item satisfait les critères de filtrage.
         </p>
         <div className="flex mt-8 gap-4 justify-center items-center flex-wrap">
-          <Button onClick={() => clearFilters()}>Reinitialiser les filtres</Button>
+          <Button onClick={() => clearFilters()}>
+            Reinitialiser les filtres
+          </Button>
         </div>
       </div>
     </div>

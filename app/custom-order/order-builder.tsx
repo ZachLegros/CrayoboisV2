@@ -94,7 +94,9 @@ export default function OrderBuilder(props: {
       )}
       {currentStep === 1 && (
         <>
-          <p className="flex sm:hidden text-xl font-semibold">Choix du matériel</p>
+          <p className="flex sm:hidden text-xl font-semibold">
+            Choix du matériel
+          </p>
           <Hardwares
             onSelect={(hardware) => {
               if (!selectedMaterial || !hardware) return; // error

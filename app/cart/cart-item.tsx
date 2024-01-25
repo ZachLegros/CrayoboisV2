@@ -51,7 +51,10 @@ export default function CartItem(props: {
     [product, selectedQuantity]
   );
 
-  const handleRemoveFromCart = useCallback(() => removeFromCart(product), [product]);
+  const handleRemoveFromCart = useCallback(
+    () => removeFromCart(product),
+    [product]
+  );
 
   if (product === undefined) return null;
 

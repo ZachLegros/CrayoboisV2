@@ -17,7 +17,11 @@ export function ModeToggle(props: { className?: string }) {
   };
 
   return (
-    <Button variant="outline" className={cn("p-2", className)} onClick={toggleTheme}>
+    <Button
+      variant="outline"
+      className={cn("p-2", className)}
+      onClick={toggleTheme}
+    >
       {!isLargerScreen && (
         <span className="inline-flex mr-2 lg:hidden lg:mr-0">Thème</span>
       )}

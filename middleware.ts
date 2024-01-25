@@ -9,7 +9,8 @@ export async function middleware(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith("/admin")) {
     try {
       const role = data.session?.user.user_metadata.role;
-      if (role !== "admin") return NextResponse.redirect(new URL("/", request.url));
+      if (role !== "admin")
+        return NextResponse.redirect(new URL("/", request.url));
     } catch {
       return NextResponse.redirect(new URL("/", request.url));
     }

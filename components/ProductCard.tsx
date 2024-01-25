@@ -36,7 +36,10 @@ export default function ProductCard(props: {
     toast({
       title: `"${product.name}" a été ajouté à votre panier.`,
       action: (
-        <ToastAction altText="Aller au panier" onClick={() => router.push("/cart")}>
+        <ToastAction
+          altText="Aller au panier"
+          onClick={() => router.push("/cart")}
+        >
           Aller au panier
         </ToastAction>
       ),
@@ -82,7 +85,11 @@ export default function ProductCard(props: {
             <p>{cad(product.price)}</p>
           </div>
           {!isInCart ? (
-            <Button color="primary" className="mt-auto" onClick={handleAddToCart}>
+            <Button
+              color="primary"
+              className="mt-auto"
+              onClick={handleAddToCart}
+            >
               Ajouter au Panier
             </Button>
           ) : (

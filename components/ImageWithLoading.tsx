@@ -25,7 +25,9 @@ export default function ImageWithLoading(props: ImageWithLoadingProps) {
         loading="lazy"
         className="w-full h-full object-cover"
       />
-      {!isLoaded && <Skeleton className="absolute top-0 left-0 w-full h-full" />}
+      {!isLoaded && (
+        <Skeleton className="absolute top-0 left-0 w-full h-full" />
+      )}
     </div>
   );
 }

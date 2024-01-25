@@ -69,7 +69,9 @@ const storeCartItemDataInLocalStorage = (cartItemData: CartItemData) => {
   localStorage.setItem("cartItemData", JSON.stringify(cartItemData));
 };
 
-const initializeCartFromLocalStorage = (callback?: (cart: Cart) => void): Cart => {
+const initializeCartFromLocalStorage = (
+  callback?: (cart: Cart) => void
+): Cart => {
   if (typeof localStorage === "undefined") return [];
   const cartString = localStorage.getItem("cart");
   const cart = cartString ? JSON.parse(cartString) : [];
@@ -103,10 +105,13 @@ const syncCart = async (cart: Cart, state: () => CartStore) => {
     },
     quantity,
   }));
-  const newCartItemData: CartItemData = syncedCart.reduce((acc, { product }) => {
-    acc[product.id as keyof CartItemData] = product;
-    return acc;
-  }, {} as CartItemData);
+  const newCartItemData: CartItemData = syncedCart.reduce(
+    (acc, { product }) => {
+      acc[product.id as keyof CartItemData] = product;
+      return acc;
+    },
+    {} as CartItemData
+  );
   state().setCart(newCart);
   state().setCartItemData(newCartItemData);
   localStorage.setItem("lastSync", Date.now().toString());
@@ -124,7 +129,9 @@ const fetchShipping = async (
 const inferShippingMethod = (
   state: () => CartStore,
   set: {
-    (arg0: { shippingMethod: { id: string; name: string; price: number } }): void;
+    (arg0: {
+      shippingMethod: { id: string; name: string; price: number };
+    }): void;
   }
 ) => {
   const { cart, cartItemData } = state();
@@ -135,7 +142,10 @@ const inferShippingMethod = (
     (method) => method.price !== 0
   );
   if (
-    isShippingFree(getCartTotalQuantity(cart), getTotalPrice(cart, cartItemData))
+    isShippingFree(
+      getCartTotalQuantity(cart),
+      getTotalPrice(cart, cartItemData)
+    )
   ) {
     set({ shippingMethod: freeMethod });
   } else if (state().shippingMethod?.price === 0) {
@@ -212,8 +222,13 @@ export const useCartStore = create<CartStore>((set, state) => ({
     state().setCartItemData(newCartItemData);
   },
   removeFromCart: (product) => {
-    const newCart = state().cart.filter((item) => item.product.id !== product.id);
-    const newCartItemData = { ...state().cartItemData, [product.id]: undefined };
+    const newCart = state().cart.filter(
+      (item) => item.product.id !== product.id
+    );
+    const newCartItemData = {
+      ...state().cartItemData,
+      [product.id]: undefined,
+    };
     state().setCart(newCart);
     state().setCartItemData(newCartItemData);
   },

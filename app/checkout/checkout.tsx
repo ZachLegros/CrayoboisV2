@@ -2,7 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
-import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
+import {
+  EmbeddedCheckoutProvider,
+  EmbeddedCheckout,
+} from "@stripe/react-stripe-js";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 import { useCartStore } from "../cart/store";
@@ -14,7 +17,9 @@ import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
 import useUserStore from "../user-store";
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
+);
 
 const destroyCheckoutSession = async (sessionIdSearchParam?: string) => {
   // Destroy checkout session
@@ -82,9 +87,12 @@ export default function Checkout(props: { sessionId?: string }) {
             router.push("/cart");
           }
         } else if (sessionId) {
-          const res = await fetch(`/api/checkout_sessions?session_id=${sessionId}`, {
-            method: "GET",
-          });
+          const res = await fetch(
+            `/api/checkout_sessions?session_id=${sessionId}`,
+            {
+              method: "GET",
+            }
+          );
           const data = await res.json();
           if (data.status === "complete") {
             clearCart();
@@ -125,7 +133,8 @@ export default function Checkout(props: { sessionId?: string }) {
               Merci de supporter Crayobois!
             </p>
             <p className="text-lg md:text-xl text-foreground/60 font-semibold text-center">
-              Vous recevrez un email de confirmation à l'adresse courriel fournie.
+              Vous recevrez un email de confirmation à l'adresse courriel
+              fournie.
             </p>
             <FaCircleCheck className="text-6xl text-green-500 mt-4" />
           </div>
@@ -150,7 +159,10 @@ export default function Checkout(props: { sessionId?: string }) {
           <Spinner className="text-primary w-10 h-10" />
         )
       ) : clientSecret ? (
-        <EmbeddedCheckoutProvider stripe={stripePromise} options={{ clientSecret }}>
+        <EmbeddedCheckoutProvider
+          stripe={stripePromise}
+          options={{ clientSecret }}
+        >
           <EmbeddedCheckout className="animate-in rounded-lg overflow-hidden" />
         </EmbeddedCheckoutProvider>
       ) : (

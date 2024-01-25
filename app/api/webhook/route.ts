@@ -153,9 +153,12 @@ export async function POST(req: Request) {
     const data = await req.text();
     event = stripe.webhooks.constructEvent(data, sig, endpointSecret);
   } catch (err: any) {
-    return new Response(JSON.stringify({ error: `Webhook Error: ${err.message}` }), {
-      status: 400,
-    });
+    return new Response(
+      JSON.stringify({ error: `Webhook Error: ${err.message}` }),
+      {
+        status: 400,
+      }
+    );
   }
 
   try {
@@ -170,6 +173,8 @@ export async function POST(req: Request) {
     }
   } catch (error: any) {
     console.error(error);
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+    });
   }
 }

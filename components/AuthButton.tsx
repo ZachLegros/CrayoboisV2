@@ -45,7 +45,9 @@ export default function AuthButton() {
 
   useEffect(() => {
     if (user)
-      getUserMenuItems().then((items) => setItems((prev) => [...items, ...prev]));
+      getUserMenuItems().then((items) =>
+        setItems((prev) => [...items, ...prev])
+      );
     else setItems(defaultItems);
   }, [user]);
 

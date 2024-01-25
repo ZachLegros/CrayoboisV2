@@ -8,7 +8,11 @@ import { FaChevronRight } from "react-icons/fa";
 import { useMediaQuery } from "@/lib/hooks";
 import { gtSm } from "@/lib/mediaQueries";
 import Image from "next/image";
-import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import ImageWithLoading from "@/components/ImageWithLoading";
 import { getProductImages } from "./actions";
@@ -63,10 +67,13 @@ export default function Index() {
           <p className="text-lg p-0 md:pr-5">
             Explorez notre séléction de produits préfabriqués de{" "}
             <b>qualité supérieure</b>, comprenant des <b>éditions spéciales</b>.
-            Parmi notre gamme, retrouvez des stylos, des rasoirs, des porte-clés, des
-            porte-mines, et bien d'autres articles.
+            Parmi notre gamme, retrouvez des stylos, des rasoirs, des
+            porte-clés, des porte-mines, et bien d'autres articles.
           </p>
-          <Button className="w-max mt-4" onClick={() => router.push("/products")}>
+          <Button
+            className="w-max mt-4"
+            onClick={() => router.push("/products")}
+          >
             Explorer les produits
           </Button>
         </div>
@@ -102,8 +109,8 @@ export default function Index() {
           <p className="text-lg p-0 md:pr-5">
             Découvrez nos stylos uniques, façonnés avec soin par{" "}
             <b>Vincent Legros</b> et fièrement assemblés en{" "}
-            <b>Outaouais, au Québec</b>. Personnalisez-les selon vos préférences -
-            bois, style, matériaux. Exprimez votre style avec élégance.
+            <b>Outaouais, au Québec</b>. Personnalisez-les selon vos préférences
+            - bois, style, matériaux. Exprimez votre style avec élégance.
           </p>
           <Button
             className="w-max mt-4"

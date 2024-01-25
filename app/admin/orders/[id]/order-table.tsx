@@ -59,7 +59,9 @@ export default function OrdersTable(props: { order: ClientOrder }) {
           <TableCell colSpan={4} className="text-right">
             Sous-total
           </TableCell>
-          <TableCell className="text-right">{cad(getNetAmount(order))}</TableCell>
+          <TableCell className="text-right">
+            {cad(getNetAmount(order))}
+          </TableCell>
         </TableRow>
         <TableRow>
           <TableCell colSpan={4} className="text-right">

@@ -69,11 +69,18 @@ export const useCustomOrderStore = create<CustomOrderStore>((set, state) => ({
   hardwares: [],
   setHardwares: (hardwares: Hardware[]) => set({ hardwares }),
   selectedMaterial: null,
-  selectMaterial: (material: Material | null) => set({ selectedMaterial: material }),
+  selectMaterial: (material: Material | null) =>
+    set({ selectedMaterial: material }),
   selectedHardware: null,
-  selectHardware: (hardware: Hardware | null) => set({ selectedHardware: hardware }),
+  selectHardware: (hardware: Hardware | null) =>
+    set({ selectedHardware: hardware }),
   typeFilter: createFilter(set, "typeFilter", true, getInitialTypeFilter),
-  originFilter: createFilter(set, "originFilter", false, getInitialOriginFilter),
+  originFilter: createFilter(
+    set,
+    "originFilter",
+    false,
+    getInitialOriginFilter
+  ),
   priceFilter: createFilter(set, "priceFilter", false, getInitialPriceFilter),
   clearFilters: () => {
     state().typeFilter.clear();

@@ -6,7 +6,10 @@ import { cn } from "../lib/utils";
 export default function Logo(props: { className?: string }) {
   const { className } = props;
   return (
-    <Link href="/" className={cn("transition-opacity hover:opacity-75", className)}>
+    <Link
+      href="/"
+      className={cn("transition-opacity hover:opacity-75", className)}
+    >
       <SvgLogo className="min-w-[100px] text-foreground" />
     </Link>
   );

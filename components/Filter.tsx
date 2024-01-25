@@ -16,7 +16,11 @@ function CollapseRadioGroup(props: {
   const { filter, setFilter, isFilterEnabled, children, className } = props;
   return (
     <Collapse isOpened={isFilterEnabled}>
-      <RadioGroup value={filter} onValueChange={setFilter} className={className}>
+      <RadioGroup
+        value={filter}
+        onValueChange={setFilter}
+        className={className}
+      >
         {children}
       </RadioGroup>
     </Collapse>

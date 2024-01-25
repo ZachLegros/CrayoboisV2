@@ -12,7 +12,9 @@ export default function OrderDetails(props: { order: ClientOrder }) {
       <div className="flex flex-col gap-3 p-3 border rounded-xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div>
-            <h2 className="text-xl font-semibold mb-1">Informations génerales</h2>
+            <h2 className="text-xl font-semibold mb-1">
+              Informations génerales
+            </h2>
             <ul className="flex flex-col gap-0.5">
               <li>
                 <b>Nom:</b> {order.payer_name}
@@ -26,7 +28,9 @@ export default function OrderDetails(props: { order: ClientOrder }) {
             </ul>
           </div>
           <div>
-            <h2 className="text-xl font-semibold mb-1">Addresse de livraison</h2>
+            <h2 className="text-xl font-semibold mb-1">
+              Addresse de livraison
+            </h2>
             <ul className="flex flex-col gap-0.5">
               <li>
                 <b>Addresse:</b> {order.address_street}
@@ -42,7 +46,9 @@ export default function OrderDetails(props: { order: ClientOrder }) {
           </div>
         </div>
         <div>
-          <h2 className="text-xl font-semibold mb-2">Commande #{order.order_no}</h2>
+          <h2 className="text-xl font-semibold mb-2">
+            Commande #{order.order_no}
+          </h2>
           <OrderTable order={order} />
         </div>
       </div>

@@ -93,7 +93,8 @@ function isCartInSync(cart: Cart, syncedCart: CartItemType<DbProduct>[]) {
         item.product.id === syncedItem.product.id &&
         getCartProductMaterialId(item.product) ===
           getMaterialId(syncedItem.product) &&
-        getCartProductHardwareId(item.product) === getHardwareId(syncedItem.product)
+        getCartProductHardwareId(item.product) ===
+          getHardwareId(syncedItem.product)
     )
   );
 }
@@ -114,7 +115,10 @@ export async function POST(req: Request) {
     const filteredCart: FilteredCart = { items: [], customItems: [] };
     for (const item of syncedCart) {
       if (isProduct(item.product)) {
-        filteredCart.items.push({ product: item.product, quantity: item.quantity });
+        filteredCart.items.push({
+          product: item.product,
+          quantity: item.quantity,
+        });
       } else if (isCustomProductWithComponents(item.product)) {
         filteredCart.customItems.push({
           product: item.product,
@@ -124,7 +128,9 @@ export async function POST(req: Request) {
     }
 
     // Create new checkout session
-    const shipping = await prisma.shipping.findUnique({ where: { id: shippingId } });
+    const shipping = await prisma.shipping.findUnique({
+      where: { id: shippingId },
+    });
     if (!shipping || isNaN(shipping.price)) throw new Error("shipping_invalid");
     // Make sure that free shipping is applied only if the conditions are met
     if (shipping.price === 0) {
@@ -200,7 +206,10 @@ export async function POST(req: Request) {
     });
 
     return new Response(
-      JSON.stringify({ clientSecret: session.client_secret, sessionId: session.id }),
+      JSON.stringify({
+        clientSecret: session.client_secret,
+        sessionId: session.id,
+      }),
       {
         status: 200,
       }

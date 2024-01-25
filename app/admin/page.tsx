@@ -4,7 +4,9 @@ import NetRevenueChart from "./net-revenue-chart";
 
 export default async function AdminPage() {
   const orders = (
-    await prisma.clientOrder.findMany({ where: { status: { not: "cancelled" } } })
+    await prisma.clientOrder.findMany({
+      where: { status: { not: "cancelled" } },
+    })
   ).sort((a, b) => a.order_no - b.order_no);
 
   return (

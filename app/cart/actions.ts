@@ -25,8 +25,12 @@ export const syncCartWithComponents = async (
       if (isCartItemType(item)) {
         if (item.product && isCartCustomProduct(item.product)) {
           const [material, hardware] = await Promise.all([
-            prisma.material.findUnique({ where: { id: item.product.material_id } }),
-            prisma.hardware.findUnique({ where: { id: item.product.hardware_id } }),
+            prisma.material.findUnique({
+              where: { id: item.product.material_id },
+            }),
+            prisma.hardware.findUnique({
+              where: { id: item.product.hardware_id },
+            }),
           ]);
           if (material && hardware) {
             const customProduct = customProductFactory(material, hardware);
@@ -57,13 +61,18 @@ export const syncCartWithComponents = async (
 
 export const syncCart = async (cart: CartItemType<CartProductType>[]) => {
   try {
-    const syncedCart: CartItemType<Product | CustomProductWithComponents>[] = [];
+    const syncedCart: CartItemType<Product | CustomProductWithComponents>[] =
+      [];
     for (const item of cart) {
       if (isCartItemType(item)) {
         if (item.product && isCartCustomProduct(item.product)) {
           const [material, hardware] = await Promise.all([
-            prisma.material.findUnique({ where: { id: item.product.material_id } }),
-            prisma.hardware.findUnique({ where: { id: item.product.hardware_id } }),
+            prisma.material.findUnique({
+              where: { id: item.product.material_id },
+            }),
+            prisma.hardware.findUnique({
+              where: { id: item.product.hardware_id },
+            }),
           ]);
           if (material && hardware) {
             const customProduct = customProductFactory(material, hardware);

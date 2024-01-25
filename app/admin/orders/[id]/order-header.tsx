@@ -7,7 +7,11 @@ import { FaChevronLeft } from "react-icons/fa";
 import { ClientOrder, OrderStatus } from "@prisma/client";
 
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Command,
   CommandGroup,
@@ -33,7 +37,9 @@ export default function OrderHeader(props: { order: ClientOrder }) {
     setOrderStatusInDb(order.id, status).then((success) => {
       if (success) {
         updateOrderStatus(order.id, status);
-        toast({ title: `Statut de la commande #${order.order_no} mis à jour.` });
+        toast({
+          title: `Statut de la commande #${order.order_no} mis à jour.`,
+        });
       } else {
         toast({
           title: "Erreur lors de la mise à jour du statut de la commande.",
