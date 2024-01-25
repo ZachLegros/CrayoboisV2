@@ -1,10 +1,13 @@
 import { create } from "zustand";
-import { ClientOrder, OrderStatus } from "@prisma/client";
+import { ClientOrder, Material, OrderStatus } from "@prisma/client";
 
 type AdminStore = {
   orders: ClientOrder[];
   setOrders: (orders: ClientOrder[]) => void;
   updateOrderStatus: (orderId: string, orderStatus: OrderStatus) => void;
+  materials: Material[];
+  setMaterials: (materials: Material[]) => void;
+  updateMaterial: (material: Material) => void;
 };
 
 export const useAdminStore = create<AdminStore>((set, get) => ({
@@ -16,6 +19,19 @@ export const useAdminStore = create<AdminStore>((set, get) => ({
       const orders = [...get().orders];
       orders[orderIndex] = { ...orders[orderIndex], status: orderStatus };
       set({ orders });
+    }
+  },
+
+  materials: [],
+  setMaterials: (materials: Material[]) => set({ materials }),
+  updateMaterial: (material: Material) => {
+    const materialIndex = get().materials.findIndex(
+      (m) => m.id === material.id
+    );
+    if (materialIndex !== -1) {
+      const materials = [...get().materials];
+      materials[materialIndex] = material;
+      set({ materials });
     }
   },
 }));
