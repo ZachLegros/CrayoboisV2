@@ -21,7 +21,7 @@ export default function OrdersTable(props: { orders: ClientOrder[] }) {
   const { orders, setOrders } = useAdminStore();
 
   useEffect(() => {
-    setOrders(ordersFromDb);
+    if (orders.length === 0) setOrders(ordersFromDb);
   }, [ordersFromDb]);
 
   return (
@@ -38,15 +38,19 @@ export default function OrdersTable(props: { orders: ClientOrder[] }) {
       <TableBody>
         {orders.map((order) => (
           <TableRow
-            className="h-10 cursor-pointer"
+            className="h-12 cursor-pointer"
             key={order.id}
             onClick={() => router.push(`/admin/orders/${order.id}`)}
           >
             <TableCell className="font-medium">#{order.order_no}</TableCell>
-            <TableCell>{dayjs(order.created_at).format("D MMM YYYY")}</TableCell>
+            <TableCell>
+              {dayjs(order.created_at).format("D MMM YYYY")}
+            </TableCell>
             <TableCell className="capitalize">{order.payer_name}</TableCell>
             <TableCell>{cad(order.amount)}</TableCell>
-            <TableCell className="text-right">{orderStatus(order.status)}</TableCell>
+            <TableCell className="text-right">
+              {orderStatus(order.status)}
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>
