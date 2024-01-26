@@ -33,13 +33,14 @@ export default function MaterialDetails(props: { materialId: string }) {
     async <P extends keyof Material>(
       property: P,
       value: Material[P]
-    ): Promise<boolean> => {
-      if (!material) return false;
+    ): Promise<void> => {
+      if (!material) {
+        errorToast();
+      }
       const success = await updateMaterial(material, property, value);
       if (!success) {
         errorToast();
       }
-      return success;
     },
     [material, errorToast]
   );
