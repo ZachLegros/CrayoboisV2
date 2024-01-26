@@ -59,11 +59,11 @@ export default function Metrics(props: { orders: ClientOrder[] }) {
   }, [orders]);
 
   return (
-    <div className="flex flex-wrap gap-3 bg-card rounded-xl border lg:bg-transparent lg:border-none">
+    <div className="flex flex-wrap gap-0 lg:gap-3 bg-card rounded-xl border lg:bg-transparent lg:border-none">
       {Object.values(metrics).map((metric) => (
         <div
           key={metric.name}
-          className="bg-transparent shadow-none rounded-xl lg:bg-card lg:border lg:shadow-none"
+          className="w-max bg-transparent shadow-none rounded-xl lg:bg-card lg:border lg:shadow-none"
         >
           <Metric {...metric} />
         </div>
