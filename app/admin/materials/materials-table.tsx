@@ -14,21 +14,21 @@ import { cad } from "@/lib/currencyFormatter";
 import useAdminStore from "../store";
 import ImageWithLoading from "@/components/ImageWithLoading";
 import { Switch } from "@/components/ui/switch";
-import { updateMaterialInDb } from "./actions";
 import { useToast } from "@/components/ui/use-toast";
-import EditableField from "@/components/EditableField";
+import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 export default function MaterialsTable(props: { materials: Material[] }) {
   const { materials: materialsFromDb } = props;
   const { materials, setMaterials } = useAdminStore();
 
   useEffect(() => {
-    if (materials.length === 0) setMaterials(materialsFromDb);
+    if (Object.keys(materials).length === 0) setMaterials(materialsFromDb);
   }, [materialsFromDb]);
 
   const tableRows = useMemo(() => {
-    return materials.map((material) => (
-      <MaterialRow material={material} key={material.id} />
+    return Object.keys(materials).map((materialId) => (
+      <MaterialRow material={materials[materialId]} key={materialId} />
     ));
   }, [materials]);
 
@@ -54,25 +54,35 @@ function MaterialRow(props: { material: Material }) {
   const { material } = props;
   const { toast } = useToast();
   const { updateMaterial } = useAdminStore();
+  const router = useRouter();
+
+  const cellStyle = material.enabled ? "opacity-100" : "opacity-40";
 
   const handleUpdate = useCallback(
     <P extends keyof Material>(property: P, value: Material[P]) => {
-      const originalMaterial = { ...material };
-      const updatedMaterial = { ...material, [property]: value };
-      updateMaterial(updatedMaterial);
-      updateMaterialInDb(updatedMaterial).then((updatedMaterial) => {
-        if (!updatedMaterial) {
-          updateMaterial(originalMaterial);
-          toast({ title: "Une erreur est survenue", variant: "destructive" });
+      updateMaterial(material, property, value).then((success) => {
+        if (!success) {
+          toast({
+            title: "Une erreur est survenue",
+            variant: "destructive",
+          });
         }
       });
     },
     [material]
   );
 
+  const handleOnRowClick = useCallback(() => {
+    router.push(`/admin/materials/${material.id}`);
+  }, [material]);
+
   return (
-    <TableRow key={material.id}>
-      <TableCell>
+    <TableRow
+      className="transition-opacity cursor-pointer"
+      onClick={handleOnRowClick}
+      key={material.id}
+    >
+      <TableCell className={cellStyle}>
         <ImageWithLoading
           width={100}
           height={100}
@@ -81,53 +91,43 @@ function MaterialRow(props: { material: Material }) {
           className="rounded-md"
         />
       </TableCell>
-      <TableCell>
-        <EditableField
-          type="text"
-          value={material.name}
-          onChange={(value) => handleUpdate("name", value)}
-          className="justify-between"
-          multiline
-        />
+      <TableCell className={cellStyle}>
+        {material.name}
+        {/* <EditableField
+            type="text"
+            value={material.name}
+            onChange={(value) => handleUpdate("name", value)}
+            className="justify-between"
+            multiline
+          /> */}
       </TableCell>
-      <TableCell>
-        <EditableField
-          type="text"
-          value={material.origin}
-          onChange={(value) => handleUpdate("origin", value)}
-          inputClassName="w-[150px]"
-        />
+      <TableCell className={cellStyle}>
+        {material.origin}
+        {/* <EditableField
+            type="text"
+            value={material.origin}
+            onChange={(value) => handleUpdate("origin", value)}
+            inputClassName="w-[150px]"
+          /> */}
       </TableCell>
-      <TableCell>
-        <EditableField
-          type="text"
-          value={material.type}
-          onChange={(value) => handleUpdate("type", value)}
-          inputClassName="w-[175px]"
-        />
+      <TableCell className={cellStyle}>{material.type}</TableCell>
+      <TableCell className={cellStyle}>{cad(material.price)}</TableCell>
+      <TableCell
+        className={cn(
+          `font-semibold ${material.quantity > 0 ? "text-green-500" : "text-red-500"}`,
+          cellStyle
+        )}
+      >
+        {material.quantity}
       </TableCell>
-      <TableCell>
-        <EditableField
-          type="number"
-          value={`${material.price}`}
-          placeholder={`${cad(material.price)}`}
-          onChange={(value) => handleUpdate("price", Number(value))}
-          inputClassName="max-w-20"
-        />
-      </TableCell>
-      <TableCell>
-        <EditableField
-          type="number"
-          value={`${material.quantity}`}
-          onChange={(value) => handleUpdate("quantity", Number(value))}
-          className={`font-semibold ${material.quantity > 0 ? "text-green-500" : "text-red-500"}`}
-          inputClassName="max-w-20"
-        />
-      </TableCell>
-      <TableCell className="text-right">
+      <TableCell className="text-right opacity-100">
         <Switch
           checked={material.enabled}
-          onCheckedChange={(value) => handleUpdate("enabled", value)}
+          onCheckedChange={(value) => {
+            handleUpdate("enabled", value);
+          }}
+          onClick={(e) => e.stopPropagation()}
+          className="border"
         />
       </TableCell>
     </TableRow>
