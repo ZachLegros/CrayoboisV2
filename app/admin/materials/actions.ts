@@ -5,6 +5,11 @@ import { cookies } from "next/headers";
 import prisma from "@/lib/prisma";
 import { Material } from "@prisma/client";
 
+export async function getMaterials() {
+  const materials = await prisma.material.findMany();
+  return materials;
+}
+
 export async function updateMaterialInDb(material: Material) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
