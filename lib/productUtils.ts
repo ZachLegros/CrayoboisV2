@@ -1,4 +1,4 @@
-import { Hardware, Material, CustomProduct, Product } from "@prisma/client";
+import { CustomProduct, Hardware, Material, Product } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 
 export type DbProduct = Product | CustomProduct | CustomProductWithComponents;
@@ -16,7 +16,7 @@ export const isProduct = (product: DbProduct): product is Product => {
 };
 
 export const isCustomProduct = (
-  product: DbProduct
+  product: DbProduct,
 ): product is CustomProduct => {
   return (
     (product as CustomProduct).material_id !== undefined &&
@@ -25,7 +25,7 @@ export const isCustomProduct = (
 };
 
 export const isCustomProductWithComponents = (
-  product: DbProduct
+  product: DbProduct,
 ): product is CustomProductWithComponents => {
   return (
     (product as CustomProductWithComponents).material !== undefined &&
@@ -34,13 +34,13 @@ export const isCustomProductWithComponents = (
 };
 
 export const isMaterial = (
-  component: Material | Hardware
+  component: Material | Hardware,
 ): component is Material => {
   return (component as Material).origin !== undefined;
 };
 
 export const isHardware = (
-  component: Material | Hardware
+  component: Material | Hardware,
 ): component is Hardware => {
   return (
     (component as Hardware).color !== undefined &&
@@ -65,7 +65,7 @@ export const getProductMaxQuantity = (product: DbProduct) => {
 
 export const getClosestValidQuantity = (
   desiredQuantity: number,
-  product: DbProduct
+  product: DbProduct,
 ) => {
   const quantity = Math.min(desiredQuantity, getProductMaxQuantity(product));
   return quantity > 0 ? quantity : 1;
@@ -73,14 +73,14 @@ export const getClosestValidQuantity = (
 
 export const generateProductName = (
   material: Material,
-  hardware: Hardware
+  hardware: Hardware,
 ): string => {
   return `${material.name}, ${hardware.name} ${hardware.color}`;
 };
 
 export const customProductFactory = (
   material: Material,
-  hardware: Hardware
+  hardware: Hardware,
 ): CustomProductWithComponents => {
   return {
     id: uuidv4(),
