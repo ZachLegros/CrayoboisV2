@@ -4,16 +4,16 @@ import { CheckIcon, Cross2Icon, Pencil2Icon } from "@radix-ui/react-icons";
 import { cn } from "@/lib/utils";
 
 export default function EditableField(props: {
-  type: HTMLInputTypeAttribute;
   value: string;
+  onChange: (value: string) => void;
+  type?: HTMLInputTypeAttribute;
   placeholder?: string;
   className?: string;
   inputClassName?: string;
   multiline?: boolean;
-  onChange: (value: string) => void;
 }) {
   const {
-    type,
+    type = "text",
     value,
     placeholder,
     onChange,
@@ -39,7 +39,7 @@ export default function EditableField(props: {
   };
 
   return (
-    <div className="relative w-full">
+    <div>
       {isEditing ? (
         <div className="flex items-center">
           {multiline ? (
