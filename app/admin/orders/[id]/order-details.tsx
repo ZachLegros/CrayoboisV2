@@ -9,7 +9,7 @@ export default function OrderDetails(props: { order: ClientOrder }) {
   return (
     <>
       <OrderHeader order={order} />
-      <div className="flex flex-col gap-3 p-3 border rounded-xl">
+      <div className="flex flex-col gap-3 md:p-3 md:border rounded-xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div>
             <h2 className="text-xl font-semibold mb-1">
