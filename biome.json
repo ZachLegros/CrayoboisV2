@@ -15,6 +15,10 @@
       },
       "correctness": {
         "useExhaustiveDependencies": "off"
+      },
+      "nursery": {
+        "noUnusedImports": "error",
+        "useImportType": "error"
       }
     }
   },
