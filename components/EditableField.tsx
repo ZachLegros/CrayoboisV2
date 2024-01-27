@@ -25,6 +25,8 @@ export default function EditableField(props: {
   const [isEditing, setIsEditing] = useState(false);
   const [inputValue, setInputValue] = useState(value);
 
+  const buttonStyle = "text-foreground/70 my-auto p-0 w-6 h-6";
+
   const handleEdit = () => {
     setIsEditing(true);
   };
@@ -58,13 +60,17 @@ export default function EditableField(props: {
             />
           )}
           <Button
-            className="ml-2 text-green-600 hover:text-green-700"
+            className={cn(buttonStyle, "ml-2 text-green-600 hover:text-green-700")}
+            size="icon"
+            variant="ghost"
             onClick={handleSave}
           >
             <CheckIcon className="w-5 h-5" />
           </Button>
           <Button
-            className="ml-2 text-red-600 hover:text-red-700"
+            className={cn(buttonStyle, "ml-2 text-red-600 hover:text-red-700")}
+            size="icon"
+            variant="ghost"
             onClick={handleCancel}
           >
             <Cross2Icon className="w-5 h-5" />
@@ -74,7 +80,9 @@ export default function EditableField(props: {
         <div className={cn("relative flex gap-x-2", className)}>
           <span>{placeholder ?? value}</span>
           <Button
-            className="transition-opacity text-foreground/70 hover:opacity-70 my-auto"
+            className={buttonStyle}
+            size="icon"
+            variant="ghost"
             onClick={handleEdit}
           >
             <Pencil2Icon className="w-4 h-4" />
