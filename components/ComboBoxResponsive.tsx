@@ -1,4 +1,6 @@
-import { useState } from "react";
+"use client";
+
+import { useMemo, useState } from "react";
 import { gtSm } from "@/lib/mediaQueries";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import {
@@ -34,6 +36,27 @@ export function ComboBoxResponsive(props: {
     onValueChange?.(value);
   };
 
+  const itemsList = useMemo(() => {
+    return Object.keys(items).map((key) => (
+      <CommandItem
+        key={key}
+        value={key}
+        onSelect={(value) => {
+          handleValueChange(value);
+          setOpen(false);
+        }}
+      >
+        {items[key]}
+        <CheckIcon
+          className={cn(
+            "ml-auto h-4 w-4",
+            key === selectedKey ? "opacity-100" : "opacity-0"
+          )}
+        />
+      </CommandItem>
+    ));
+  }, [items, selectedKey]);
+
   if (isDesktop) {
     return (
       <Popover open={open} onOpenChange={setOpen}>
@@ -51,26 +74,7 @@ export function ComboBoxResponsive(props: {
         <PopoverContent className="w-[150px] p-0" align="end">
           <Command>
             <CommandList>
-              <CommandGroup>
-                {Object.keys(items).map((key) => (
-                  <CommandItem
-                    key={key}
-                    value={key}
-                    onSelect={(value) => {
-                      handleValueChange(value);
-                      setOpen(false);
-                    }}
-                  >
-                    {items[key]}
-                    <CheckIcon
-                      className={cn(
-                        "ml-auto h-4 w-4",
-                        key === selectedKey ? "opacity-100" : "opacity-0"
-                      )}
-                    />
-                  </CommandItem>
-                ))}
-              </CommandGroup>
+              <CommandGroup>{itemsList}</CommandGroup>
             </CommandList>
           </Command>
         </PopoverContent>
@@ -81,12 +85,7 @@ export function ComboBoxResponsive(props: {
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className="w-[130px] justify-between"
-        >
+        <Button variant="outline" role="combobox" aria-expanded={open}>
           {items[selectedKey]}
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -95,26 +94,7 @@ export function ComboBoxResponsive(props: {
         <div className="mt-4 border-t p-3">
           <Command>
             <CommandList>
-              <CommandGroup>
-                {Object.keys(items).map((key) => (
-                  <CommandItem
-                    key={key}
-                    value={key}
-                    onSelect={(value) => {
-                      handleValueChange(value);
-                      setOpen(false);
-                    }}
-                  >
-                    {items[selectedKey]}
-                    <CheckIcon
-                      className={cn(
-                        "ml-auto h-4 w-4",
-                        key === selectedKey ? "opacity-100" : "opacity-0"
-                      )}
-                    />
-                  </CommandItem>
-                ))}
-              </CommandGroup>
+              <CommandGroup>{itemsList}</CommandGroup>
             </CommandList>
           </Command>
         </div>
