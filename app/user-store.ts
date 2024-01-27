@@ -1,13 +1,13 @@
-import { create } from "zustand";
 import { createClient } from "@/lib/supabase/client";
-import { User } from "@supabase/supabase-js";
+import type { Session, User } from "@supabase/supabase-js";
+import { create } from "zustand";
 
 type UserStore = {
   user?: User;
   id?: string;
   email?: string;
-  supabase: any;
-  getCurrentSession: () => Promise<void>;
+  supabase: ReturnType<typeof createClient>;
+  getCurrentSession: () => Promise<Session | null>;
   signOut: () => Promise<void>;
   getCurrentUser: () => Promise<void>;
   clearUser: () => void;
@@ -18,7 +18,7 @@ export const useUserStore = create<UserStore>((set, get) => ({
 
   getCurrentSession: async () => {
     const res = await get().supabase.auth.getSession();
-    if (res && res.data.session) {
+    if (res?.data.session) {
       return res.data.session;
     }
 
@@ -36,7 +36,7 @@ export const useUserStore = create<UserStore>((set, get) => ({
     if (get().id) return;
 
     const res = await get().supabase.auth.getUser();
-    if (res && res.data.user) {
+    if (res?.data.user) {
       const currentUser = res.data.user;
       set({
         user: currentUser,
