@@ -91,7 +91,7 @@ export function MobileNavLinks(props: {
 }) {
   const pathname = usePathname();
   const { items, className, onNavLinkClick } = props;
-  const { cart } = useCartStore();
+  const { cartState } = useCartStore();
   const linkStyle =
     "transition-colors text-foreground/70 hover:text-foreground aria-[current]:font-sem aria-[current]:text-foreground";
   return (
@@ -122,8 +122,8 @@ export function MobileNavLinks(props: {
         >
           Mon panier
         </Link>
-        {cart.items.length > 0 && (
-          <Badge className="ml-2">{cart.items.length}</Badge>
+        {cartState.items.length > 0 && (
+          <Badge className="ml-2">{cartState.items.length}</Badge>
         )}
       </li>
     </ul>

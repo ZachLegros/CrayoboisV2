@@ -35,33 +35,54 @@ export const isCartItemType = (
   return item.product !== undefined && !Number.isNaN(item.quantity);
 };
 
-export class Cart {
-  items: CartItems = [];
-  itemData: CartItemData = {};
-  shipping: Shipping | null = null;
-  shippingMethods: Shipping[] = [];
-  breakdown: PriceBreakdown = {
-    subtotal: 0,
-    tps: 0,
-    tvq: 0,
-    shipping: 0,
-    total: 0,
-  };
+export type CartState = {
+  items: CartItems;
+  itemData: CartItemData;
+  shipping: Shipping | null;
+  shippingMethods: Shipping[];
+  breakdown: PriceBreakdown;
+};
 
-  constructor() {
-    this.items = this.getCartFromLocalStorage();
-    this.itemData = this.getCartItemDataFromLocalStorage();
+export class Cart {
+  private state: CartState = {
+    items: [],
+    itemData: {},
+    shipping: null,
+    shippingMethods: [],
+    breakdown: {
+      subtotal: 0,
+      tps: 0,
+      tvq: 0,
+      shipping: 0,
+      total: 0,
+    },
+  };
+  onStateChange: (state: CartState) => void;
+
+  constructor(onStateChange: (state: CartState) => void) {
+    this.state.items = this.getCartFromLocalStorage();
+    this.state.itemData = this.getCartItemDataFromLocalStorage();
+    this.onStateChange = onStateChange;
   }
 
+  private setState = (state: Partial<CartState>) => {
+    this.state = { ...this.state, ...state };
+    this.onStateChange(this.state);
+  };
+
+  getState = () => {
+    return { ...this.state };
+  };
+
   private setItems = (items: CartItems) => {
-    this.items = items;
-    this.inferShippingMethod();
-    this.inferBreakdown();
+    this.setState({ items });
     this.setItemsInLocalStorage(items);
   };
 
   private setItemData = (itemData: CartItemData) => {
-    this.itemData = itemData;
+    this.setState({ itemData });
+    this.inferShippingMethod();
+    this.inferBreakdown();
     this.setItemDataInLocalStorage(itemData);
   };
 
@@ -69,7 +90,7 @@ export class Cart {
     const alreadyInCart = this.has(product.id);
     if (alreadyInCart) return;
     const newCartItems = [
-      ...this.items,
+      ...this.state.items,
       {
         product: {
           id: product.id,
@@ -79,15 +100,17 @@ export class Cart {
         quantity: 1,
       },
     ];
-    const newCartItemData = { ...this.itemData, [product.id]: product };
+    const newCartItemData = { ...this.state.itemData, [product.id]: product };
     this.setItems(newCartItems);
     this.setItemData(newCartItemData);
   };
 
   removeItem = (productId: string) => {
-    const newCartItems = this.items.filter((item) => item.product.id !== productId);
+    const newCartItems = this.state.items.filter(
+      (item) => item.product.id !== productId,
+    );
     const newCartItemData = {
-      ...this.itemData,
+      ...this.state.itemData,
       [productId]: undefined,
     };
     this.setItems(newCartItems);
@@ -99,14 +122,16 @@ export class Cart {
     property: P,
     value: CartItemType<CartProductType>[P],
   ) => {
-    const newCartItems: CartItems = [...this.items].map((item) =>
+    const newCartItems: CartItems = [...this.state.items].map((item) =>
       item.product.id === productId ? { ...item, [property]: value } : item,
     );
     this.setItems(newCartItems);
+    this.inferShippingMethod();
+    this.inferBreakdown();
   };
 
   has = (productId: string) => {
-    return this.items.some((item) => item.product.id === productId);
+    return this.state.items.some((item) => item.product.id === productId);
   };
 
   clear = () => {
@@ -115,45 +140,50 @@ export class Cart {
   };
 
   getTotalItemsPrice = () => {
-    return this.items.reduce((acc, item) => {
-      const product = this.itemData[item.product.id];
+    return this.state.items.reduce((acc, item) => {
+      const product = this.state.itemData[item.product.id];
       if (product === undefined) return acc;
       return acc + product.price * item.quantity;
     }, 0);
   };
 
   getTotalQuantity = () => {
-    return this.items.reduce((acc, item) => acc + item.quantity, 0);
+    return this.state.items.reduce((acc, item) => acc + item.quantity, 0);
   };
 
   private inferBreakdown = () => {
-    if (!this.shipping) {
-      return {
-        subtotal: 0,
-        tps: 0,
-        tvq: 0,
-        shipping: 0,
-        total: 0,
-      };
+    if (!this.state.shipping) {
+      this.setState({
+        breakdown: {
+          subtotal: 0,
+          tps: 0,
+          tvq: 0,
+          shipping: 0,
+          total: 0,
+        },
+      });
+      return;
     }
     const subtotal = this.getTotalItemsPrice();
     const tps = getTps(subtotal);
     const tvq = getTvq(subtotal);
-    const shippingPrice = this.shipping.price;
-    this.breakdown = {
-      subtotal,
-      tps,
-      tvq,
-      shipping: shippingPrice,
-      total: subtotal + tps + tvq + shippingPrice,
-    };
+    const shippingPrice = this.state.shipping.price;
+    this.setState({
+      breakdown: {
+        subtotal,
+        tps,
+        tvq,
+        shipping: shippingPrice,
+        total: subtotal + tps + tvq + shippingPrice,
+      },
+    });
   };
 
   sync = async () => {
     const lastSync = parseInt(safeLocalStorageGet("lastSync") ?? "0");
     if (lastSync && Date.now() - lastSync < 1000 * 60 * 60) return;
 
-    const syncedCart = await syncCartAction(this.items);
+    const syncedCart = await syncCartAction(this.state.items);
     const newCartItems: CartItems = syncedCart.map(({ product, quantity }) => ({
       product: {
         id: product.id,
@@ -172,31 +202,33 @@ export class Cart {
   };
 
   fetchShippingMethods = async () => {
-    fetchShippingMethods().then((shippingMethods) => {
-      this.shippingMethods = shippingMethods;
-      this.inferShippingMethod();
-    });
+    const shippingMethods = await fetchShippingMethods();
+    this.setState({ shippingMethods });
+    this.inferShippingMethod();
+    this.inferBreakdown();
   };
 
   setShippingMethod = (id: string) => {
-    const correspondingMethod = this.shippingMethods.find((item) => item.id === id);
-    this.shipping = correspondingMethod ?? null;
+    const correspondingMethod = this.state.shippingMethods.find(
+      (item) => item.id === id,
+    );
+    this.setState({ shipping: correspondingMethod ?? null });
+    this.inferBreakdown();
   };
 
-  inferShippingMethod = () => {
-    const freeMethod = this.shippingMethods.filter(
+  private inferShippingMethod = () => {
+    const freeMethod = this.state.shippingMethods.filter(
       (method) => method.price === 0,
     )[0];
-    const nonFreeMethods = this.shippingMethods
+    const nonFreeMethods = this.state.shippingMethods
       .filter((method) => method.price !== 0)
       .sort((a, b) => a.price - b.price);
+
     if (isShippingFree(this.getTotalQuantity(), this.getTotalItemsPrice())) {
-      this.shipping = freeMethod;
-    } else if (this.shipping?.price === 0) {
-      // reset to cheapest non-free method
-      this.shipping = nonFreeMethods[0];
+      this.setState({ shipping: freeMethod });
+      return;
     }
-    return;
+    this.setState({ shipping: nonFreeMethods[0] });
   };
 
   private getCartFromLocalStorage = (): CartItems => {

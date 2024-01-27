@@ -13,24 +13,22 @@ import { useCartStore } from "./store";
 export default function CartBreakdown(props: { hasAction?: boolean }) {
   const { hasAction = true } = props;
   const router = useRouter();
-  const { cart } = useCartStore();
+  const { cart, cartState } = useCartStore();
   const [isButtonLoading, setIsButtonLoading] = useState(false);
 
   const nonFreeShippingMethods = useMemo(() => {
-    return cart.shippingMethods.filter((method) => method.price !== 0);
-  }, [cart.shippingMethods]);
+    return cartState.shippingMethods.filter((method) => method.price !== 0);
+  }, [cartState.shippingMethods]);
 
   useEffect(() => {
-    if (cart.shippingMethods.length === 0) {
+    if (cartState.shippingMethods.length === 0) {
       cart.fetchShippingMethods();
-    } else if (!cart.shipping) {
-      cart.inferShippingMethod();
     }
-  }, [cart.shippingMethods, cart.shipping]);
+  }, [cartState.shippingMethods, cartState.shipping]);
 
   const isLoading = useMemo(() => {
-    return cart.shippingMethods.length === 0;
-  }, [cart.shippingMethods]);
+    return cartState.shippingMethods.length === 0;
+  }, [cartState.shippingMethods]);
 
   return (
     <>
@@ -44,14 +42,14 @@ export default function CartBreakdown(props: { hasAction?: boolean }) {
         </p>
         <div className="min-h-12">
           {nonFreeShippingMethods.length > 0 ? (
-            cart.shipping?.price === 0 ? (
+            cartState.shipping?.price === 0 ? (
               <Badge variant="default-faded">Livraison gratuite!</Badge>
             ) : (
               <RadioGroup onValueChange={(id: string) => cart.setShippingMethod(id)}>
                 {nonFreeShippingMethods.map((method) => (
                   <div className="flex items-center space-x-2" key={method.id}>
                     <RadioGroupItem
-                      checked={cart.shipping?.id === method.id}
+                      checked={cartState.shipping?.id === method.id}
                       value={`${method.id}`}
                       id={method.id}
                     />
@@ -70,24 +68,28 @@ export default function CartBreakdown(props: { hasAction?: boolean }) {
       <div className="flex flex-col min-w-60">
         <div className="flex justify-between mt-2">
           <span>Sous-total</span>
-          <span>{cad(cart.breakdown.subtotal)}</span>
+          <span>{cad(cartState.breakdown.subtotal)}</span>
         </div>
         <div className="flex justify-between">
           <span>TPS</span>
-          <span>{cad(cart.breakdown.tps)}</span>
+          <span>{cad(cartState.breakdown.tps)}</span>
         </div>
         <div className="flex justify-between">
           <span>TVQ</span>
-          <span>{cad(cart.breakdown.tvq)}</span>
+          <span>{cad(cartState.breakdown.tvq)}</span>
         </div>
         <div className="flex justify-between">
           <span>Livraison</span>
-          {!isLoading ? cad(cart.breakdown.shipping) : <Skeleton className="w-16" />}
+          {!isLoading ? (
+            cad(cartState.breakdown.shipping)
+          ) : (
+            <Skeleton className="w-16" />
+          )}
         </div>
         <div className="flex justify-between text-lg md:text-xl lg:text-2xl font-semibold mt-2">
           <span>Total</span>
           {!isLoading ? (
-            <span>{cad(cart.breakdown.total)}</span>
+            <span>{cad(cartState.breakdown.total)}</span>
           ) : (
             <Skeleton className="w-24 h-8" />
           )}

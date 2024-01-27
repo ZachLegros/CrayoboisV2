@@ -13,35 +13,35 @@ import EmptyCart from "./empty-cart";
 import { useCartStore } from "./store";
 
 export default function Cart() {
-  const { cart } = useCartStore();
+  const { cart, cartState } = useCartStore();
 
   const cartItems = useMemo(() => {
     const items: ReactNode[] = [];
-    if (Array.isArray(cart) === false) return [];
-    cart
+    if (cartState.items.length === 0) return [];
+    cartState.items
       .slice()
       .reverse()
       .forEach((item, index) => {
-        const product = cart.itemData[item.product.id];
+        const product = cartState.itemData[item.product.id];
         if (product === undefined) return;
         items.push(
           <div className="flex flex-col gap-4" key={product.id}>
             <CartItem
               item={item}
               product={product}
-              hasSeparator={index !== cart.length - 1}
+              hasSeparator={index !== cartState.items.length - 1}
             />
           </div>,
         );
       });
     return items;
-  }, [cart]);
+  }, [cartState.items]);
 
   useEffect(() => {
     cart.sync();
   }, []);
 
-  if (cart.items.length === 0) {
+  if (cartState.items.length === 0) {
     return <EmptyCart />;
   }
 
@@ -52,7 +52,7 @@ export default function Cart() {
         <Separator className="flex md:hidden" />
         <div className="flex md:hidden justify-between text-xl py-4">
           <span>Sous-total</span>
-          <span>{cad(cart.breakdown.subtotal)}</span>
+          <span>{cad(cartState.breakdown.subtotal)}</span>
         </div>
       </Card>
       <div className="hidden md:flex w-full lg:min-w-80 lg:max-w-80 h-max flex-grow sticky top-0 -mt-[calc(4rem+1.5rem+1px)] pt-[calc(1.5rem+2rem+2rem+1px)]">

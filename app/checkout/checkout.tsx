@@ -32,7 +32,7 @@ export default function Checkout(props: { sessionId?: string }) {
   const { sessionId } = props;
   const router = useRouter();
   const { toast } = useToast();
-  const { cart } = useCartStore();
+  const { cart, cartState } = useCartStore();
   const { user } = useUserStore();
   const [clientSecret, setClientSecret] = useState("");
   const [success, setSuccess] = useState(false);
@@ -64,12 +64,17 @@ export default function Checkout(props: { sessionId?: string }) {
 
     const fetchCheckoutSessions = async () => {
       try {
-        if (cart.items.length > 0 && cart.shipping && !sessionId && !clientSecret) {
+        if (
+          cartState.items.length > 0 &&
+          cartState.shipping &&
+          !sessionId &&
+          !clientSecret
+        ) {
           const res = await fetch("/api/checkout_sessions", {
             method: "POST",
             body: JSON.stringify({
               cart,
-              shippingId: cart.shipping.id,
+              shippingId: cartState.shipping.id,
               userId: user?.id,
             }),
             credentials: "same-origin",

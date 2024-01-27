@@ -8,7 +8,7 @@ import { Button } from "./ui/button";
 
 export default function Cart() {
   const router = useRouter();
-  const { cart } = useCartStore();
+  const { cartState } = useCartStore();
 
   return (
     <Button
@@ -20,9 +20,9 @@ export default function Cart() {
       <p className="hidden sm:flex sm:mr-1">Mon panier</p>
       <div className="relative">
         <FaShoppingCart className="text-xl" />
-        {cart.items.length > 0 && (
+        {cartState.items.length > 0 && (
           <Badge className="flex justify-center items-center absolute top-0 right-0 -mt-1.5 -mr-1.5 rounded-full p-0 text-2xs w-3.5 h-3.5">
-            {cart.items.length}
+            {cartState.items.length}
           </Badge>
         )}
       </div>
