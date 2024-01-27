@@ -75,6 +75,8 @@
     "@types/uuid": "^9.0.7",
     "dotenv-cli": "^7.3.0",
     "encoding": "^0.1.13",
+    "eslint": "^8.56.0",
+    "eslint-config-next": "^14.1.0",
     "husky": "^8.0.0",
     "lint-staged": "^15.2.0",
     "postgres": "^3.4.3",
@@ -82,8 +84,6 @@
     "rimraf": "^5.0.5"
   },
   "lint-staged": {
-    "*": [
-      "biome check --no-errors-on-unmatched --files-ignore-unknown=true"
-    ]
+    "*": ["biome check --no-errors-on-unmatched --files-ignore-unknown=true"]
   }
 }
