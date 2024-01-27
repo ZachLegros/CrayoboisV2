@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "dev": "rimraf .next && next dev --turbo",
-    "build": "prisma generate && next build",
+    "build": "bun run lint && prisma generate && next build",
     "start": "next start",
     "generate": "prisma generate",
     "migrate-dev": "dotenv -e .env.development.local -- prisma migrate dev && bun seed-triggers",
@@ -12,7 +12,7 @@
     "seed-triggers": "bun --env-file=.env.development.local lib/seedTriggers.ts",
     "seed-triggers-prod": "bun --env-file=.env.production.local lib/seedTriggers.ts",
     "studio": "dotenv -e .env.development.local -- prisma studio",
-    "lint": "next lint",
+    "lint": "biome check --no-errors-on-unmatched --files-ignore-unknown=true --apply .",
     "prepare": "husky install"
   },
   "dependencies": {
