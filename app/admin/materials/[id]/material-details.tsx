@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, ReactNode } from "react";
+import { useCallback, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { Material } from "@prisma/client";
 import { Switch } from "@/components/ui/switch";
@@ -10,6 +10,7 @@ import useAdminStore from "../../store";
 import { getMaterials } from "../actions";
 import EditableField from "@/components/EditableField";
 import { cn } from "@/lib/utils";
+import Field from "@/components/Field";
 
 export default function MaterialDetails(props: { materialId: string }) {
   const { materialId } = props;
@@ -108,16 +109,6 @@ export default function MaterialDetails(props: { materialId: string }) {
           </Field>
         </div>
       </div>
-    </div>
-  );
-}
-
-function Field(props: { label: string; children: ReactNode }) {
-  const { label, children } = props;
-  return (
-    <div className="flex items-center gap-2 h-9">
-      <p className="font-semibold">{label}:</p>
-      {children}
     </div>
   );
 }
