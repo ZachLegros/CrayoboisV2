@@ -1,47 +1,19 @@
-"use client";
-
-import { DbProduct, getHardwareId, getMaterialId } from "@/lib/productUtils";
-import { getTps, getTvq } from "@/lib/utils";
-import { Shipping } from "@prisma/client";
+import { type DbProduct, getHardwareId, getMaterialId } from "@/lib/productUtils";
+import {
+  getTps,
+  getTvq,
+  safeLocalStorageGet,
+  safeLocalStorageSet,
+} from "@/lib/utils";
 import { fetchShippingMethods, syncCart as syncCartAction } from "./actions";
-
-export type CartProduct = { id: string };
-export type CartCustomProduct = CartProduct & {
-  material_id: string;
-  hardware_id: string;
-};
-export type CartProductType = CartProduct | CartCustomProduct;
-export type CartItemData = {
-  [key: string]: DbProduct | undefined;
-};
-export type CartItems = CartItemType<CartProductType>[];
-
-export type PriceBreakdown = {
-  subtotal: number;
-  tps: number;
-  tvq: number;
-  shipping: number;
-  total: number;
-};
-
-export type CartItemType<T> = {
-  product: T;
-  quantity: number;
-};
-
-export const isCartItemType = (
-  item: CartItemType<CartProductType>,
-): item is CartItemType<CartProductType> => {
-  return item.product !== undefined && !Number.isNaN(item.quantity);
-};
-
-export type CartState = {
-  items: CartItems;
-  itemData: CartItemData;
-  shipping: Shipping | null;
-  shippingMethods: Shipping[];
-  breakdown: PriceBreakdown;
-};
+import type {
+  CartItemData,
+  CartItemType,
+  CartItems,
+  CartProductType,
+  CartState,
+} from "./types";
+import { isShippingFree } from "./utils";
 
 export class Cart {
   private state: CartState = {
@@ -250,35 +222,4 @@ export class Cart {
   private setItemDataInLocalStorage = (itemData: CartItemData) => {
     safeLocalStorageSet("itemData", JSON.stringify(itemData));
   };
-}
-
-export const isCartCustomProduct = (
-  cartProduct: CartProductType,
-): cartProduct is CartCustomProduct => {
-  return (
-    (cartProduct as CartCustomProduct).material_id !== undefined &&
-    (cartProduct as CartCustomProduct).hardware_id !== undefined
-  );
-};
-
-export const getCartProductMaterialId = (product: CartProductType) => {
-  return isCartCustomProduct(product) ? product.material_id : undefined;
-};
-
-export const getCartProductHardwareId = (product: CartProductType) => {
-  return isCartCustomProduct(product) ? product.hardware_id : undefined;
-};
-
-export const isShippingFree = (totalQuantity: number, totalItemsPrice: number) => {
-  return totalQuantity >= 4 || totalItemsPrice >= 150;
-};
-
-export function safeLocalStorageGet(key: string) {
-  if (typeof localStorage === "undefined") return null;
-  return localStorage.getItem(key);
-}
-
-export function safeLocalStorageSet(key: string, value: string) {
-  if (typeof localStorage === "undefined") return;
-  localStorage.setItem(key, value);
 }

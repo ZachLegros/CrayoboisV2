@@ -1,6 +1,7 @@
 import { create } from "zustand";
 
-import { Cart, CartState } from "./cart-view";
+import { Cart } from "./cart-view";
+import type { CartState } from "./types";
 
 export type CartStore = {
   cart: Cart;

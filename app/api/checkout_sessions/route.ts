@@ -1,10 +1,11 @@
 import { syncCartWithComponents } from "@/app/cart/actions";
-import { CartItemType, CartProductType, isShippingFree } from "@/app/cart/cart-view";
+import type { CartItems } from "@/app/cart/types";
+import { isShippingFree } from "@/app/cart/utils";
 import prisma from "@/lib/prisma";
 import { isCustomProductWithComponents, isProduct } from "@/lib/productUtils";
 import Stripe from "stripe";
 import {
-  FilteredCart,
+  type FilteredCart,
   createCheckoutSessionInDB,
   getLineItems,
   getTotalTps,
@@ -18,7 +19,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 export async function POST(req: Request) {
   try {
     const data = await req.json();
-    const cart = data.cart as CartItemType<CartProductType>[];
+    const cart = data.cart as CartItems;
     const shippingId = data.shippingId as string;
     const userId = data.userId as string | undefined;
 
