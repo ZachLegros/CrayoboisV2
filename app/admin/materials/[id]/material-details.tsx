@@ -1,7 +1,6 @@
 "use client";
 
-import { useCallback, useEffect } from "react";
-import { TableRow, TableCell } from "@/components/ui/table";
+import { useCallback, useEffect, ReactNode } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { Material } from "@prisma/client";
 import { Switch } from "@/components/ui/switch";
@@ -9,6 +8,8 @@ import ImageWithLoading from "@/components/ImageWithLoading";
 import { cad } from "@/lib/currencyFormatter";
 import useAdminStore from "../../store";
 import { getMaterials } from "../actions";
+import EditableField from "@/components/EditableField";
+import { cn } from "@/lib/utils";
 
 export default function MaterialDetails(props: { materialId: string }) {
   const { materialId } = props;
@@ -16,7 +17,6 @@ export default function MaterialDetails(props: { materialId: string }) {
   const material = materials[materialId] ?? null;
 
   const { toast } = useToast();
-  const cellStyle = material?.enabled ? undefined : "disabled";
 
   const errorToast = useCallback(
     () =>
@@ -50,30 +50,74 @@ export default function MaterialDetails(props: { materialId: string }) {
   if (!material) return null;
 
   return (
-    <TableRow className={cellStyle}>
-      <TableCell>
+    <div>
+      <div className="text-lg md:text-xl font-semibold mb-3">
+        <EditableField
+          value={material.name}
+          onChange={(value) => handleUpdate("name", value)}
+        />
+      </div>
+      <div className="flex flex-col sm:flex-row gap-6">
         <ImageWithLoading
           src={material.image}
+          width={175}
+          height={175}
           alt={material.name}
-          width={100}
-          height={100}
+          quality={100}
+          className="rounded-lg w-full object-contain sm:w-[200px] sm:h-[200px] md:w-[175px] md:h-[175px]"
         />
-      </TableCell>
-      <TableCell>{material.name}</TableCell>
-      <TableCell>{material.origin}</TableCell>
-      <TableCell>{material.type}</TableCell>
-      <TableCell>{cad(material.price)}</TableCell>
-      <TableCell>{material.quantity}</TableCell>
-      <TableCell className="text-right">
-        <Switch
-          checked={material.enabled}
-          onCheckedChange={(value) => {
-            handleUpdate("enabled", value);
-          }}
-          onClick={(e) => e.stopPropagation()}
-          className="border"
-        />
-      </TableCell>
-    </TableRow>
+        <div className="flex-auto">
+          <Field label="Activé">
+            <Switch
+              checked={material.enabled}
+              onCheckedChange={(checked) => handleUpdate("enabled", checked)}
+              className="w-9"
+            />
+          </Field>
+          <Field label="Prix">
+            <EditableField
+              placeholder={cad(material.price)}
+              value={`${material.price}`}
+              onChange={(value) => handleUpdate("price", Number(value))}
+              type="number"
+            />
+          </Field>
+          <Field label="Quantité">
+            <EditableField
+              placeholder={`${material.quantity}`}
+              value={`${material.quantity}`}
+              onChange={(value) => handleUpdate("quantity", Number(value))}
+              type="number"
+              className={cn(
+                "font-semibold",
+                material.quantity > 0 ? "text-green-500" : "text-red-500"
+              )}
+            />
+          </Field>
+          <Field label="Type">
+            <EditableField
+              value={material.type}
+              onChange={(value) => handleUpdate("type", value)}
+            />
+          </Field>
+          <Field label="Origine">
+            <EditableField
+              value={material.origin}
+              onChange={(value) => handleUpdate("origin", value)}
+            />
+          </Field>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Field(props: { label: string; children: ReactNode }) {
+  const { label, children } = props;
+  return (
+    <div className="flex items-center gap-2 h-9">
+      <p className="font-semibold">{label}:</p>
+      {children}
+    </div>
   );
 }
