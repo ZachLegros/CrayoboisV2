@@ -7,7 +7,7 @@ export default async function AdminOrders() {
   );
 
   return (
-    <div className="p-3 border rounded-xl">
+    <div className="md:p-3 md:border rounded-xl">
       <OrdersTable orders={orders} />
     </div>
   );
