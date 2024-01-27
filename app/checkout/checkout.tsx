@@ -1,24 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { loadStripe } from "@stripe/stripe-js";
-import {
-  EmbeddedCheckoutProvider,
-  EmbeddedCheckout,
-} from "@stripe/react-stripe-js";
-import NextLink from "next/link";
-import { useRouter } from "next/navigation";
-import { useCartStore } from "../cart/store";
-import { FaCircleCheck } from "react-icons/fa6";
-import { FaExclamationCircle } from "react-icons/fa";
-import { useToast } from "@/components/ui/use-toast";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
-import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
+import { EmbeddedCheckout, EmbeddedCheckoutProvider } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import NextLink from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { FaExclamationCircle } from "react-icons/fa";
+import { FaCircleCheck } from "react-icons/fa6";
+import { useCartStore } from "../cart/store";
 import useUserStore from "../user-store";
 
 const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string,
 );
 
 const destroyCheckoutSession = async (sessionIdSearchParam?: string) => {
@@ -35,7 +32,7 @@ export default function Checkout(props: { sessionId?: string }) {
   const { sessionId } = props;
   const router = useRouter();
   const { toast } = useToast();
-  const { cart, syncCart, shippingMethod, clearCart } = useCartStore();
+  const { cart } = useCartStore();
   const { user } = useUserStore();
   const [clientSecret, setClientSecret] = useState("");
   const [success, setSuccess] = useState(false);
@@ -46,7 +43,7 @@ export default function Checkout(props: { sessionId?: string }) {
       if (error === "cart_is_empty") {
         toast({ title: "Votre panier est vide." });
       } else if (error === "cart_out_of_sync") {
-        syncCart();
+        cart.sync();
         toast({
           title:
             "Un ou plusieurs produits de votre panier ne sont plus disponibles.",
@@ -67,12 +64,12 @@ export default function Checkout(props: { sessionId?: string }) {
 
     const fetchCheckoutSessions = async () => {
       try {
-        if (cart.length > 0 && shippingMethod && !sessionId && !clientSecret) {
+        if (cart.items.length > 0 && cart.shipping && !sessionId && !clientSecret) {
           const res = await fetch("/api/checkout_sessions", {
             method: "POST",
             body: JSON.stringify({
               cart,
-              shippingId: shippingMethod.id,
+              shippingId: cart.shipping.id,
               userId: user?.id,
             }),
             credentials: "same-origin",
@@ -87,15 +84,12 @@ export default function Checkout(props: { sessionId?: string }) {
             router.push("/cart");
           }
         } else if (sessionId) {
-          const res = await fetch(
-            `/api/checkout_sessions?session_id=${sessionId}`,
-            {
-              method: "GET",
-            }
-          );
+          const res = await fetch(`/api/checkout_sessions?session_id=${sessionId}`, {
+            method: "GET",
+          });
           const data = await res.json();
           if (data.status === "complete") {
-            clearCart();
+            cart.clear();
             setSuccess(true);
           } else {
             // transaction failed or unexpected error
@@ -105,8 +99,8 @@ export default function Checkout(props: { sessionId?: string }) {
           // cart is empty or shipping method is undefined
           router.push("/cart");
         }
-      } catch (err: any) {
-        handleErrors(err.message);
+      } catch (err) {
+        handleErrors((err as Error).message);
         console.error(err);
         router.push("/cart");
       }
@@ -133,7 +127,7 @@ export default function Checkout(props: { sessionId?: string }) {
               Merci de supporter Crayobois!
             </p>
             <p className="text-lg md:text-xl text-foreground/60 font-semibold text-center">
-              Vous recevrez un email de confirmation à l'adresse courriel
+              Vous recevrez un email de confirmation à l&apos;adresse courriel
               fournie.
             </p>
             <FaCircleCheck className="text-6xl text-green-500 mt-4" />
@@ -159,16 +153,13 @@ export default function Checkout(props: { sessionId?: string }) {
           <Spinner className="text-primary w-10 h-10" />
         )
       ) : clientSecret ? (
-        <EmbeddedCheckoutProvider
-          stripe={stripePromise}
-          options={{ clientSecret }}
-        >
+        <EmbeddedCheckoutProvider stripe={stripePromise} options={{ clientSecret }}>
           <EmbeddedCheckout className="animate-in rounded-lg overflow-hidden" />
         </EmbeddedCheckoutProvider>
       ) : (
         <div className="flex flex-col w-full h-full justify-center items-center gap-4">
           <p className="text-xl md:text-2xl font-semibold text-center">
-            Création d'une session de paiement sécurisée...
+            Création d&apos;une session de paiement sécurisée...
           </p>
           <Spinner className="text-primary w-10 h-10" />
         </div>

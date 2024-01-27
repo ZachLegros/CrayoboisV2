@@ -1,6 +1,7 @@
 import Filter from "@/components/Filter";
-import { useProductsStore } from "./store";
 import { useEffect } from "react";
+import { PriceFilterValue } from "../custom-order/store";
+import { useProductsStore } from "./store";
 
 export default function ProductFilters() {
   const { products, priceFilter } = useProductsStore();
@@ -19,7 +20,7 @@ export default function ProductFilters() {
           { value: "asc", label: "Prix ascendant" },
         ]}
         currentValue={priceFilter.value}
-        setValue={priceFilter.setValue}
+        setValue={(value) => priceFilter.setValue(value as PriceFilterValue)}
         filterEnabled={priceFilter.enabled}
         setFilterEnabled={priceFilter.setEnabled}
         isDisabled={isDisabled}

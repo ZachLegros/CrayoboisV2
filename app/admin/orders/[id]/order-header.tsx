@@ -1,13 +1,13 @@
 "use client";
 
+import { ComboBoxResponsive } from "@/components/ComboBoxResponsive";
+import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/use-toast";
 import type { ClientOrder, OrderStatus } from "@prisma/client";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import { FaChevronLeft } from "react-icons/fa";
-import { updateOrderStatusInDb } from "../actions";
-import { toast } from "@/components/ui/use-toast";
-import { ComboBoxResponsive } from "@/components/ComboBoxResponsive";
 import useAdminStore from "../../store";
+import { updateOrderStatusInDb } from "../actions";
 
 export default function OrderHeader(props: { order: ClientOrder }) {
   const { order } = props;

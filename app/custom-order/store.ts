@@ -7,37 +7,41 @@ const getInitialPriceFilter = (): PriceFilterValue => "desc";
 const getInitialTypeFilter = () => "all";
 const getInitialOriginFilter = () => "all";
 
-export type Filter = {
-  value: string;
-  setValue: (value: string) => void;
+export interface FilterType<T> {
+  value: T;
+  setValue: (value: T) => void;
   clear: () => void;
   enabled: boolean;
   setEnabled: (enabled: boolean) => void;
-};
+}
+export class Filter<T> implements FilterType<T> {
+  value: T;
+  initialValue: T;
+  enabled: boolean;
 
-export const createFilter = (
-  set: (arg0: {
-    (state: any): { [x: string]: any };
-    (state: any): { [x: string]: any };
-    (state: any): { [x: string]: any };
-  }) => void,
-  filterKey: string,
-  enabled: boolean,
-  valueInitializer: () => any
-): Filter => ({
-  value: valueInitializer(),
-  enabled,
-  setValue: (value: string) =>
-    set((state) => ({ [filterKey]: { ...state[filterKey], value } })),
-  setEnabled: (enabled: boolean) =>
-    set((state) => ({
-      [filterKey]: { ...state[filterKey], enabled, value: valueInitializer() },
-    })),
-  clear: () =>
-    set((state) => ({
-      [filterKey]: { ...state[filterKey], value: valueInitializer() },
-    })),
-});
+  constructor(params: {
+    value: T;
+    enabled: boolean;
+  }) {
+    const { value, enabled } = params;
+    this.value = value;
+    this.enabled = enabled;
+    this.initialValue = value;
+  }
+
+  setValue(value: T) {
+    this.value = value;
+  }
+
+  setEnabled(enabled: boolean) {
+    this.enabled = enabled;
+    this.clear();
+  }
+
+  clear() {
+    this.value = this.initialValue;
+  }
+}
 
 export type CustomOrderStore = {
   currentStep: number;
@@ -50,9 +54,9 @@ export type CustomOrderStore = {
   selectMaterial: (material: Material | null) => void;
   selectedHardware: Hardware | null;
   selectHardware: (hardware: Hardware | null) => void;
-  typeFilter: Filter;
-  priceFilter: Filter;
-  originFilter: Filter;
+  typeFilter: Filter<string>;
+  priceFilter: Filter<PriceFilterValue>;
+  originFilter: Filter<string>;
   clearFilters: () => void;
   clearSelections: () => void;
   reset: () => void;
@@ -69,19 +73,12 @@ export const useCustomOrderStore = create<CustomOrderStore>((set, state) => ({
   hardwares: [],
   setHardwares: (hardwares: Hardware[]) => set({ hardwares }),
   selectedMaterial: null,
-  selectMaterial: (material: Material | null) =>
-    set({ selectedMaterial: material }),
+  selectMaterial: (material: Material | null) => set({ selectedMaterial: material }),
   selectedHardware: null,
-  selectHardware: (hardware: Hardware | null) =>
-    set({ selectedHardware: hardware }),
-  typeFilter: createFilter(set, "typeFilter", true, getInitialTypeFilter),
-  originFilter: createFilter(
-    set,
-    "originFilter",
-    false,
-    getInitialOriginFilter
-  ),
-  priceFilter: createFilter(set, "priceFilter", false, getInitialPriceFilter),
+  selectHardware: (hardware: Hardware | null) => set({ selectedHardware: hardware }),
+  typeFilter: new Filter({ value: getInitialTypeFilter(), enabled: true }),
+  originFilter: new Filter({ value: getInitialOriginFilter(), enabled: false }),
+  priceFilter: new Filter({ value: getInitialPriceFilter(), enabled: false }),
   clearFilters: () => {
     state().typeFilter.clear();
     state().originFilter.clear();

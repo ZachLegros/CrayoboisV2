@@ -1,8 +1,8 @@
 "use server";
-import { headers, cookies } from "next/headers";
-import { createClient } from "@/lib/supabase/server";
 import prisma from "@/lib/prisma";
+import { createClient } from "@/lib/supabase/server";
 import { User } from "@supabase/supabase-js";
+import { cookies, headers } from "next/headers";
 
 export const sendOtp = async (email: string) => {
   "use server";

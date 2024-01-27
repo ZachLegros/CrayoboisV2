@@ -1,7 +1,8 @@
-import { HTMLInputTypeAttribute, useState } from "react";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { CheckIcon, Cross2Icon, Pencil2Icon } from "@radix-ui/react-icons";
 import { cn } from "@/lib/utils";
+import { CheckIcon, Cross2Icon, Pencil2Icon } from "@radix-ui/react-icons";
+import { HTMLInputTypeAttribute, useState } from "react";
 
 export default function EditableField(props: {
   value: string;
@@ -46,10 +47,7 @@ export default function EditableField(props: {
             <textarea
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              className={cn(
-                "bg-transparent border rounded-md p-1",
-                inputClassName
-              )}
+              className={cn("bg-transparent border rounded-md p-1", inputClassName)}
             />
           ) : (
             <Input
@@ -59,28 +57,28 @@ export default function EditableField(props: {
               className={inputClassName}
             />
           )}
-          <button
+          <Button
             className="ml-2 text-green-600 hover:text-green-700"
             onClick={handleSave}
           >
             <CheckIcon className="w-5 h-5" />
-          </button>
-          <button
+          </Button>
+          <Button
             className="ml-2 text-red-600 hover:text-red-700"
             onClick={handleCancel}
           >
             <Cross2Icon className="w-5 h-5" />
-          </button>
+          </Button>
         </div>
       ) : (
         <div className={cn("relative flex gap-x-2", className)}>
           <span>{placeholder ?? value}</span>
-          <button
+          <Button
             className="transition-opacity text-foreground/70 hover:opacity-70 my-auto"
             onClick={handleEdit}
           >
             <Pencil2Icon className="w-4 h-4" />
-          </button>
+          </Button>
         </div>
       )}
     </div>

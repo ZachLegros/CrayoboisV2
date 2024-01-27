@@ -1,8 +1,8 @@
 "use client";
 
-import { type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { Portal } from "@radix-ui/react-portal";
+import { type ReactNode } from "react";
 
 export default function FloatingBar(props: {
   children: ReactNode;
@@ -15,7 +15,7 @@ export default function FloatingBar(props: {
       <div
         className={cn(
           "flex w-full items-end fixed bottom-0 left-0 z-50 h-32 bg-gradient-to-t from-background pointer-events-none",
-          className
+          className,
         )}
       >
         {children}

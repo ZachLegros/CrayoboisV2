@@ -1,23 +1,23 @@
 "use client";
 
-import { cad } from "@/lib/currencyFormatter";
-import ImageWithLoading from "./ImageWithLoading";
 import { useCartStore } from "@/app/cart/store";
+import { useToast } from "@/components/ui/use-toast";
+import { cad } from "@/lib/currencyFormatter";
+import { Product } from "@prisma/client";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaExpandAlt } from "react-icons/fa";
-import { Product } from "@prisma/client";
-import { useToast } from "@/components/ui/use-toast";
-import { Card } from "./ui/card";
+import ImageWithLoading from "./ImageWithLoading";
 import { Button } from "./ui/button";
+import { Card } from "./ui/card";
 import { Dialog, DialogContent } from "./ui/dialog";
+import { ToastAction } from "./ui/toast";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "./ui/tooltip";
-import { ToastAction } from "./ui/toast";
-import { useRouter } from "next/navigation";
 
 export default function ProductCard(props: {
   product: Product;
@@ -26,20 +26,17 @@ export default function ProductCard(props: {
   const { product } = props;
   const router = useRouter();
   const { toast } = useToast();
-  const { addToCart, isProductInCart } = useCartStore();
-  const [isInCart, setIsInCart] = useState(isProductInCart(product));
+  const { cart } = useCartStore();
+  const [isInCart, setIsInCart] = useState(cart.has(product.id));
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleAddToCart = () => {
-    addToCart(product);
+  const handleaddItem = () => {
+    cart.addItem(product);
     setIsInCart(true);
     toast({
       title: `"${product.name}" a été ajouté à votre panier.`,
       action: (
-        <ToastAction
-          altText="Aller au panier"
-          onClick={() => router.push("/cart")}
-        >
+        <ToastAction altText="Aller au panier" onClick={() => router.push("/cart")}>
           Aller au panier
         </ToastAction>
       ),
@@ -85,11 +82,7 @@ export default function ProductCard(props: {
             <p>{cad(product.price)}</p>
           </div>
           {!isInCart ? (
-            <Button
-              color="primary"
-              className="mt-auto"
-              onClick={handleAddToCart}
-            >
+            <Button color="primary" className="mt-auto" onClick={handleaddItem}>
               Ajouter au Panier
             </Button>
           ) : (

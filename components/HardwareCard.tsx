@@ -1,10 +1,10 @@
 "use client";
 
-import { Hardware } from "@prisma/client";
 import { cad } from "@/lib/currencyFormatter";
+import { Hardware } from "@prisma/client";
 import ImageWithLoading from "./ImageWithLoading";
-import { CardInteractive } from "./ui/card";
 import { Badge } from "./ui/badge";
+import { CardInteractive } from "./ui/card";
 
 export default function HardwareCard(props: {
   hardware: Hardware;

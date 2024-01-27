@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
-import Metric from "./metric";
 import { cad, cadPrecision } from "@/lib/currencyFormatter";
 import { dayjs } from "@/lib/utils";
-import useAdminStore from "./store";
 import { ClientOrder } from "@prisma/client";
+import { useEffect, useMemo } from "react";
+import Metric from "./metric";
+import useAdminStore from "./store";
 
 export default function Metrics(props: { orders: ClientOrder[] }) {
   const { orders } = props;

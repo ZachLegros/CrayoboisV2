@@ -1,17 +1,20 @@
 import Filter from "@/components/Filter";
-import { useCustomOrderStore } from "./store";
-import { useEffect, useMemo } from "react";
 import { cn } from "@/lib/utils";
+import { useEffect, useMemo } from "react";
+import { PriceFilterValue, useCustomOrderStore } from "./store";
 
 export default function HardwareFilters(props: { className?: string }) {
   const { className } = props;
   const { hardwares, typeFilter, priceFilter } = useCustomOrderStore();
 
   const hardwareTypes: { [type: string]: number } = useMemo(() => {
-    return hardwares.reduce((acc, hardware) => {
-      acc[hardware.name] = acc[hardware.name] ? acc[hardware.name] + 1 : 1;
-      return acc;
-    }, {} as any);
+    return hardwares.reduce(
+      (acc, hardware) => {
+        acc[hardware.name] = acc[hardware.name] ? acc[hardware.name] + 1 : 1;
+        return acc;
+      },
+      {} as { [type: string]: number },
+    );
   }, [hardwares]);
 
   useEffect(() => {
@@ -42,7 +45,7 @@ export default function HardwareFilters(props: { className?: string }) {
           { value: "asc", label: "Prix ascendant" },
         ]}
         currentValue={priceFilter.value}
-        setValue={priceFilter.setValue}
+        setValue={(value) => priceFilter.setValue(value as PriceFilterValue)}
         filterEnabled={priceFilter.enabled}
         setFilterEnabled={priceFilter.setEnabled}
       />

@@ -1,24 +1,21 @@
 "use client";
 
-import { create } from "zustand";
 import { ClientOrder, Material, OrderStatus } from "@prisma/client";
+import { create } from "zustand";
 import { updateMaterialInDb } from "./materials/actions";
 import { updateOrderStatusInDb } from "./orders/actions";
 
 type AdminStore = {
   orders: { [key: string]: ClientOrder };
   setOrders: (orders: ClientOrder[]) => void;
-  updateOrderStatus: (
-    orderId: string,
-    orderStatus: OrderStatus
-  ) => Promise<boolean>;
+  updateOrderStatus: (orderId: string, orderStatus: OrderStatus) => Promise<boolean>;
   materials: { [key: string]: Material };
   setMaterial: (material: Material) => void;
   setMaterials: (materials: Material[]) => void;
   updateMaterial: <P extends keyof Material>(
     material: Material,
     property: P,
-    value: Material[P]
+    value: Material[P],
   ) => Promise<boolean>;
 };
 
@@ -26,7 +23,7 @@ export const useAdminStore = create<AdminStore>((set, get) => ({
   orders: {},
   setOrders: (orders: ClientOrder[]) => {
     const ordersObj = orders.reduce((acc, order) => {
-      return { ...acc, [order.id]: order };
+      return { acc, [order.id]: order };
     }, {});
     set({ orders: ordersObj });
   },
@@ -49,14 +46,14 @@ export const useAdminStore = create<AdminStore>((set, get) => ({
   },
   setMaterials: (materials: Material[]) => {
     const materialsObj = materials.reduce((acc, material) => {
-      return { ...acc, [material.id]: material };
+      return { acc, [material.id]: material };
     }, {});
     set({ materials: materialsObj });
   },
   updateMaterial: async <P extends keyof Material>(
     material: Material,
     property: P,
-    value: Material[P]
+    value: Material[P],
   ) => {
     const originalMaterials = { ...get().materials };
     const updatedMaterial = { ...material, [property]: value };

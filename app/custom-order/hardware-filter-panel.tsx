@@ -1,8 +1,8 @@
 "use client";
 
-import { useCustomOrderStore } from "./store";
-import { ResetButton } from "./material-filter-panel";
 import HardwareFilters from "./hardware-filters";
+import { ResetButton } from "./material-filter-panel";
+import { useCustomOrderStore } from "./store";
 
 export default function HardwareFilterPanel(props: { isDisabled?: boolean }) {
   const { isDisabled } = props;

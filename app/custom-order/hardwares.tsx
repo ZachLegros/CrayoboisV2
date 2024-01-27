@@ -1,11 +1,11 @@
 "use client";
 
-import { useMemo } from "react";
 import ItemsGrid from "@/components/ItemsGrid";
-import { useCustomOrderStore } from "./store";
 import ProductComponentCard from "@/components/ProductComponentCard";
-import { Hardware } from "@prisma/client";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Hardware } from "@prisma/client";
+import { useMemo } from "react";
+import { useCustomOrderStore } from "./store";
 
 export default function Hardwares(props: {
   onSelect: (hardware: Hardware) => void;
@@ -37,8 +37,8 @@ export default function Hardwares(props: {
 
   if (filteredHardwares.length === 0) {
     <ItemsGrid className="w-full h-full">
-      {[...Array(12).keys()].map((_, index) => (
-        <Skeleton className="w-full h-[149px] p-3" key={index} />
+      {[...Array(12).keys()].map((item) => (
+        <Skeleton className="w-full h-[149px] p-3" key={item} />
       ))}
     </ItemsGrid>;
   }

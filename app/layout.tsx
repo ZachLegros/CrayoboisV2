@@ -1,9 +1,9 @@
+import NavBar from "@/components/NavBar";
+import { Toaster } from "@/components/ui/toaster";
+import { cn } from "@/lib/utils";
+import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
-import { Inter as FontSans } from "next/font/google";
-import NavBar from "@/components/NavBar";
-import { cn } from "@/lib/utils";
-import { Toaster } from "@/components/ui/toaster";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -13,7 +13,8 @@ const fontSans = FontSans({
 export const metadata = {
   metadataBase: new URL("https://crayobois.ca"),
   title: "Crayobois - Le stylo qu'il vous faut",
-  description: `Crayobois est une microentreprise de menuiserie québécoise spécialisée dans la fabrication de stylos en bois divers de haute qualité.`,
+  description:
+    "Crayobois est une microentreprise de menuiserie québécoise spécialisée dans la fabrication de stylos en bois divers de haute qualité.",
 };
 
 export default function RootLayout({
@@ -27,7 +28,7 @@ export default function RootLayout({
         <body
           className={cn(
             "bg-background-content text-foreground font-sans antialiased min-h-screen",
-            fontSans.variable
+            fontSans.variable,
           )}
           suppressHydrationWarning={true}
         >

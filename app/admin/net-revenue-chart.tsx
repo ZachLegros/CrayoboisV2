@@ -1,25 +1,25 @@
 "use client";
 
-import type { ApexOptions } from "apexcharts";
-import type { ClientOrder } from "@prisma/client";
-import { useTheme } from "next-themes";
-import { Card } from "@/components/ui/card";
-import { dayjs, getTps } from "@/lib/utils";
-import { useEffect, useMemo } from "react";
-import { cad, cadPrecision } from "@/lib/currencyFormatter";
-import { getTvq } from "@/lib/utils";
-import {
-  chartPrimary,
-  chartBgDark,
-  chartBgLight,
-  getNetAmount,
-  chartSecondary,
-} from "./common";
 import Stat from "@/components/Stat";
+import { Card } from "@/components/ui/card";
+import { cad, cadPrecision } from "@/lib/currencyFormatter";
 import { useMediaQuery } from "@/lib/hooks";
 import { gtMd } from "@/lib/mediaQueries";
-import useAdminStore from "./store";
+import { dayjs, getTps } from "@/lib/utils";
+import { getTvq } from "@/lib/utils";
+import type { ClientOrder } from "@prisma/client";
+import type { ApexOptions } from "apexcharts";
+import { useTheme } from "next-themes";
+import { useEffect, useMemo } from "react";
 import Chart from "./chart";
+import {
+  chartBgDark,
+  chartBgLight,
+  chartPrimary,
+  chartSecondary,
+  getNetAmount,
+} from "./common";
+import useAdminStore from "./store";
 
 export default function NetRevenueChart(props: { orders: ClientOrder[] }) {
   const { orders } = props;

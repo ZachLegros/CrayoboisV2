@@ -1,8 +1,8 @@
 "use client";
 
-import type { Props as ApexChartProps } from "react-apexcharts";
-import dynamic from "next/dynamic";
 import { Spinner } from "@/components/ui/spinner";
+import dynamic from "next/dynamic";
+import type { Props as ApexChartProps } from "react-apexcharts";
 
 export default function Chart(props: ApexChartProps) {
   const { ...chartProps } = props;

@@ -1,7 +1,7 @@
-import { Children, ReactElement, cloneElement, useState } from "react";
-import { Skeleton } from "./ui/skeleton";
 import { cn } from "@/lib/utils";
 import Image, { type ImageProps } from "next/image";
+import { Children, ReactElement, cloneElement, useState } from "react";
+import { Skeleton } from "./ui/skeleton";
 
 export default function ImageListWithLoading(props: {
   children: ReactElement<ImageProps>[] | ReactElement<ImageProps>;
@@ -22,9 +22,7 @@ export default function ImageListWithLoading(props: {
 
   return (
     <div className={cn("flex relative overflow-hidden", className)}>
-      {loadCount <= itemsNo && (
-        <Skeleton className="w-full h-full absolute z-50" />
-      )}
+      {loadCount <= itemsNo && <Skeleton className="w-full h-full absolute z-50" />}
       {images}
     </div>
   );

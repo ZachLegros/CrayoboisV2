@@ -1,30 +1,30 @@
 "use client";
 
-import { useEffect, useLayoutEffect } from "react";
-import type { Hardware, Material } from "@prisma/client";
-import Materials from "./materials";
-import Hardwares from "./hardwares";
-import { useCustomOrderStore } from "./store";
-import { useCartStore } from "../cart/store";
-import { customProductFactory } from "@/lib/productUtils";
-import AddedToCart from "./added-to-cart";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import FloatingBar from "@/components/FloatingBar";
 import FloatingFilterTrigger from "@/components/FloatingFilterTrigger";
-import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
-import HardwareFilters from "./hardware-filters";
-import MaterialFilters from "./material-filters";
 import { Button } from "@/components/ui/button";
-import { FaChevronLeft } from "react-icons/fa";
-import { gtMd } from "@/lib/mediaQueries";
+import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { useMediaQuery } from "@/lib/hooks";
+import { gtMd } from "@/lib/mediaQueries";
+import { customProductFactory } from "@/lib/productUtils";
+import type { Hardware, Material } from "@prisma/client";
+import { useEffect, useLayoutEffect } from "react";
+import { FaChevronLeft } from "react-icons/fa";
+import { useCartStore } from "../cart/store";
+import AddedToCart from "./added-to-cart";
+import HardwareFilters from "./hardware-filters";
+import Hardwares from "./hardwares";
+import MaterialFilters from "./material-filters";
+import Materials from "./materials";
+import { useCustomOrderStore } from "./store";
 
 export default function OrderBuilder(props: {
   materials: Material[];
   hardwares: Hardware[];
 }) {
   const { materials, hardwares } = props;
-  const { addToCart } = useCartStore();
+  const { cart } = useCartStore();
   const {
     currentStep,
     setCurrentStep,
@@ -37,9 +37,9 @@ export default function OrderBuilder(props: {
   } = useCustomOrderStore();
   const isLargeScreen = useMediaQuery(gtMd);
 
-  const handleAddToCart = (material: Material, hardware: Hardware) => {
+  const handleaddItem = (material: Material, hardware: Hardware) => {
     const customProduct = customProductFactory(material, hardware);
-    addToCart(customProduct);
+    cart.addItem(customProduct);
     setCurrentStep(currentStep + 1);
   };
 
@@ -94,13 +94,11 @@ export default function OrderBuilder(props: {
       )}
       {currentStep === 1 && (
         <>
-          <p className="flex sm:hidden text-xl font-semibold">
-            Choix du matériel
-          </p>
+          <p className="flex sm:hidden text-xl font-semibold">Choix du matériel</p>
           <Hardwares
             onSelect={(hardware) => {
               if (!selectedMaterial || !hardware) return; // error
-              handleAddToCart(selectedMaterial, hardware);
+              handleaddItem(selectedMaterial, hardware);
             }}
           />
           <FloatingBar className="flex md:hidden">

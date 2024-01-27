@@ -2,20 +2,20 @@
 
 import ItemsGrid from "@/components/ItemsGrid";
 import ProductCard from "@/components/ProductCard";
+import { Button } from "@/components/ui/button";
 import { Product } from "@prisma/client";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo } from "react";
 import { useProductsStore } from "./store";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
 
 export default function ProductsGrid(props: { products: Product[] }) {
-  const { products } = props;
+  const { products: productsFromDb } = props;
   const router = useRouter();
-  const { priceFilter, setProducts } = useProductsStore();
+  const { priceFilter, products, setProducts } = useProductsStore();
 
   useEffect(() => {
-    setProducts(products);
-  }, []);
+    if (products.length === 0) setProducts(productsFromDb);
+  }, [products, productsFromDb, setProducts]);
 
   const filteredProducts = useMemo(() => {
     if (products.length === 0) return [];

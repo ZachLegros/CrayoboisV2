@@ -1,5 +1,5 @@
-import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/middleware";
+import { type NextRequest, NextResponse } from "next/server";
 
 export async function middleware(request: NextRequest) {
   const { supabase, response } = createClient(request);
@@ -9,8 +9,7 @@ export async function middleware(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith("/admin")) {
     try {
       const role = data.session?.user.user_metadata.role;
-      if (role !== "admin")
-        return NextResponse.redirect(new URL("/", request.url));
+      if (role !== "admin") return NextResponse.redirect(new URL("/", request.url));
     } catch {
       return NextResponse.redirect(new URL("/", request.url));
     }

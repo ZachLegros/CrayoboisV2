@@ -20,7 +20,7 @@ export function Breadcrumbs(props: {
           </li>
         );
         return (
-          <Fragment key={index}>
+          <Fragment key={step}>
             {separator}
             <li
               className="text-foreground text-sm font-medium data-[previous=true]:underline data-[previous=true]:cursor-pointer data-[next=true]:opacity-50 truncate"

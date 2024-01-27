@@ -1,13 +1,13 @@
-import { create } from "zustand";
-import { Filter, PriceFilterValue, createFilter } from "../custom-order/store";
 import { Product } from "@prisma/client";
+import { create } from "zustand";
+import { Filter, PriceFilterValue } from "../custom-order/store";
 
 const getInitialPriceFilter = (): PriceFilterValue => "desc";
 
 export type ProductsStore = {
   products: readonly Product[];
   setProducts: (products: Product[]) => void;
-  priceFilter: Filter;
+  priceFilter: Filter<PriceFilterValue>;
   clearFilters: () => void;
   reset: () => void;
 };
@@ -17,7 +17,7 @@ export const useProductsStore = create<ProductsStore>((set, state) => ({
   setProducts: (products: Product[]) => {
     set({ products });
   },
-  priceFilter: createFilter(set, "priceFilter", true, getInitialPriceFilter),
+  priceFilter: new Filter({ value: getInitialPriceFilter(), enabled: true }),
   clearFilters: () => {
     state().priceFilter.clear();
   },

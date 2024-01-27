@@ -13,10 +13,10 @@ export default function Loading() {
           currentStep={0}
         />
         <ItemsGrid className="w-full h-full">
-          {[...Array(12).keys()].map((_, index) => (
+          {[...Array(12).keys()].map((item) => (
             <Skeleton
               className="w-full h-[120px] sm:h-[129px] md:h-[154px] lg:h-[179px] p-3"
-              key={index}
+              key={item}
             />
           ))}
         </ItemsGrid>

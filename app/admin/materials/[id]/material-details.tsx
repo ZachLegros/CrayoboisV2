@@ -1,16 +1,16 @@
 "use client";
 
-import { useCallback, useEffect } from "react";
-import { useToast } from "@/components/ui/use-toast";
-import { Material } from "@prisma/client";
-import { Switch } from "@/components/ui/switch";
+import EditableField from "@/components/EditableField";
+import Field from "@/components/Field";
 import ImageWithLoading from "@/components/ImageWithLoading";
+import { Switch } from "@/components/ui/switch";
+import { useToast } from "@/components/ui/use-toast";
 import { cad } from "@/lib/currencyFormatter";
+import { cn } from "@/lib/utils";
+import { Material } from "@prisma/client";
+import { useCallback, useEffect } from "react";
 import useAdminStore from "../../store";
 import { getMaterials } from "../actions";
-import EditableField from "@/components/EditableField";
-import { cn } from "@/lib/utils";
-import Field from "@/components/Field";
 
 export default function MaterialDetails(props: { materialId: string }) {
   const { materialId } = props;
@@ -25,13 +25,13 @@ export default function MaterialDetails(props: { materialId: string }) {
         title: "Une erreur est survenue",
         variant: "destructive",
       }),
-    [toast]
+    [toast],
   );
 
   const handleUpdate = useCallback(
     async <P extends keyof Material>(
       property: P,
-      value: Material[P]
+      value: Material[P],
     ): Promise<void> => {
       if (!material) {
         errorToast();
@@ -41,12 +41,12 @@ export default function MaterialDetails(props: { materialId: string }) {
         errorToast();
       }
     },
-    [material, errorToast]
+    [material, errorToast, updateMaterial],
   );
 
   useEffect(() => {
     if (!material) getMaterials().then((materials) => setMaterials(materials));
-  }, [material]);
+  }, [material, setMaterials]);
 
   if (!material) return null;
 
@@ -61,8 +61,8 @@ export default function MaterialDetails(props: { materialId: string }) {
       <div className="flex flex-col sm:flex-row gap-6">
         <ImageWithLoading
           src={material.image}
-          width={175}
-          height={175}
+          width={250}
+          height={250}
           alt={material.name}
           quality={100}
           className="rounded-lg w-full object-contain sm:w-[200px] sm:h-[200px] md:w-[175px] md:h-[175px]"
@@ -91,7 +91,7 @@ export default function MaterialDetails(props: { materialId: string }) {
               type="number"
               className={cn(
                 "font-semibold",
-                material.quantity > 0 ? "text-green-500" : "text-red-500"
+                material.quantity > 0 ? "text-green-500" : "text-red-500",
               )}
             />
           </Field>

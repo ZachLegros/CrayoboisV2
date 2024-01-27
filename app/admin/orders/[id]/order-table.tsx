@@ -1,6 +1,6 @@
 "use client";
 
-import { DbProduct } from "@/lib/productUtils";
+import { ItemImages } from "@/app/cart/cart-item";
 import {
   Table,
   TableBody,
@@ -11,10 +11,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cad } from "@/lib/currencyFormatter";
-import { ItemImages } from "@/app/cart/cart-item";
-import { getNetAmount } from "../../common";
+import { DbProduct } from "@/lib/productUtils";
 import { ClientOrder } from "@prisma/client";
 import { getTps, getTvq } from "../../../../lib/utils";
+import { getNetAmount } from "../../common";
 
 export default function OrdersTable(props: { order: ClientOrder }) {
   const { order } = props;
@@ -57,9 +57,7 @@ export default function OrdersTable(props: { order: ClientOrder }) {
           <TableCell colSpan={3} className="text-right">
             Sous-total
           </TableCell>
-          <TableCell className="text-right">
-            {cad(getNetAmount(order))}
-          </TableCell>
+          <TableCell className="text-right">{cad(getNetAmount(order))}</TableCell>
         </TableRow>
         <TableRow>
           <TableCell colSpan={3} className="text-right">

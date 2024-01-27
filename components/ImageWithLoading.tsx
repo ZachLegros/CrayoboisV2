@@ -1,7 +1,7 @@
+import { cn } from "@/lib/utils";
 import Image, { type ImageProps } from "next/image";
 import { useState } from "react";
 import { Skeleton } from "./ui/skeleton";
-import { cn } from "@/lib/utils";
 
 export type ImageWithLoadingProps = Omit<ImageProps, "loading"> & {
   className?: string;
@@ -25,9 +25,7 @@ export default function ImageWithLoading(props: ImageWithLoadingProps) {
         loading="lazy"
         className="w-full h-full object-cover"
       />
-      {!isLoaded && (
-        <Skeleton className="absolute top-0 left-0 w-full h-full" />
-      )}
+      {!isLoaded && <Skeleton className="absolute top-0 left-0 w-full h-full" />}
     </div>
   );
 }

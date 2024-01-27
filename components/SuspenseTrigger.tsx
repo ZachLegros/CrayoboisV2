@@ -2,5 +2,4 @@
 export default function SuspenseTrigger() {
   // this triggers Suspense
   throw new Promise(() => {});
-  return <></>;
 }

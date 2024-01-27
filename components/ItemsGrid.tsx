@@ -8,10 +8,7 @@ export default function ItemsGrid(props: {
   const { children, className } = props;
   return (
     <div
-      className={cn(
-        "animate-in grid grid-cols-1 lg:grid-cols-2 gap-4",
-        className
-      )}
+      className={cn("animate-in grid grid-cols-1 lg:grid-cols-2 gap-4", className)}
     >
       {children}
     </div>

@@ -1,18 +1,18 @@
 "use client";
 
-import { Suspense, useState } from "react";
-import { usePathname } from "next/navigation";
+import { useCartStore } from "@/app/cart/store";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Suspense, useState } from "react";
+import { FaBars } from "react-icons/fa";
 import AuthButton from "./AuthButton";
+import CartButton from "./CartButton";
 import Logo from "./Logo";
 import { ModeToggle } from "./ModeToggle";
-import CartButton from "./CartButton";
-import { Sheet, SheetContent } from "./ui/sheet";
-import { Button } from "./ui/button";
-import { FaBars } from "react-icons/fa";
-import { cn } from "@/lib/utils";
-import { useCartStore } from "@/app/cart/store";
 import { Badge } from "./ui/badge";
+import { Button } from "./ui/button";
+import { Sheet, SheetContent } from "./ui/sheet";
 
 const items = [
   {
@@ -67,9 +67,9 @@ export function NavLinks(props: {
   const { items, className, onNavLinkClick } = props;
   return (
     <ul className={className}>
-      {items.map((item, index) => {
+      {items.map((item) => {
         return (
-          <li key={index}>
+          <li key={item.title}>
             <Link
               href={item.link}
               className="transition-colors text-md font-medium text-foreground/70 hover:text-foreground aria-[current]:font-sem aria-[current]:text-foreground"
@@ -99,9 +99,9 @@ export function MobileNavLinks(props: {
       <li>
         <ModeToggle className="mb-4 -ml-2" />
       </li>
-      {items.map((item, index) => {
+      {items.map((item) => {
         return (
-          <li key={index}>
+          <li key={item.title}>
             <Link
               href={item.link}
               className={linkStyle}
@@ -122,7 +122,9 @@ export function MobileNavLinks(props: {
         >
           Mon panier
         </Link>
-        {cart.length > 0 && <Badge className="ml-2">{cart.length}</Badge>}
+        {cart.items.length > 0 && (
+          <Badge className="ml-2">{cart.items.length}</Badge>
+        )}
       </li>
     </ul>
   );

@@ -1,11 +1,11 @@
 "use client";
 
 import { dayjs } from "@/lib/utils";
-import OrderTable from "./order-table";
-import OrderHeader from "./order-header";
-import useAdminStore from "../../store";
 import { useEffect } from "react";
+import useAdminStore from "../../store";
 import { getOrders } from "../actions";
+import OrderHeader from "./order-header";
+import OrderTable from "./order-table";
 
 export default function OrderDetails(props: { orderId: string }) {
   const { orderId } = props;
@@ -24,9 +24,7 @@ export default function OrderDetails(props: { orderId: string }) {
       <div className="flex flex-col gap-3 md:p-3 md:border rounded-xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div>
-            <h2 className="text-xl font-semibold mb-1">
-              Informations génerales
-            </h2>
+            <h2 className="text-xl font-semibold mb-1">Informations génerales</h2>
             <ul className="flex flex-col gap-0.5">
               <li>
                 <b>Nom:</b> {order.payer_name}
@@ -40,9 +38,7 @@ export default function OrderDetails(props: { orderId: string }) {
             </ul>
           </div>
           <div>
-            <h2 className="text-xl font-semibold mb-1">
-              Addresse de livraison
-            </h2>
+            <h2 className="text-xl font-semibold mb-1">Addresse de livraison</h2>
             <ul className="flex flex-col gap-0.5">
               <li>
                 <b>Addresse:</b> {order.address_street}
@@ -58,9 +54,7 @@ export default function OrderDetails(props: { orderId: string }) {
           </div>
         </div>
         <div>
-          <h2 className="text-xl font-semibold mb-2">
-            Commande #{order.order_no}
-          </h2>
+          <h2 className="text-xl font-semibold mb-2">Commande #{order.order_no}</h2>
           <OrderTable order={order} />
         </div>
       </div>

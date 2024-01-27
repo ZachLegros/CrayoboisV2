@@ -6,10 +6,7 @@ import { cn } from "../lib/utils";
 export default function Logo(props: { className?: string }) {
   const { className } = props;
   return (
-    <Link
-      href="/"
-      className={cn("transition-opacity hover:opacity-75", className)}
-    >
+    <Link href="/" className={cn("transition-opacity hover:opacity-75", className)}>
       <SvgLogo className="min-w-[100px] text-foreground" />
     </Link>
   );
@@ -23,6 +20,8 @@ export const SvgLogo = (props: { className?: string }) => {
       version="1.1"
       viewBox="0.00 0.00 1200.00 600.00"
       className={className}
+      role="img"
+      aria-label="crayobois"
     >
       <path
         fill="currentColor "

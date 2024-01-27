@@ -1,11 +1,11 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { useMediaQuery } from "@/lib/hooks";
+import { gtLg } from "@/lib/mediaQueries";
+import { cn } from "@/lib/utils";
 import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
 import { useTheme } from "next-themes";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { gtLg } from "@/lib/mediaQueries";
-import { useMediaQuery } from "@/lib/hooks";
 
 export function ModeToggle(props: { className?: string }) {
   const { className } = props;
@@ -17,11 +17,7 @@ export function ModeToggle(props: { className?: string }) {
   };
 
   return (
-    <Button
-      variant="outline"
-      className={cn("p-2", className)}
-      onClick={toggleTheme}
-    >
+    <Button variant="outline" className={cn("p-2", className)} onClick={toggleTheme}>
       {!isLargerScreen && (
         <span className="inline-flex mr-2 lg:hidden lg:mr-0">Thème</span>
       )}

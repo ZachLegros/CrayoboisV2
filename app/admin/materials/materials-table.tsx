@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useMemo } from "react";
-import type { Material } from "@prisma/client";
+import ImageWithLoading from "@/components/ImageWithLoading";
+import { Switch } from "@/components/ui/switch";
 import {
   Table,
   TableBody,
@@ -10,13 +10,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { cad } from "@/lib/currencyFormatter";
-import useAdminStore from "../store";
-import ImageWithLoading from "@/components/ImageWithLoading";
-import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
+import { cad } from "@/lib/currencyFormatter";
 import { cn } from "@/lib/utils";
+import type { Material } from "@prisma/client";
 import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useMemo } from "react";
+import useAdminStore from "../store";
 
 export default function MaterialsTable(props: { materials: Material[] }) {
   const { materials: materialsFromDb } = props;
@@ -71,7 +71,7 @@ function MaterialRow(props: { material: Material }) {
         }
       });
     },
-    [material]
+    [material],
   );
 
   const handleOnRowClick = useCallback(() => {
@@ -118,7 +118,7 @@ function MaterialRow(props: { material: Material }) {
         className={cn(
           "text-right font-semibold",
           material.quantity > 0 ? "text-green-500" : "text-red-500",
-          cellStyle
+          cellStyle,
         )}
       >
         {material.quantity}

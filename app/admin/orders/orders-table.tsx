@@ -1,7 +1,5 @@
 "use client";
 
-import { ClientOrder, OrderStatus } from "@prisma/client";
-import { dayjs } from "@/lib/utils";
 import {
   Table,
   TableBody,
@@ -11,9 +9,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cad } from "@/lib/currencyFormatter";
+import { dayjs } from "@/lib/utils";
+import { ClientOrder, OrderStatus } from "@prisma/client";
 import { useRouter } from "next/navigation";
-import useAdminStore from "../store";
 import { useEffect } from "react";
+import useAdminStore from "../store";
 
 export default function OrdersTable(props: { orders: ClientOrder[] }) {
   const { orders: ordersFromDb } = props;
@@ -45,9 +45,7 @@ export default function OrdersTable(props: { orders: ClientOrder[] }) {
               onClick={() => router.push(`/admin/orders/${order.id}`)}
             >
               <TableCell className="font-medium">#{order.order_no}</TableCell>
-              <TableCell>
-                {dayjs(order.created_at).format("D MMM YYYY")}
-              </TableCell>
+              <TableCell>{dayjs(order.created_at).format("D MMM YYYY")}</TableCell>
               <TableCell className="capitalize">{order.payer_name}</TableCell>
               <TableCell>{cad(order.amount)}</TableCell>
               <TableCell className="text-right">

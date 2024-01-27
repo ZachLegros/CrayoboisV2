@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 const routes = [
   { name: "Tableau de bord", href: "/admin" },
@@ -20,13 +20,13 @@ export default function SidePanel(props: { className?: string }) {
     <div
       className={cn(
         "h-max sticky top-0 -mt-[calc(4rem+1.5rem+1px)] pt-[calc(4rem+1.5rem+1px)]",
-        className
+        className,
       )}
     >
       <ul className="flex flex-col w-full gap-1">
-        {routes.map((route, index) => (
+        {routes.map((route) => (
           <li
-            key={index}
+            key={route.name}
             className="transition-colors p-2 font-medium hover:bg-secondary rounded-md cursor-pointer aria-[current]:font-semibold aria-[current]:bg-slate-100 dark:aria-[current]:bg-secondary"
             onClick={() => router.push(route.href)}
             aria-current={pathname === route.href ? "page" : undefined}

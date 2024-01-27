@@ -1,20 +1,20 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useUserStore } from "@/app/user-store";
+import { getUserMenuItems } from "@/app/actions";
 import { useCartStore } from "@/app/cart/store";
-import { Button } from "./ui/button";
-import { useEffect, useState } from "react";
+import { useUserStore } from "@/app/user-store";
 import {
   DropdownMenu,
-  DropdownMenuTrigger,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuItem,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { FaUser } from "react-icons/fa";
-import { getUserMenuItems } from "@/app/actions";
+import { Button } from "./ui/button";
 
 const defaultItems = [
   {
@@ -26,7 +26,7 @@ const defaultItems = [
 export default function AuthButton() {
   const router = useRouter();
   const { user, signOut, getCurrentUser } = useUserStore();
-  const { clearCart } = useCartStore();
+  const { cart } = useCartStore();
   const [items, setItems] = useState(defaultItems);
 
   const handleLogin = () => {
@@ -35,19 +35,17 @@ export default function AuthButton() {
 
   const handleLogout = async () => {
     await signOut();
-    clearCart();
+    cart.clear();
     router.push("/");
   };
 
   useEffect(() => {
     if (!user) getCurrentUser();
-  }, [user]);
+  }, [user, getCurrentUser]);
 
   useEffect(() => {
     if (user)
-      getUserMenuItems().then((items) =>
-        setItems((prev) => [...items, ...prev])
-      );
+      getUserMenuItems().then((items) => setItems((prev) => [...items, ...prev]));
     else setItems(defaultItems);
   }, [user]);
 
@@ -80,8 +78,8 @@ export function UserMenu(props: {
       <DropdownMenuContent align="end" className="min-w-44">
         <DropdownMenuLabel>{email?.split("@")[0]}</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {items.map((item, index) => (
-          <DropdownMenuItem onClick={() => router.push(item.href)} key={index}>
+        {items.map((item) => (
+          <DropdownMenuItem onClick={() => router.push(item.href)} key={item.label}>
             {item.label}
           </DropdownMenuItem>
         ))}

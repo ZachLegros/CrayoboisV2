@@ -20,7 +20,7 @@ export default function SidePanel(props: { className?: string }) {
     <div
       className={cn(
         "h-max sticky top-0 -mt-[calc(4rem+1.5rem+1px)] pt-[calc(4rem+1.5rem+1px)]",
-        className
+        className,
       )}
     >
       <div className="hidden md:flex w-full h-[calc(100vh-4rem-1.5rem-1px)] overflow-y-auto pr-3">

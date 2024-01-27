@@ -3,12 +3,12 @@
 import CheckButton from "@/components/CheckButton";
 import { ReactNode } from "react";
 import { UnmountClosed as Collapse } from "react-collapse";
-import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { Label } from "./ui/label";
+import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 
 function CollapseRadioGroup(props: {
-  filter: any;
-  setFilter: (value: any) => void;
+  filter: string;
+  setFilter: (value: string) => void;
   isFilterEnabled: boolean;
   children: ReactNode;
   className?: string;
@@ -16,11 +16,7 @@ function CollapseRadioGroup(props: {
   const { filter, setFilter, isFilterEnabled, children, className } = props;
   return (
     <Collapse isOpened={isFilterEnabled}>
-      <RadioGroup
-        value={filter}
-        onValueChange={setFilter}
-        className={className}
-      >
+      <RadioGroup value={filter} onValueChange={setFilter} className={className}>
         {children}
       </RadioGroup>
     </Collapse>
@@ -69,8 +65,8 @@ export default function Filter(props: {
         setFilter={setValue}
         className="p-3"
       >
-        {filterValues.map((filter, index) => (
-          <div className="flex items-center space-x-2" key={index}>
+        {filterValues.map((filter) => (
+          <div className="flex items-center space-x-2" key={filter.value}>
             <RadioGroupItem value={filter.value} id={filter.value} />
             <Label htmlFor={filter.value} className="cursor-pointer text-md">
               {filter.label}

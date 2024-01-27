@@ -1,27 +1,30 @@
 import Filter from "@/components/Filter";
-import { useCustomOrderStore } from "./store";
-import { useEffect, useMemo } from "react";
 import { cn } from "@/lib/utils";
+import { useEffect, useMemo } from "react";
+import { PriceFilterValue, useCustomOrderStore } from "./store";
 
 export default function MaterialFilters(props: { className?: string }) {
   const { className } = props;
-  const { materials, originFilter, typeFilter, priceFilter } =
-    useCustomOrderStore();
+  const { materials, originFilter, typeFilter, priceFilter } = useCustomOrderStore();
 
-  const materialTypes: { [type: string]: number } = useMemo(() => {
-    return materials.reduce((acc, material) => {
-      acc[material.type] = acc[material.type] ? acc[material.type] + 1 : 1;
-      return acc;
-    }, {} as any);
+  const materialTypes = useMemo(() => {
+    return materials.reduce(
+      (acc, material) => {
+        acc[material.type] = acc[material.type] ? acc[material.type] + 1 : 1;
+        return acc;
+      },
+      {} as { [type: string]: number },
+    );
   }, [materials]);
 
   const materialOrigins = useMemo(() => {
-    return materials.reduce((acc, material) => {
-      acc[material.origin] = acc[material.origin]
-        ? acc[material.origin] + 1
-        : 1;
-      return acc;
-    }, {} as any);
+    return materials.reduce(
+      (acc, material) => {
+        acc[material.origin] = acc[material.origin] ? acc[material.origin] + 1 : 1;
+        return acc;
+      },
+      {} as { [type: string]: number },
+    );
   }, [materials]);
 
   useEffect(() => {
@@ -52,7 +55,7 @@ export default function MaterialFilters(props: { className?: string }) {
           { value: "asc", label: "Prix ascendant" },
         ]}
         currentValue={priceFilter.value}
-        setValue={priceFilter.setValue}
+        setValue={(value) => priceFilter.setValue(value as PriceFilterValue)}
         filterEnabled={priceFilter.enabled}
         setFilterEnabled={priceFilter.setEnabled}
       />

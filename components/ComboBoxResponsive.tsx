@@ -1,15 +1,5 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { gtSm } from "@/lib/mediaQueries";
-import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@/components/ui/popover";
-import { useMediaQuery } from "@uidotdev/usehooks";
-import { Drawer, DrawerTrigger, DrawerContent } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -17,7 +7,13 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
+import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { gtSm } from "@/lib/mediaQueries";
 import { cn } from "@/lib/utils";
+import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+import { useMediaQuery } from "@uidotdev/usehooks";
+import { useMemo, useState } from "react";
 
 export function ComboBoxResponsive(props: {
   items: { [key: string]: string };
@@ -28,15 +24,14 @@ export function ComboBoxResponsive(props: {
   const [open, setOpen] = useState(false);
   const isDesktop = useMediaQuery(gtSm);
   const [selectedKey, setSelectedKey] = useState(
-    defaultKey ?? Object.keys(items)[0]
+    defaultKey ?? Object.keys(items)[0],
   );
 
-  const handleValueChange = (value: string) => {
-    setSelectedKey(value);
-    onValueChange?.(value);
-  };
-
   const itemsList = useMemo(() => {
+    const handleValueChange = (value: string) => {
+      setSelectedKey(value);
+      onValueChange?.(value);
+    };
     return Object.keys(items).map((key) => (
       <CommandItem
         key={key}
@@ -50,12 +45,12 @@ export function ComboBoxResponsive(props: {
         <CheckIcon
           className={cn(
             "ml-auto h-4 w-4",
-            key === selectedKey ? "opacity-100" : "opacity-0"
+            key === selectedKey ? "opacity-100" : "opacity-0",
           )}
         />
       </CommandItem>
     ));
-  }, [items, selectedKey]);
+  }, [items, onValueChange, selectedKey]);
 
   if (isDesktop) {
     return (

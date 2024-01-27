@@ -1,7 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import dayjslib from "dayjs";
 import "dayjs/locale/fr-ca";
-import React from "react";
 import { twMerge } from "tailwind-merge";
 
 dayjslib.locale("fr-ca");
@@ -9,12 +8,6 @@ export const dayjs = dayjslib;
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
-}
-
-export function getValidChildren(children: React.ReactNode) {
-  return React.Children.toArray(children).filter((child) =>
-    React.isValidElement(child),
-  ) as React.ReactElement[];
 }
 
 export function shuffleArray<T>(array: T[]) {

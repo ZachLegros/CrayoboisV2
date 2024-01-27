@@ -1,12 +1,12 @@
 "use client";
 
-import { useProductsStore } from "./store";
-import { ResetButton } from "../custom-order/material-filter-panel";
-import { cn } from "@/lib/utils";
-import ProductFilters from "./products-filters";
 import FloatingBar from "@/components/FloatingBar";
 import FloatingFilterTrigger from "@/components/FloatingFilterTrigger";
-import { Drawer, DrawerTrigger, DrawerContent } from "@/components/ui/drawer";
+import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
+import { cn } from "@/lib/utils";
+import { ResetButton } from "../custom-order/material-filter-panel";
+import ProductFilters from "./products-filters";
+import { useProductsStore } from "./store";
 
 export default function SidePanel(props: { className?: string }) {
   const { className } = props;
@@ -38,7 +38,7 @@ export default function SidePanel(props: { className?: string }) {
     <div
       className={cn(
         "w-52 lg:w-64 h-screen overflow-hidden sticky top-0 -mt-[calc(64px+24px+1px)] pt-[calc(64px+24px+1px)]",
-        className
+        className,
       )}
     >
       <div className="flex flex-col w-full h-full gap-4 overflow-y-auto overflow-x-hidden pr-2">

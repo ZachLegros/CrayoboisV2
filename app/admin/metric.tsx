@@ -1,9 +1,9 @@
 "use client";
 
-import type { ApexOptions } from "apexcharts";
-import { chartPrimary } from "./common";
 import Stat from "@/components/Stat";
+import type { ApexOptions } from "apexcharts";
 import Chart from "./chart";
+import { chartPrimary } from "./common";
 
 export default function Metric(props: {
   name: string;

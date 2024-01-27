@@ -15,10 +15,7 @@ export default function CheckButton(props: {
 
   return (
     <Button
-      className={cn(
-        "flex justify-between p-3 text-lg font-semibold",
-        className
-      )}
+      className={cn("flex justify-between p-3 text-lg font-semibold", className)}
       variant="ghost"
       onClick={onClick}
       disabled={isDisabled}

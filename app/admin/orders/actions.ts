@@ -1,9 +1,9 @@
 "use server";
 
+import prisma from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
 import { ClientOrder, OrderStatus } from "@prisma/client";
 import { cookies } from "next/headers";
-import prisma from "@/lib/prisma";
 
 export async function getOrders(): Promise<ClientOrder[]> {
   const cookieStore = cookies();
@@ -22,7 +22,7 @@ export async function getOrders(): Promise<ClientOrder[]> {
 
 export async function updateOrderStatusInDb(
   orderId: string,
-  orderStatus: OrderStatus
+  orderStatus: OrderStatus,
 ) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);

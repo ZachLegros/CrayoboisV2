@@ -1,19 +1,18 @@
 "use client";
 
-import { useMemo } from "react";
 import ItemsGrid from "@/components/ItemsGrid";
 import ProductComponentCard from "@/components/ProductComponentCard";
-import { useCustomOrderStore } from "./store";
-import { Material } from "@prisma/client";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Material } from "@prisma/client";
+import { useMemo } from "react";
 import NoFilterResult from "./no-filter-result";
+import { useCustomOrderStore } from "./store";
 
 export default function Materials(props: {
   onSelect: (material: Material) => void;
 }) {
   const { onSelect } = props;
-  const { materials, typeFilter, originFilter, priceFilter } =
-    useCustomOrderStore();
+  const { materials, typeFilter, originFilter, priceFilter } = useCustomOrderStore();
 
   const filteredMaterials = useMemo(() => {
     const mats = materials.filter((material) => {
@@ -45,8 +44,8 @@ export default function Materials(props: {
 
   if (filteredMaterials.length === 0) {
     <ItemsGrid className="w-full h-full">
-      {[...Array(12).keys()].map((_, index) => (
-        <Skeleton className="w-full h-[149px] p-3" key={index} />
+      {[...Array(12).keys()].map((item) => (
+        <Skeleton className="w-full h-[149px] p-3" key={item} />
       ))}
     </ItemsGrid>;
   }
