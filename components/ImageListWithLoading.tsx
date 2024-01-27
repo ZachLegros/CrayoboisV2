@@ -1,23 +1,31 @@
-import { ReactNode, useState } from "react";
+import { Children, ReactElement, cloneElement, useState } from "react";
 import { Skeleton } from "./ui/skeleton";
 import { cn } from "@/lib/utils";
+import Image, { type ImageProps } from "next/image";
 
 export default function ImageListWithLoading(props: {
-  itemsNo: number;
+  children: ReactElement<ImageProps>[] | ReactElement<ImageProps>;
   className?: string;
-  children: (onLoad: () => void) => ReactNode | ReactNode[];
 }) {
-  const { itemsNo, className, children } = props;
-  const [loadCount, setLoadCount] = useState(0);
+  const { className, children } = props;
+  const itemsNo = Children.count(children);
+  const [loadCount, setLoadCount] = useState(itemsNo);
 
   const handleLoad = () => {
     setLoadCount((prev) => prev + 1);
   };
 
+  const images = Children.map(children, (child) => {
+    if (child.type !== Image) return;
+    return cloneElement(child, { onLoad: handleLoad });
+  });
+
   return (
     <div className={cn("flex relative overflow-hidden", className)}>
-      {loadCount < itemsNo && <Skeleton className="w-full h-full absolute" />}
-      {children(handleLoad)}
+      {loadCount <= itemsNo && (
+        <Skeleton className="w-full h-full absolute z-50" />
+      )}
+      {images}
     </div>
   );
 }

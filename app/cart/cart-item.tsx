@@ -108,29 +108,21 @@ export const ItemImages = (props: { product: DbProduct }) => {
   if (isCustomProductWithComponents(product)) {
     const { material, hardware } = product;
     return (
-      <ImageListWithLoading className="flex-col md:flex-row" itemsNo={2}>
-        {(onLoad) => (
-          <>
-            <Image
-              width={75}
-              height={75}
-              src={material.image}
-              alt={material.name}
-              quality={70}
-              loading="eager"
-              onLoad={onLoad}
-            />
-            <Image
-              width={75}
-              height={75}
-              src={hardware.image}
-              alt={hardware.name}
-              quality={70}
-              loading="eager"
-              onLoad={onLoad}
-            />
-          </>
-        )}
+      <ImageListWithLoading className="flex-col md:flex-row">
+        <Image
+          width={75}
+          height={75}
+          src={material.image}
+          alt={material.name}
+          quality={70}
+        />
+        <Image
+          width={75}
+          height={75}
+          src={hardware.image}
+          alt={hardware.name}
+          quality={70}
+        />
       </ImageListWithLoading>
     );
   }
