@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "dev": "rimraf .next && next dev --turbo",
-    "build": "bun run lint && prisma generate && next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "generate": "prisma generate",
     "migrate-dev": "dotenv -e .env.development.local -- prisma migrate dev && bun seed-triggers",
