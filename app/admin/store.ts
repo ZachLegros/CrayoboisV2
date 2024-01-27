@@ -22,9 +22,10 @@ type AdminStore = {
 export const useAdminStore = create<AdminStore>((set, get) => ({
   orders: {},
   setOrders: (orders: ClientOrder[]) => {
-    const ordersObj = orders.reduce((acc, order) => {
-      return { acc, [order.id]: order };
-    }, {});
+    const ordersObj: { [orderId: string]: ClientOrder } = {};
+    for (const order of orders) {
+      ordersObj[order.id] = order;
+    }
     set({ orders: ordersObj });
   },
   updateOrderStatus: async (orderId: string, orderStatus: OrderStatus) => {
@@ -45,9 +46,10 @@ export const useAdminStore = create<AdminStore>((set, get) => ({
     set({ materials: { ...get().materials, [material.id]: material } });
   },
   setMaterials: (materials: Material[]) => {
-    const materialsObj = materials.reduce((acc, material) => {
-      return { acc, [material.id]: material };
-    }, {});
+    const materialsObj: { [materialId: string]: Material } = {};
+    for (const material of materials) {
+      materialsObj[material.id] = material;
+    }
     set({ materials: materialsObj });
   },
   updateMaterial: async <P extends keyof Material>(
