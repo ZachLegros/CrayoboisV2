@@ -116,7 +116,8 @@ function MaterialRow(props: { material: Material }) {
       <TableCell className={cellStyle}>{cad(material.price)}</TableCell>
       <TableCell
         className={cn(
-          `text-right font-semibold ${material.quantity > 0 ? "text-green-500" : "text-red-500"}`,
+          "text-right font-semibold",
+          material.quantity > 0 ? "text-green-500" : "text-red-500",
           cellStyle
         )}
       >
@@ -125,8 +126,8 @@ function MaterialRow(props: { material: Material }) {
       <TableCell className="text-right opacity-100">
         <Switch
           checked={material.enabled}
-          onCheckedChange={(value) => {
-            handleUpdate("enabled", value);
+          onCheckedChange={(checked) => {
+            handleUpdate("enabled", checked);
           }}
           onClick={(e) => e.stopPropagation()}
           className="border"
