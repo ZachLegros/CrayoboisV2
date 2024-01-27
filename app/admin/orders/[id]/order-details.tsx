@@ -1,10 +1,22 @@
-import { ClientOrder } from "@prisma/client";
+"use client";
+
 import { dayjs } from "@/lib/utils";
 import OrderTable from "./order-table";
 import OrderHeader from "./order-header";
+import useAdminStore from "../../store";
+import { useEffect } from "react";
+import { getOrders } from "../actions";
 
-export default function OrderDetails(props: { order: ClientOrder }) {
-  const { order } = props;
+export default function OrderDetails(props: { orderId: string }) {
+  const { orderId } = props;
+  const { orders, setOrders } = useAdminStore();
+  const order = orders[orderId] ?? null;
+
+  useEffect(() => {
+    if (!order) getOrders().then((orders) => setOrders(orders));
+  }, [order]);
+
+  if (!order) return null;
 
   return (
     <>

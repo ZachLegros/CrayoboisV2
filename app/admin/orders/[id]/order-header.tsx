@@ -4,7 +4,7 @@ import type { ClientOrder, OrderStatus } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { FaChevronLeft } from "react-icons/fa";
-import { setOrderStatusInDb } from "../actions";
+import { updateOrderStatusInDb } from "../actions";
 import { toast } from "@/components/ui/use-toast";
 import { ComboBoxResponsive } from "@/components/ComboBoxResponsive";
 import useAdminStore from "../../store";
@@ -17,7 +17,7 @@ export default function OrderHeader(props: { order: ClientOrder }) {
   const handleValueChange = (value: string) => {
     const status = value as OrderStatus;
     if (status === order.status) return;
-    setOrderStatusInDb(order.id, status).then((success) => {
+    updateOrderStatusInDb(order.id, status).then((success) => {
       if (success) {
         updateOrderStatus(order.id, status);
         toast({
