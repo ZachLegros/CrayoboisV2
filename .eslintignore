@@ -1,8 +1,0 @@
-node_modules/
-app/images/
-/**/*.json
-*.lock*
-dist/
-prisma/
-data/
-*.d.ts
