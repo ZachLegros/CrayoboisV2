@@ -1,7 +1,7 @@
 "use client";
 
 import { cad } from "@/lib/currencyFormatter";
-import { Hardware } from "@prisma/client";
+import type { Hardware } from "@prisma/client";
 import ImageWithLoading from "./ImageWithLoading";
 import { Badge } from "./ui/badge";
 import { CardInteractive } from "./ui/card";

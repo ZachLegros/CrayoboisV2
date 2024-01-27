@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
-import { ClientOrder, OrderStatus } from "@prisma/client";
+import type { ClientOrder, OrderStatus } from "@prisma/client";
 import { cookies } from "next/headers";
 
 export async function getOrders(): Promise<ClientOrder[]> {

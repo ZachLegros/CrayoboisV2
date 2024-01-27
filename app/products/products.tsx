@@ -3,7 +3,7 @@
 import ItemsGrid from "@/components/ItemsGrid";
 import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
-import { Product } from "@prisma/client";
+import type { Product } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo } from "react";
 import { useProductsStore } from "./store";

@@ -1,4 +1,4 @@
-import { Hardware, Material } from "@prisma/client";
+import type { Hardware, Material } from "@prisma/client";
 import { create } from "zustand";
 
 export type PriceFilterValue = "asc" | "desc";

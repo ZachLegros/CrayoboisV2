@@ -1,4 +1,4 @@
-import { OrderStatus, PrismaClient } from "@prisma/client";
+import { type OrderStatus, PrismaClient } from "@prisma/client";
 import orders from "./clientOrders.json";
 import hardwares from "./hardwares.json";
 import materials from "./materials.json";

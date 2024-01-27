@@ -3,7 +3,7 @@
 import { useCartStore } from "@/app/cart/store";
 import { useToast } from "@/components/ui/use-toast";
 import { cad } from "@/lib/currencyFormatter";
-import { Product } from "@prisma/client";
+import type { Product } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaExpandAlt } from "react-icons/fa";

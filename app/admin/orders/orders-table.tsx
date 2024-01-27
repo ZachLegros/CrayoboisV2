@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import { cad } from "@/lib/currencyFormatter";
 import { dayjs } from "@/lib/utils";
-import { ClientOrder, OrderStatus } from "@prisma/client";
+import { type ClientOrder, OrderStatus } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo } from "react";
 import useAdminStore from "../store";
@@ -21,7 +21,6 @@ export default function OrdersTable(props: { orders: ClientOrder[] }) {
   const { orders, setOrders } = useAdminStore();
 
   const tableItems = useMemo(() => {
-    console.log(orders);
     return Object.keys(orders).map((orderId) => {
       const order = orders[orderId];
       return (

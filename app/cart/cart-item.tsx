@@ -12,15 +12,15 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { cad } from "@/lib/currencyFormatter";
 import {
-  DbProduct,
+  type DbProduct,
   isCustomProductWithComponents,
   isProduct,
 } from "@/lib/productUtils";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { useCallback, useMemo, useState } from "react";
-import { CartItemType, CartProductType } from "./cart-view";
 import { useCartStore } from "./store";
+import type { CartItemType, CartProductType } from "./types";
 
 const quantityRange = [...Array(100 + 1).keys()].slice(1, 100 + 1);
 

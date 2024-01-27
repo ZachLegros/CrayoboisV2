@@ -1,6 +1,6 @@
-import { Product } from "@prisma/client";
+import type { Product } from "@prisma/client";
 import { create } from "zustand";
-import { Filter, PriceFilterValue } from "../custom-order/store";
+import { Filter, type PriceFilterValue } from "../custom-order/store";
 
 const getInitialPriceFilter = (): PriceFilterValue => "desc";
 

@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
-import { Material } from "@prisma/client";
+import type { Material } from "@prisma/client";
 import { cookies } from "next/headers";
 
 export async function getMaterials(): Promise<Material[]> {

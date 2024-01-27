@@ -1,6 +1,6 @@
 "use client";
 
-import { ClientOrder, Material, OrderStatus } from "@prisma/client";
+import type { ClientOrder, Material, OrderStatus } from "@prisma/client";
 import { create } from "zustand";
 import { updateMaterialInDb } from "./materials/actions";
 import { updateOrderStatusInDb } from "./orders/actions";

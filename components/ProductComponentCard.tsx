@@ -2,7 +2,7 @@
 
 import { cad } from "@/lib/currencyFormatter";
 import { isMaterial } from "@/lib/productUtils";
-import { Hardware, Material } from "@prisma/client";
+import type { Hardware, Material } from "@prisma/client";
 import { useTheme } from "next-themes";
 import { FaEarthAmericas } from "react-icons/fa6";
 import ImageWithLoading from "./ImageWithLoading";

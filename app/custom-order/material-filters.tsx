@@ -1,7 +1,7 @@
 import Filter from "@/components/Filter";
 import { cn } from "@/lib/utils";
 import { useEffect, useMemo } from "react";
-import { PriceFilterValue, useCustomOrderStore } from "./store";
+import { type PriceFilterValue, useCustomOrderStore } from "./store";
 
 export default function MaterialFilters(props: { className?: string }) {
   const { className } = props;

@@ -7,7 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
 import { cad } from "@/lib/currencyFormatter";
 import { cn } from "@/lib/utils";
-import { Material } from "@prisma/client";
+import type { Material } from "@prisma/client";
 import { useCallback, useEffect } from "react";
 import useAdminStore from "../../store";
 import { getMaterials } from "../actions";

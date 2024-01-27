@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { FaFilter } from "react-icons/fa";
-import { Button, ButtonProps } from "./ui/button";
+import { Button, type ButtonProps } from "./ui/button";
 
 export default function FloatingFilterTrigger(props: ButtonProps) {
   const { className, ...buttonProps } = props;

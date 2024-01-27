@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { Portal } from "@radix-ui/react-portal";
-import { type ReactNode } from "react";
+import type { ReactNode } from "react";
 
 export default function FloatingBar(props: {
   children: ReactNode;

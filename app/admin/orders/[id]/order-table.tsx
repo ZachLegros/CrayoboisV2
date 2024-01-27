@@ -11,8 +11,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cad } from "@/lib/currencyFormatter";
-import { DbProduct } from "@/lib/productUtils";
-import { ClientOrder } from "@prisma/client";
+import type { DbProduct } from "@/lib/productUtils";
+import type { ClientOrder } from "@prisma/client";
 import { getTps, getTvq } from "../../../../lib/utils";
 import { getNetAmount } from "../../common";
 

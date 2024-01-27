@@ -1,19 +1,15 @@
 import prisma from "@/lib/prisma";
 import {
-  CustomProductWithComponents,
-  DbProduct,
+  type CustomProductWithComponents,
+  type DbProduct,
   getHardwareId,
   getMaterialId,
 } from "@/lib/productUtils";
 import { getTps, getTvq } from "@/lib/utils";
-import { Product } from "@prisma/client";
-import Stripe from "stripe";
-import {
-  CartItemType,
-  CartItems,
-  getCartProductHardwareId,
-  getCartProductMaterialId,
-} from "../cart/cart-view";
+import type { Product } from "@prisma/client";
+import type Stripe from "stripe";
+import type { CartItemType, CartItems } from "../cart/types";
+import { getCartProductHardwareId, getCartProductMaterialId } from "../cart/utils";
 
 export function getTotalAmount(cart: CartItemType<DbProduct>[]) {
   return cart.reduce((total, item) => {

@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import Image, { type ImageProps } from "next/image";
-import { Children, ReactElement, cloneElement, useState } from "react";
+import { Children, type ReactElement, cloneElement, useState } from "react";
 import { Skeleton } from "./ui/skeleton";
 
 export default function ImageListWithLoading(props: {

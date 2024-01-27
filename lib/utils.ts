@@ -46,3 +46,13 @@ export function hexTransp(value: number) {
   if (hexValue.length === 1) hexValue = `0${hexValue}`;
   return hexValue;
 }
+
+export function safeLocalStorageGet(key: string) {
+  if (typeof localStorage === "undefined") return null;
+  return localStorage.getItem(key);
+}
+
+export function safeLocalStorageSet(key: string, value: string) {
+  if (typeof localStorage === "undefined") return;
+  localStorage.setItem(key, value);
+}

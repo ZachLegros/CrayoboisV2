@@ -1,5 +1,5 @@
 import { hexTransp } from "@/lib/utils";
-import { ClientOrder } from "@prisma/client";
+import type { ClientOrder } from "@prisma/client";
 import colors from "tailwindcss/colors";
 
 export const chartPrimary = "#b43e00";

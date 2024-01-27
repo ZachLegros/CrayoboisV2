@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { CheckIcon, Cross2Icon, Pencil2Icon } from "@radix-ui/react-icons";
-import { HTMLInputTypeAttribute, useState } from "react";
+import { type HTMLInputTypeAttribute, useState } from "react";
 
 export default function EditableField(props: {
   value: string;

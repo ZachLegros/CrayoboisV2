@@ -1,6 +1,6 @@
 import Filter from "@/components/Filter";
 import { useEffect } from "react";
-import { PriceFilterValue } from "../custom-order/store";
+import type { PriceFilterValue } from "../custom-order/store";
 import { useProductsStore } from "./store";
 
 export default function ProductFilters() {

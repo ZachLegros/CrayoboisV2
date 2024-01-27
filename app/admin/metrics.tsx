@@ -2,7 +2,7 @@
 
 import { cad, cadPrecision } from "@/lib/currencyFormatter";
 import { dayjs } from "@/lib/utils";
-import { ClientOrder } from "@prisma/client";
+import type { ClientOrder } from "@prisma/client";
 import { useEffect, useMemo } from "react";
 import Metric from "./metric";
 import useAdminStore from "./store";

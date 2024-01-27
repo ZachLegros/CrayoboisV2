@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import SidePanel from "./side-panel";
 
 export default function Layout(props: { children: ReactNode }) {

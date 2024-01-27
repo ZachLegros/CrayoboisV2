@@ -73,7 +73,7 @@ export default function Checkout(props: { sessionId?: string }) {
           const res = await fetch("/api/checkout_sessions", {
             method: "POST",
             body: JSON.stringify({
-              cart,
+              cart: cartState.items,
               shippingId: cartState.shipping.id,
               userId: user?.id,
             }),

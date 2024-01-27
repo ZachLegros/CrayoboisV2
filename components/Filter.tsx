@@ -1,7 +1,7 @@
 "use client";
 
 import CheckButton from "@/components/CheckButton";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { UnmountClosed as Collapse } from "react-collapse";
 import { Label } from "./ui/label";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";

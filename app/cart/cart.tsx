@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { Separator } from "@/components/ui/separator";
 import { cad } from "@/lib/currencyFormatter";
-import { ReactNode, useEffect, useMemo } from "react";
+import { type ReactNode, useEffect, useMemo } from "react";
 import CartBreakdown from "./cart-breakdown";
 import CartItem from "./cart-item";
 import EmptyCart from "./empty-cart";

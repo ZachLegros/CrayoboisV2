@@ -1,4 +1,4 @@
-import { CustomProduct, Hardware, Material, Product } from "@prisma/client";
+import type { CustomProduct, Hardware, Material, Product } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 
 export type DbProduct = Product | CustomProduct | CustomProductWithComponents;

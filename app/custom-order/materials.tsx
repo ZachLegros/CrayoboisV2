@@ -3,7 +3,7 @@
 import ItemsGrid from "@/components/ItemsGrid";
 import ProductComponentCard from "@/components/ProductComponentCard";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Material } from "@prisma/client";
+import type { Material } from "@prisma/client";
 import { useMemo } from "react";
 import NoFilterResult from "./no-filter-result";
 import { useCustomOrderStore } from "./store";
