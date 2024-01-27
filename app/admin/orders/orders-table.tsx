@@ -28,10 +28,10 @@ export default function OrdersTable(props: { orders: ClientOrder[] }) {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">Numéro de commande</TableHead>
+          <TableHead>#</TableHead>
           <TableHead>Date</TableHead>
           <TableHead>Nom</TableHead>
-          <TableHead>Coût total</TableHead>
+          <TableHead>Total</TableHead>
           <TableHead className="text-right">Statut</TableHead>
         </TableRow>
       </TableHeader>
