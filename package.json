@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "dev": "rimraf .next && next dev --turbo --experimental-https",
+    "dev": "rimraf .next && next dev --turbo",
     "build": "prisma generate && next build",
     "start": "next start",
     "generate": "prisma generate",
