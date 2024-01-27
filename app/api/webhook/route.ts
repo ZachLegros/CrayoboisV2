@@ -1,11 +1,10 @@
-import Stripe from "stripe";
 import prisma from "@/lib/prisma";
-import { deleteCheckoutSessionInDB } from "../checkout_sessions/route";
-import { orZero } from "../utils";
 import { getTps, getTvq } from "@/lib/utils";
+import Stripe from "stripe";
+import { deleteCheckoutSessionInDB, orZero } from "../utils";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
+const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET as string;
 
 async function setCheckoutSessionCompleted(checkoutSid: string) {
   return prisma.checkoutSession.update({
@@ -152,12 +151,16 @@ export async function POST(req: Request) {
   try {
     const data = await req.text();
     event = stripe.webhooks.constructEvent(data, sig, endpointSecret);
-  } catch (err: any) {
+  } catch (err) {
     return new Response(
-      JSON.stringify({ error: `Webhook Error: ${err.message}` }),
+      JSON.stringify({
+        error: `Webhook Error: ${
+          (err as Stripe.errors.StripeSignatureVerificationError).message
+        }`,
+      }),
       {
         status: 400,
-      }
+      },
     );
   }
 
@@ -171,9 +174,9 @@ export async function POST(req: Request) {
         console.log(`Unhandled event type ${event.type} for ${event.id}`);
         throw new Error(`Unhandled event type ${event.type} for ${event.id}`);
     }
-  } catch (error: any) {
+  } catch (error) {
     console.error(error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: (error as Error).message }), {
       status: 500,
     });
   }

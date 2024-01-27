@@ -1,14 +1,7 @@
-import { useCallback, useMemo, useState } from "react";
-import { cad } from "@/lib/currencyFormatter";
-import { CartItemType, CartProductType, useCartStore } from "./store";
-import ImageWithLoading from "@/components/ImageWithLoading";
-import Image from "next/image";
 import ImageListWithLoading from "@/components/ImageListWithLoading";
-import {
-  DbProduct,
-  isCustomProductWithComponents,
-  isProduct,
-} from "@/lib/productUtils";
+import ImageWithLoading from "@/components/ImageWithLoading";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -16,10 +9,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { cad } from "@/lib/currencyFormatter";
+import {
+  DbProduct,
+  isCustomProductWithComponents,
+  isProduct,
+} from "@/lib/productUtils";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
+import { useCallback, useMemo, useState } from "react";
+import { CartItemType, CartProductType } from "./cart-view";
+import { useCartStore } from "./store";
 
 const quantityRange = [...Array(100 + 1).keys()].slice(1, 100 + 1);
 
@@ -29,14 +30,14 @@ export default function CartItem(props: {
   hasSeparator?: boolean;
 }) {
   const { item, product, hasSeparator } = props;
-  const { removeFromCart, setItemQuantity } = useCartStore();
+  const { cart } = useCartStore();
 
   const [selectedQuantity, setSelectedQuantity] = useState(item.quantity);
 
   const handleQuantityChange = (value: string) => {
     const quantity = parseInt(value);
     setSelectedQuantity(quantity);
-    setItemQuantity(product, quantity);
+    cart.updateItem(product.id, "quantity", quantity);
   };
 
   const quantityContent = useMemo(
@@ -48,13 +49,10 @@ export default function CartItem(props: {
         onQuantityChange={handleQuantityChange}
       />
     ),
-    [product, selectedQuantity]
+    [product, selectedQuantity],
   );
 
-  const handleRemoveFromCart = useCallback(
-    () => removeFromCart(product),
-    [product]
-  );
+  const handleremoveItem = useCallback(() => cart.removeItem(product.id), [product]);
 
   if (product === undefined) return null;
 
@@ -80,7 +78,7 @@ export default function CartItem(props: {
           <Button
             size="sm"
             variant="outline"
-            onClick={handleRemoveFromCart}
+            onClick={handleremoveItem}
             className="w-max ml-auto mt-auto"
           >
             Retirer
@@ -91,7 +89,7 @@ export default function CartItem(props: {
           <Button
             size="sm"
             variant="outline"
-            onClick={handleRemoveFromCart}
+            onClick={handleremoveItem}
             className="w-max ml-auto mt-auto"
           >
             Retirer
@@ -150,7 +148,7 @@ export const Section = (props: {
     <div
       className={cn(
         "flex flex-col gap-1 md:gap-4 text-sm md:text-md lg:text-lg",
-        className
+        className,
       )}
     >
       {!!title && <span className="font-semibold line-clamp-2">{title}</span>}
@@ -185,7 +183,7 @@ const QuantityContent = (props: {
   }
   return (
     <Badge variant="secondary" className="gap-1 h-8">
-      <span className="w-2 h-2 bg-primary rounded-full"></span>1 en stock
+      <span className="w-2 h-2 bg-primary rounded-full" />1 en stock
     </Badge>
   );
 };

@@ -1,43 +1,36 @@
 "use client";
 
-import { cad } from "@/lib/currencyFormatter";
-import { useCartStore } from "./store";
-import { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Skeleton } from "@/components/ui/skeleton";
+import { cad } from "@/lib/currencyFormatter";
+import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import { useCartStore } from "./store";
 
 export default function CartBreakdown(props: { hasAction?: boolean }) {
   const { hasAction = true } = props;
   const router = useRouter();
-  const {
-    shippingMethod,
-    setShippingMethod,
-    shippingMethods,
-    getBreakdown,
-    fetchShipping,
-    inferShippingMethod,
-  } = useCartStore();
-  const { subtotal, tps, tvq, shipping, total } = getBreakdown();
+  const { cart } = useCartStore();
   const [isButtonLoading, setIsButtonLoading] = useState(false);
+
   const nonFreeShippingMethods = useMemo(() => {
-    return shippingMethods.filter((method) => method.price !== 0);
-  }, [shippingMethods]);
+    return cart.shippingMethods.filter((method) => method.price !== 0);
+  }, [cart.shippingMethods]);
 
   useEffect(() => {
-    if (shippingMethods.length === 0) {
-      fetchShipping();
-    } else if (!shippingMethod) {
-      inferShippingMethod();
+    if (cart.shippingMethods.length === 0) {
+      cart.fetchShippingMethods();
+    } else if (!cart.shipping) {
+      cart.inferShippingMethod();
     }
-  }, [shippingMethods]);
+  }, [cart.shippingMethods, cart.shipping]);
 
   const isLoading = useMemo(() => {
-    return shippingMethods.length === 0;
-  }, [shippingMethods]);
+    return cart.shippingMethods.length === 0;
+  }, [cart.shippingMethods]);
 
   return (
     <>
@@ -45,20 +38,20 @@ export default function CartBreakdown(props: { hasAction?: boolean }) {
         <p className="font-semibold">Méthode de livraison</p>
         <p>
           {`La livraison est gratuite pour toutes commandes ayant un sous-total ${cad(
-            150
+            150,
           )} et plus ou
           l'achat d'au moins 4 produits.`}
         </p>
         <div className="min-h-12">
           {nonFreeShippingMethods.length > 0 ? (
-            shippingMethod?.price === 0 ? (
+            cart.shipping?.price === 0 ? (
               <Badge variant="default-faded">Livraison gratuite!</Badge>
             ) : (
-              <RadioGroup onValueChange={(id: string) => setShippingMethod(id)}>
-                {nonFreeShippingMethods.map((method, index) => (
-                  <div className="flex items-center space-x-2" key={index}>
+              <RadioGroup onValueChange={(id: string) => cart.setShippingMethod(id)}>
+                {nonFreeShippingMethods.map((method) => (
+                  <div className="flex items-center space-x-2" key={method.id}>
                     <RadioGroupItem
-                      checked={shippingMethod?.id === method.id}
+                      checked={cart.shipping?.id === method.id}
                       value={`${method.id}`}
                       id={method.id}
                     />
@@ -77,24 +70,24 @@ export default function CartBreakdown(props: { hasAction?: boolean }) {
       <div className="flex flex-col min-w-60">
         <div className="flex justify-between mt-2">
           <span>Sous-total</span>
-          <span>{cad(subtotal)}</span>
+          <span>{cad(cart.breakdown.subtotal)}</span>
         </div>
         <div className="flex justify-between">
           <span>TPS</span>
-          <span>{cad(tps)}</span>
+          <span>{cad(cart.breakdown.tps)}</span>
         </div>
         <div className="flex justify-between">
           <span>TVQ</span>
-          <span>{cad(tvq)}</span>
+          <span>{cad(cart.breakdown.tvq)}</span>
         </div>
         <div className="flex justify-between">
           <span>Livraison</span>
-          {shippingMethod ? cad(shipping) : <Skeleton className="w-16" />}
+          {!isLoading ? cad(cart.breakdown.shipping) : <Skeleton className="w-16" />}
         </div>
         <div className="flex justify-between text-lg md:text-xl lg:text-2xl font-semibold mt-2">
           <span>Total</span>
-          {shippingMethod ? (
-            <span>{cad(total)}</span>
+          {!isLoading ? (
+            <span>{cad(cart.breakdown.total)}</span>
           ) : (
             <Skeleton className="w-24 h-8" />
           )}

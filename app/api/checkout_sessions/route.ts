@@ -1,103 +1,19 @@
+import { syncCartWithComponents } from "@/app/cart/actions";
+import { CartItemType, CartProductType, isShippingFree } from "@/app/cart/cart-view";
+import prisma from "@/lib/prisma";
+import { isCustomProductWithComponents, isProduct } from "@/lib/productUtils";
 import Stripe from "stripe";
 import {
-  Cart,
-  CartItemType,
-  CartProductType,
-  getCartProductHardwareId,
-  getCartProductMaterialId,
-} from "@/app/cart/store";
-import { syncCartWithComponents } from "@/app/cart/actions";
-import {
-  CustomProductWithComponents,
-  DbProduct,
-  getHardwareId,
-  getMaterialId,
-  isCustomProductWithComponents,
-  isProduct,
-} from "@/lib/productUtils";
-import prisma from "@/lib/prisma";
-import { Product } from "@prisma/client";
-import { getLineItems, getTotalTps, getTotalTvq, inCents } from "../utils";
-import { isShippingFree } from "@/app/cart/utils";
+  FilteredCart,
+  createCheckoutSessionInDB,
+  getLineItems,
+  getTotalTps,
+  getTotalTvq,
+  inCents,
+  isCartInSync,
+} from "../utils";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-
-type FilteredCart = {
-  items: CartItemType<Product>[];
-  customItems: CartItemType<CustomProductWithComponents>[];
-};
-
-async function createCheckoutSessionInDB(params: {
-  sessionId: string;
-  cart: FilteredCart;
-  expiresAt: Date;
-  shippingId: string;
-  userId?: string;
-}) {
-  try {
-    const { sessionId, cart, expiresAt, shippingId, userId } = params;
-    await prisma.checkoutSession.create({
-      data: {
-        sid: sessionId,
-        expires_at: expiresAt,
-        items: {
-          create: cart.items.map((item) => ({
-            productId: item.product.id,
-            quantity: item.quantity,
-          })),
-        },
-        custom_items: {
-          create: cart.customItems.map((item) => ({
-            customProduct: {
-              create: {
-                name: item.product.name,
-                price: item.product.price,
-                quantity: item.quantity,
-                material_id: item.product.material_id,
-                hardware_id: item.product.hardware_id,
-              },
-            },
-            quantity: item.quantity,
-          })),
-        },
-        shipping_id: shippingId,
-        ...(userId && { user_id: userId }),
-      },
-      include: {
-        items: true,
-        custom_items: true,
-      },
-    });
-  } catch (err) {
-    throw new Error("failed_to_create_session_in_db");
-  }
-}
-
-export async function deleteCheckoutSessionInDB(checkoutSid: string) {
-  try {
-    const deleted = await prisma.checkoutSession.delete({
-      where: {
-        sid: checkoutSid,
-      },
-    });
-    return deleted;
-  } catch (err) {
-    console.error(err);
-  }
-}
-
-function isCartInSync(cart: Cart, syncedCart: CartItemType<DbProduct>[]) {
-  return cart.every((item) =>
-    syncedCart.some(
-      (syncedItem) =>
-        item.product.id === syncedItem.product.id &&
-        getCartProductMaterialId(item.product) ===
-          getMaterialId(syncedItem.product) &&
-        getCartProductHardwareId(item.product) ===
-          getHardwareId(syncedItem.product)
-    )
-  );
-}
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
 export async function POST(req: Request) {
   try {
@@ -131,7 +47,8 @@ export async function POST(req: Request) {
     const shipping = await prisma.shipping.findUnique({
       where: { id: shippingId },
     });
-    if (!shipping || isNaN(shipping.price)) throw new Error("shipping_invalid");
+    if (!shipping || Number.isNaN(shipping.price))
+      throw new Error("shipping_invalid");
     // Make sure that free shipping is applied only if the conditions are met
     if (shipping.price === 0) {
       const totalQuantiy =
@@ -140,11 +57,11 @@ export async function POST(req: Request) {
       const totalPrice =
         filteredCart.items.reduce(
           (acc, item) => acc + item.product.price * item.quantity,
-          0
+          0,
         ) +
         filteredCart.customItems.reduce(
           (acc, item) => acc + item.product.price * item.quantity,
-          0
+          0,
         );
       if (!isShippingFree(totalQuantiy, totalPrice))
         throw new Error("shipping_invalid");
@@ -190,7 +107,7 @@ export async function POST(req: Request) {
       ],
       mode: "payment",
       return_url: `${req.headers.get(
-        "origin"
+        "origin",
       )}/checkout?session_id={CHECKOUT_SESSION_ID}`,
     });
 
@@ -212,11 +129,11 @@ export async function POST(req: Request) {
       }),
       {
         status: 200,
-      }
+      },
     );
-  } catch (err: any) {
-    return new Response(JSON.stringify({ error: err.message }), {
-      status: err.statusCode || 500,
+  } catch (err) {
+    return new Response(JSON.stringify({ error: (err as Error).message }), {
+      status: 500,
     });
   }
 }
@@ -233,11 +150,11 @@ export async function GET(req: Request) {
       }),
       {
         status: 200,
-      }
+      },
     );
-  } catch (err: any) {
-    return new Response(JSON.stringify({ error: err.message }), {
-      status: err.statusCode || 500,
+  } catch (err) {
+    return new Response(JSON.stringify({ error: (err as Error).message }), {
+      status: 500,
     });
   }
 }
@@ -254,11 +171,11 @@ export async function DELETE(req: Request) {
       }),
       {
         status: 200,
-      }
+      },
     );
-  } catch (err: any) {
-    return new Response(JSON.stringify({ error: err.message }), {
-      status: err.statusCode || 500,
+  } catch (err) {
+    return new Response(JSON.stringify({ error: (err as Error).message }), {
+      status: 500,
     });
   }
 }

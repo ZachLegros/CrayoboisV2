@@ -1,21 +1,21 @@
 "use server";
 
+import prisma from "@/lib/prisma";
 import {
   CustomProductWithComponents,
   customProductFactory,
   getClosestValidQuantity,
 } from "@/lib/productUtils";
-import prisma from "@/lib/prisma";
 import { Product } from "@prisma/client";
 import {
   CartItemType,
   CartProductType,
   isCartCustomProduct,
   isCartItemType,
-} from "./store";
+} from "./cart-view";
 
 export const syncCartWithComponents = async (
-  cart: CartItemType<CartProductType>[]
+  cart: CartItemType<CartProductType>[],
 ) => {
   try {
     const syncedCartWithComponents: CartItemType<
@@ -61,8 +61,7 @@ export const syncCartWithComponents = async (
 
 export const syncCart = async (cart: CartItemType<CartProductType>[]) => {
   try {
-    const syncedCart: CartItemType<Product | CustomProductWithComponents>[] =
-      [];
+    const syncedCart: CartItemType<Product | CustomProductWithComponents>[] = [];
     for (const item of cart) {
       if (isCartItemType(item)) {
         if (item.product && isCartCustomProduct(item.product)) {

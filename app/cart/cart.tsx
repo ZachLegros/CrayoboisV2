@@ -1,20 +1,19 @@
 "use client";
 
+import FloatingBar from "@/components/FloatingBar";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
+import { Separator } from "@/components/ui/separator";
+import { cad } from "@/lib/currencyFormatter";
+import { ReactNode, useEffect, useMemo } from "react";
+import CartBreakdown from "./cart-breakdown";
 import CartItem from "./cart-item";
 import EmptyCart from "./empty-cart";
-import CartBreakdown from "./cart-breakdown";
-import { ReactNode, useEffect, useMemo } from "react";
 import { useCartStore } from "./store";
-import { Card } from "@/components/ui/card";
-import FloatingBar from "@/components/FloatingBar";
-import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
-import { Button } from "@/components/ui/button";
-import { cad } from "@/lib/currencyFormatter";
-import { Separator } from "@/components/ui/separator";
 
 export default function Cart() {
-  const { cart, cartItemData, syncCart, getBreakdown } = useCartStore();
-  const { subtotal } = getBreakdown();
+  const { cart } = useCartStore();
 
   const cartItems = useMemo(() => {
     const items: ReactNode[] = [];
@@ -23,26 +22,26 @@ export default function Cart() {
       .slice()
       .reverse()
       .forEach((item, index) => {
-        const product = cartItemData[item.product.id];
+        const product = cart.itemData[item.product.id];
         if (product === undefined) return;
         items.push(
-          <div className="flex flex-col gap-4" key={index}>
+          <div className="flex flex-col gap-4" key={product.id}>
             <CartItem
               item={item}
               product={product}
               hasSeparator={index !== cart.length - 1}
             />
-          </div>
+          </div>,
         );
       });
     return items;
   }, [cart]);
 
   useEffect(() => {
-    syncCart();
+    cart.sync();
   }, []);
 
-  if (cart.length === 0) {
+  if (cart.items.length === 0) {
     return <EmptyCart />;
   }
 
@@ -53,7 +52,7 @@ export default function Cart() {
         <Separator className="flex md:hidden" />
         <div className="flex md:hidden justify-between text-xl py-4">
           <span>Sous-total</span>
-          <span>{cad(subtotal)}</span>
+          <span>{cad(cart.breakdown.subtotal)}</span>
         </div>
       </Card>
       <div className="hidden md:flex w-full lg:min-w-80 lg:max-w-80 h-max flex-grow sticky top-0 -mt-[calc(4rem+1.5rem+1px)] pt-[calc(1.5rem+2rem+2rem+1px)]">
