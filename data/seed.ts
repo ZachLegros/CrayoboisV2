@@ -1,7 +1,7 @@
 import { OrderStatus, PrismaClient } from "@prisma/client";
+import orders from "./clientOrders.json";
 import hardwares from "./hardwares.json";
 import materials from "./materials.json";
-import orders from "./clientOrders.json";
 import products from "./products.json";
 
 const prisma = new PrismaClient();
