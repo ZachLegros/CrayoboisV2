@@ -5,7 +5,6 @@ import { TableRow, TableCell } from "@/components/ui/table";
 import { useToast } from "@/components/ui/use-toast";
 import { Material } from "@prisma/client";
 import { Switch } from "@/components/ui/switch";
-// import { useRouter } from "next/navigation";
 import ImageWithLoading from "@/components/ImageWithLoading";
 import { cad } from "@/lib/currencyFormatter";
 import useAdminStore from "../../store";
@@ -17,8 +16,7 @@ export default function MaterialDetails(props: { materialId: string }) {
   const material = materials[materialId] ?? null;
 
   const { toast } = useToast();
-  // const router = useRouter();
-  const cellStyle = material?.enabled ? "opacity-100" : "opacity-40";
+  const cellStyle = material?.enabled ? undefined : "disabled";
 
   const errorToast = useCallback(
     () =>

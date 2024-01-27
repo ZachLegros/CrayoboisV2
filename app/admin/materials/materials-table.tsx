@@ -41,7 +41,9 @@ export default function MaterialsTable(props: { materials: Material[] }) {
           <TableHead>Origine</TableHead>
           <TableHead>Type</TableHead>
           <TableHead>Prix</TableHead>
-          <TableHead className="max-w-[120px]">Quantité disponible</TableHead>
+          <TableHead className="text-right max-w-[120px]">
+            Quantité disponible
+          </TableHead>
           <TableHead className="text-right">Activé</TableHead>
         </TableRow>
       </TableHeader>
@@ -114,7 +116,7 @@ function MaterialRow(props: { material: Material }) {
       <TableCell className={cellStyle}>{cad(material.price)}</TableCell>
       <TableCell
         className={cn(
-          `font-semibold ${material.quantity > 0 ? "text-green-500" : "text-red-500"}`,
+          `text-right font-semibold ${material.quantity > 0 ? "text-green-500" : "text-red-500"}`,
           cellStyle
         )}
       >
