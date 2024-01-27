@@ -82,7 +82,7 @@
     "rimraf": "^5.0.5"
   },
   "lint-staged": {
-    "**/*.{js,ts,tsx,json}": [
+    "*": [
       "biome check --no-errors-on-unmatched --files-ignore-unknown=true"
     ]
   }
