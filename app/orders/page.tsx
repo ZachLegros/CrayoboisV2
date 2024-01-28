@@ -17,14 +17,13 @@ import { orderStatus } from "@/lib/utils";
 import { dayjs } from "@/lib/utils";
 import type { Product } from "@prisma/client";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { getUserOrders } from "./actions";
 import Loading from "./loading";
 import useUserOrdersStore from "./store";
 
 export default async function OrdersPage() {
   const { orders, setOrders, countOrders } = useUserOrdersStore();
-  const [isOrdersFetched, setIsOrdersFetched] = useState(false);
   const router = useRouter();
   const isDesktop = useMediaQuery(gtSm);
 
@@ -32,12 +31,12 @@ export default async function OrdersPage() {
     const fetchOrders = async () => {
       const orders = await getUserOrders();
       setOrders(orders);
-      setIsOrdersFetched(true);
     };
     if (countOrders() === 0) fetchOrders();
   }, [orders]);
 
   const tableItems = useMemo(() => {
+    if (orders === null) return null;
     return Object.keys(orders).map((orderId) => {
       const order = orders[orderId];
       let products: Product[] = [];
@@ -85,7 +84,7 @@ export default async function OrdersPage() {
     });
   }, [orders, isDesktop]);
 
-  if (!isOrdersFetched) return <Loading />;
+  if (orders === null) return <Loading />;
 
   if (countOrders() === 0) {
     return (

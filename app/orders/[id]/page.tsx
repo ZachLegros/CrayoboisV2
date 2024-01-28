@@ -14,7 +14,7 @@ export default function UserOrderPage({ params }: { params: { id: string } }) {
   const { id } = params;
   const router = useRouter();
   const { orders, setOrders } = useUserOrdersStore();
-  const order = orders[id] ?? null;
+  const order = orders?.[id] ?? null;
 
   useEffect(() => {
     if (!order) {
