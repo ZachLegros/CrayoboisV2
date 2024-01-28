@@ -47,13 +47,7 @@ export default function Metric(props: {
     <div className="w-max lg:w-60 overflow-hidden rounded-xl">
       <Stat name={name} value={currentValue} className="p-3" />
       <div className="hidden lg:flex -mb-0.5 h-[80px] w-full">
-        <Chart
-          options={options}
-          series={series}
-          type="area"
-          height={80}
-          width={240}
-        />
+        <Chart options={options} series={series} type="area" height={80} />
       </div>
     </div>
   );

@@ -129,7 +129,7 @@ export default function NetRevenueChart(props: { orders: ClientOrder[] }) {
         <Stat name="TPS" value={cad(tps)} />
         <Stat name="Livraison" value={cad(shipping)} />
       </div>
-      <div className="h-[425px]">
+      <div className="h-[425px] w-full">
         <Chart options={options} series={series} type="area" height={425} />
       </div>
     </Card>
