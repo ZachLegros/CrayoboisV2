@@ -93,25 +93,8 @@ function MaterialRow(props: { material: Material }) {
           className="rounded-md"
         />
       </TableCell>
-      <TableCell className={cellStyle}>
-        {material.name}
-        {/* <EditableField
-            type="text"
-            value={material.name}
-            onChange={(value) => handleUpdate("name", value)}
-            className="justify-between"
-            multiline
-          /> */}
-      </TableCell>
-      <TableCell className={cellStyle}>
-        {material.origin}
-        {/* <EditableField
-            type="text"
-            value={material.origin}
-            onChange={(value) => handleUpdate("origin", value)}
-            inputClassName="w-[150px]"
-          /> */}
-      </TableCell>
+      <TableCell className={cellStyle}>{material.name}</TableCell>
+      <TableCell className={cellStyle}>{material.origin}</TableCell>
       <TableCell className={cellStyle}>{material.type}</TableCell>
       <TableCell className={cellStyle}>{cad(material.price)}</TableCell>
       <TableCell

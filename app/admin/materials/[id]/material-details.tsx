@@ -52,11 +52,13 @@ export default function MaterialDetails(props: { materialId: string }) {
 
   return (
     <div>
-      <div className="text-lg md:text-xl font-semibold mb-3">
-        <EditableField
-          value={material.name}
-          onChange={(value) => handleUpdate("name", value)}
-        />
+      <div className="text-lg md:text-xl mb-3">
+        <Field label="Nom">
+          <EditableField
+            value={material.name}
+            onChange={(value) => handleUpdate("name", value)}
+          />
+        </Field>
       </div>
       <div className="flex flex-col sm:flex-row gap-6">
         <ImageWithLoading
