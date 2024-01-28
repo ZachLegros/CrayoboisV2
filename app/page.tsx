@@ -20,7 +20,7 @@ export default function Index() {
 
   useEffect(() => {
     const getImages = async () => {
-      const images = await getProductImages(10);
+      const images = await getProductImages();
       setProductImages(images);
     };
     getImages();
