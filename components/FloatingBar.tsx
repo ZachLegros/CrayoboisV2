@@ -14,7 +14,7 @@ export default function FloatingBar(props: {
     <Portal>
       <div
         className={cn(
-          "flex w-full items-end fixed bottom-0 left-0 z-50 h-32 bg-gradient-to-t from-background pointer-events-none",
+          "flex w-full items-end fixed bottom-0 left-0 z-50 h-28 bg-gradient-to-t from-background pointer-events-none",
           className,
         )}
       >
