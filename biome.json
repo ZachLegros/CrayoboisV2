@@ -16,6 +16,9 @@
       "correctness": {
         "useExhaustiveDependencies": "off"
       },
+      "suspicious": {
+        "noExplicitAny": "off"
+      },
       "nursery": {
         "noUnusedImports": "error",
         "useImportType": "error"

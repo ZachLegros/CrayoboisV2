@@ -15,12 +15,9 @@ export type Filter = {
   setEnabled: (enabled: boolean) => void;
 };
 
-type SetFn = (store: Partial<CustomOrderStore>) => void;
-type GetFn = () => CustomOrderStore;
-
 export const createFilter = (params: {
-  set: SetFn;
-  get: GetFn;
+  set: any;
+  get: any;
   filterKey: string;
   enabled: boolean;
   initialValue: string;
@@ -30,16 +27,13 @@ export const createFilter = (params: {
     value: initialValue,
     enabled,
     setValue: (value: string) => {
-      const filter = get()[filterKey as keyof CustomOrderStore] as Filter;
-      set({ [filterKey]: { ...filter, value } });
+      set({ [filterKey]: { ...get()[filterKey], value } });
     },
     setEnabled: (enabled: boolean) => {
-      const filter = get()[filterKey as keyof CustomOrderStore] as Filter;
-      set({ [filterKey]: { ...filter, enabled, value: initialValue } });
+      set({ [filterKey]: { ...get()[filterKey], enabled, value: initialValue } });
     },
     clear: () => {
-      const filter = get()[filterKey as keyof CustomOrderStore] as Filter;
-      set({ [filterKey]: { ...filter, value: initialValue } });
+      set({ [filterKey]: { ...get()[filterKey], value: initialValue } });
     },
   };
 };
