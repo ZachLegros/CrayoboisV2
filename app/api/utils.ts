@@ -1,7 +1,8 @@
 import prisma from "@/lib/prisma";
 import {
-  type CustomProductWithComponents,
+  type CustomProduct,
   type DbProduct,
+  type WithComponents,
   getHardwareId,
   getMaterialId,
 } from "@/lib/productUtils";
@@ -52,7 +53,7 @@ export function getLineItems(
 
 export type FilteredCart = {
   items: CartItemType<Product>[];
-  customItems: CartItemType<CustomProductWithComponents>[];
+  customItems: CartItemType<CustomProduct<WithComponents>>[];
 };
 
 export async function createCheckoutSessionInDB(params: {
