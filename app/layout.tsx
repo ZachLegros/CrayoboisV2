@@ -1,6 +1,7 @@
 import NavBar from "@/components/NavBar";
 import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
+import { Analytics } from "@vercel/analytics/react";
 import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
@@ -71,6 +72,7 @@ export default function RootLayout({
             </footer>
           </main>
           <Toaster />
+          {process.env.VERCEL_ENV === "production" && <Analytics />}
         </body>
       </Providers>
     </html>
