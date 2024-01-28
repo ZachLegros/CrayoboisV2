@@ -56,7 +56,7 @@ export default function Cart() {
         </div>
       </Card>
       <div className="hidden md:flex w-full lg:min-w-80 lg:max-w-80 h-max flex-grow sticky top-0 -mt-[calc(4rem+1.5rem+1px)] pt-[calc(1.5rem+2rem+2rem+1px)]">
-        <Card className="grid grid-flow-col lg:grid-flow-row gap-2 w-full text-sm p-3 md:text-md lg:text-lg dark:bg-background dark:border-none dark:shadow-none">
+        <Card className="grid grid-flow-col lg:grid-flow-row gap-5 w-full text-sm p-3 md:text-md lg:text-lg dark:bg-background dark:border-none dark:shadow-none">
           <CartBreakdown />
         </Card>
       </div>
