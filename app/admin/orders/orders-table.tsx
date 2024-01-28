@@ -9,8 +9,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cad } from "@/lib/currencyFormatter";
-import { dayjs } from "@/lib/utils";
-import { type ClientOrder, OrderStatus } from "@prisma/client";
+import { dayjs, orderStatus } from "@/lib/utils";
+import type { ClientOrder } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo } from "react";
 import useAdminStore from "../store";
@@ -57,17 +57,4 @@ export default function OrdersTable(props: { orders: ClientOrder[] }) {
       <TableBody>{tableItems}</TableBody>
     </Table>
   );
-}
-
-function orderStatus(status: OrderStatus) {
-  switch (status) {
-    case OrderStatus.pending:
-      return "En attente";
-    case OrderStatus.shipped:
-      return "Livrée";
-    case OrderStatus.cancelled:
-      return "Annulée";
-    default:
-      return status;
-  }
 }

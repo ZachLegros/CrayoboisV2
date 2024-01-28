@@ -1,3 +1,4 @@
+import { OrderStatus } from "@prisma/client";
 import { type ClassValue, clsx } from "clsx";
 import dayjslib from "dayjs";
 import "dayjs/locale/fr-ca";
@@ -55,4 +56,17 @@ export function safeLocalStorageGet(key: string) {
 export function safeLocalStorageSet(key: string, value: string) {
   if (typeof localStorage === "undefined") return;
   localStorage.setItem(key, value);
+}
+
+export function orderStatus(status: OrderStatus) {
+  switch (status) {
+    case OrderStatus.pending:
+      return "En attente";
+    case OrderStatus.shipped:
+      return "Livrée";
+    case OrderStatus.cancelled:
+      return "Annulée";
+    default:
+      return status;
+  }
 }
