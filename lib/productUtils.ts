@@ -1,9 +1,16 @@
-import type { CustomProduct, Hardware, Material, Product } from "@prisma/client";
+import type {
+  CustomProduct as PrismaCustomProduct,
+  Hardware,
+  Material,
+  Product,
+} from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 
-export type DbProduct = Product | CustomProduct | CustomProductWithComponents;
+export type CustomProduct<T = void> = PrismaCustomProduct & T;
 
-export type CustomProductWithComponents = CustomProduct & {
+export type DbProduct = Product | CustomProduct | CustomProduct<WithComponents>;
+
+export type WithComponents = {
   material: Material;
   hardware: Hardware;
 };
@@ -24,10 +31,10 @@ export const isCustomProduct = (product: DbProduct): product is CustomProduct =>
 
 export const isCustomProductWithComponents = (
   product: DbProduct,
-): product is CustomProductWithComponents => {
+): product is CustomProduct<WithComponents> => {
   return (
-    (product as CustomProductWithComponents).material !== undefined &&
-    (product as CustomProductWithComponents).hardware !== undefined
+    (product as CustomProduct<WithComponents>).material !== undefined &&
+    (product as CustomProduct<WithComponents>).hardware !== undefined
   );
 };
 
@@ -78,7 +85,7 @@ export const generateProductName = (
 export const customProductFactory = (
   material: Material,
   hardware: Hardware,
-): CustomProductWithComponents => {
+): CustomProduct<WithComponents> => {
   return {
     id: uuidv4(),
     name: generateProductName(material, hardware),
