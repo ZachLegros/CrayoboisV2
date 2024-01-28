@@ -34,7 +34,7 @@ export default function RootLayout({
         >
           <NavBar />
           <main className="flex flex-col min-h-[calc(100vh-72px)] max-w-screen-xl mx-auto px-3 md:px-4 lg:px-6">
-            <div className="flex-grow py-3 md:py-6">{children}</div>
+            <div className="flex flex-col flex-auto py-3 md:py-6">{children}</div>
             <footer className="w-full border-t p-8 mt-auto">
               <p className="text-center text-xs">
                 © {new Date().getFullYear()} Crayobois
