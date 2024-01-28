@@ -7,41 +7,42 @@ const getInitialPriceFilter = (): PriceFilterValue => "desc";
 const getInitialTypeFilter = () => "all";
 const getInitialOriginFilter = () => "all";
 
-export interface FilterType<T> {
-  value: T;
-  setValue: (value: T) => void;
+export type Filter = {
+  value: string;
+  setValue: (value: string) => void;
   clear: () => void;
   enabled: boolean;
   setEnabled: (enabled: boolean) => void;
-}
-export class Filter<T> implements FilterType<T> {
-  value: T;
-  initialValue: T;
+};
+
+type SetFn = (store: Partial<CustomOrderStore>) => void;
+type GetFn = () => CustomOrderStore;
+
+export const createFilter = (params: {
+  set: SetFn;
+  get: GetFn;
+  filterKey: string;
   enabled: boolean;
-
-  constructor(params: {
-    value: T;
-    enabled: boolean;
-  }) {
-    const { value, enabled } = params;
-    this.value = value;
-    this.enabled = enabled;
-    this.initialValue = value;
-  }
-
-  setValue(value: T) {
-    this.value = value;
-  }
-
-  setEnabled(enabled: boolean) {
-    this.enabled = enabled;
-    this.clear();
-  }
-
-  clear() {
-    this.value = this.initialValue;
-  }
-}
+  initialValue: string;
+}): Filter => {
+  const { set, get, filterKey, enabled, initialValue } = params;
+  return {
+    value: initialValue,
+    enabled,
+    setValue: (value: string) => {
+      const filter = get()[filterKey as keyof CustomOrderStore] as Filter;
+      set({ [filterKey]: { ...filter, value } });
+    },
+    setEnabled: (enabled: boolean) => {
+      const filter = get()[filterKey as keyof CustomOrderStore] as Filter;
+      set({ [filterKey]: { ...filter, enabled, value: initialValue } });
+    },
+    clear: () => {
+      const filter = get()[filterKey as keyof CustomOrderStore] as Filter;
+      set({ [filterKey]: { ...filter, value: initialValue } });
+    },
+  };
+};
 
 export type CustomOrderStore = {
   currentStep: number;
@@ -54,20 +55,21 @@ export type CustomOrderStore = {
   selectMaterial: (material: Material | null) => void;
   selectedHardware: Hardware | null;
   selectHardware: (hardware: Hardware | null) => void;
-  typeFilter: Filter<string>;
-  priceFilter: Filter<PriceFilterValue>;
-  originFilter: Filter<string>;
+  typeFilter: Filter;
+  priceFilter: Filter;
+  originFilter: Filter;
   clearFilters: () => void;
   clearSelections: () => void;
   reset: () => void;
 };
 
-export const useCustomOrderStore = create<CustomOrderStore>((set, state) => ({
+export const useCustomOrderStore = create<CustomOrderStore>((set, get) => ({
   currentStep: 0,
   setCurrentStep: (step: number) => {
-    state().clearFilters();
+    get().clearFilters();
     set({ currentStep: step });
   },
+
   materials: [],
   setMaterials: (materials: Material[]) => set({ materials }),
   hardwares: [],
@@ -76,21 +78,41 @@ export const useCustomOrderStore = create<CustomOrderStore>((set, state) => ({
   selectMaterial: (material: Material | null) => set({ selectedMaterial: material }),
   selectedHardware: null,
   selectHardware: (hardware: Hardware | null) => set({ selectedHardware: hardware }),
-  typeFilter: new Filter({ value: getInitialTypeFilter(), enabled: true }),
-  originFilter: new Filter({ value: getInitialOriginFilter(), enabled: false }),
-  priceFilter: new Filter({ value: getInitialPriceFilter(), enabled: false }),
+
+  typeFilter: createFilter({
+    set,
+    get,
+    filterKey: "typeFilter",
+    enabled: true,
+    initialValue: getInitialTypeFilter(),
+  }),
+  originFilter: createFilter({
+    set,
+    get,
+    filterKey: "originFilter",
+    enabled: false,
+    initialValue: getInitialOriginFilter(),
+  }),
+  priceFilter: createFilter({
+    set,
+    get,
+    filterKey: "priceFilter",
+    enabled: false,
+    initialValue: getInitialPriceFilter(),
+  }),
+
   clearFilters: () => {
-    state().typeFilter.clear();
-    state().originFilter.clear();
-    state().priceFilter.clear();
+    get().typeFilter.clear();
+    get().originFilter.clear();
+    get().priceFilter.clear();
   },
   clearSelections: () => {
-    state().selectMaterial(null);
-    state().selectHardware(null);
+    get().selectMaterial(null);
+    get().selectHardware(null);
   },
   reset: () => {
     set(() => ({ currentStep: 0 }));
-    state().clearFilters();
-    state().clearSelections();
+    get().clearFilters();
+    get().clearSelections();
   },
 }));
