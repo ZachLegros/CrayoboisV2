@@ -1,5 +1,6 @@
 "use client";
 
+import FloatingBar from "@/components/FloatingBar";
 import OrderBreakdown from "@/components/OrderBreakdown";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
@@ -29,11 +30,22 @@ export default function UserOrderPage({ params }: { params: { id: string } }) {
 
   return (
     <div className="animate-in flex flex-col gap-3">
-      <Button className="w-max" onClick={() => router.push("/orders")}>
-        <FaChevronLeft className="mr-1" />
-        Mes commandes
-      </Button>
+      <div className="hidden sm:flex justify-between">
+        <Button className="w-max" onClick={() => router.push("/orders")}>
+          <FaChevronLeft className="mr-1" />
+          Mes commandes
+        </Button>
+      </div>
       <OrderBreakdown order={order} />
+      <FloatingBar className="flex sm:hidden p-3 pb-6">
+        <Button
+          className="w-max text-lg drop-shadow-lg p-4 pointer-events-auto"
+          onClick={() => router.push("/orders")}
+        >
+          <FaChevronLeft className="mr-1" />
+          Mes commandes
+        </Button>
+      </FloatingBar>
     </div>
   );
 }
