@@ -5,8 +5,8 @@ export default function Layout(props: { children: ReactNode }) {
   const { children } = props;
   return (
     <div className="flex flex-col flex-auto w-full md:max-w-[725px] mx-auto gap-2">
-      <p className="text-2xl font-semibold">Mes commandes</p>
-      <Card className="animate-in flex flex-col flex-auto items-center justify-center p-5">
+      <p className="text-2xl font-semibold mb-4">Mes commandes</p>
+      <Card className="animate-in flex flex-col flex-auto p-3 dark:bg-background">
         {children}
       </Card>
     </div>
