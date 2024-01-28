@@ -37,9 +37,6 @@ yarn-error.log*
 next-env.d.ts
 
 data/*
-!data/materials.json
-!data/hardwares.json
-!data/products.json
 !data/seed.ts
-!data/seedProd.ts
+
 certificates
