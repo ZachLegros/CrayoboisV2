@@ -17,12 +17,14 @@ import { orderStatus } from "@/lib/utils";
 import { dayjs } from "@/lib/utils";
 import type { Product } from "@prisma/client";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getUserOrders } from "./actions";
+import Loading from "./loading";
 import useUserOrdersStore from "./store";
 
 export default async function OrdersPage() {
   const { orders, setOrders, countOrders } = useUserOrdersStore();
+  const [isOrdersFetched, setIsOrdersFetched] = useState(false);
   const router = useRouter();
   const isDesktop = useMediaQuery(gtSm);
 
@@ -30,6 +32,7 @@ export default async function OrdersPage() {
     const fetchOrders = async () => {
       const orders = await getUserOrders();
       setOrders(orders);
+      setIsOrdersFetched(true);
     };
     if (countOrders() === 0) fetchOrders();
   }, [orders]);
@@ -50,7 +53,10 @@ export default async function OrdersPage() {
           key={order.id}
         >
           <TableCell>
-            <Button variant="link" className="underline text-primary font-semibold">
+            <Button
+              variant="link"
+              className="underline text-primary font-semibold w-max p-0"
+            >
               #{order.order_no}
             </Button>
           </TableCell>
@@ -79,6 +85,8 @@ export default async function OrdersPage() {
     });
   }, [orders, isDesktop]);
 
+  if (!isOrdersFetched) return <Loading />;
+
   if (countOrders() === 0) {
     return (
       <div className="flex flex-col flex-auto justify-center items-center m-5">
@@ -97,6 +105,7 @@ export default async function OrdersPage() {
 
   return (
     <div className="animate-in">
+      <p className="text-2xl font-semibold mb-4">Mes commandes</p>
       <Table>
         <TableHeader>
           <TableRow>
