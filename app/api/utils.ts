@@ -107,6 +107,9 @@ export async function deleteCheckoutSessionInDB(checkoutSid: string) {
     const deleted = await prisma.checkoutSession.delete({
       where: {
         sid: checkoutSid,
+        status: {
+          not: "completed",
+        },
       },
     });
     return deleted;

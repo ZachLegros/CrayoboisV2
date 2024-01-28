@@ -1,7 +1,13 @@
 import prisma from "@/lib/prisma";
 import type { CustomProduct } from "@/lib/productUtils";
 import { getTps, getTvq } from "@/lib/utils";
-import type { Hardware, Material, Product } from "@prisma/client";
+import type {
+  ClientOrder,
+  CustomProduct as PrismaCustomProduct,
+  Hardware,
+  Material,
+  Product,
+} from "@prisma/client";
 import type Stripe from "stripe";
 import { deleteCheckoutSessionInDB, orZero } from "../utils";
 
@@ -30,6 +36,22 @@ type CustomProductWithOrderComponents = CustomProduct<{
   material: OrderMaterial;
   hardware: OrderHardware;
 }>;
+
+export async function handleSuccess(event: Stripe.CheckoutSessionCompletedEvent) {
+  const checkoutSessionId = event.data.object.id;
+  console.log("Checkout session completed:", checkoutSessionId);
+  setCheckoutSessionCompleted(checkoutSessionId);
+  const order = await createOrder(event);
+  if (!order) throw new Error("Order not created");
+  return new Response(JSON.stringify({ order_id: order.id }), { status: 200 });
+}
+
+export async function handleExpire(event: Stripe.CheckoutSessionExpiredEvent) {
+  const checkoutSid = event.data.object.id;
+  console.log("Checkout session expired:", checkoutSid);
+  await deleteCheckoutSessionInDB(checkoutSid);
+  return new Response(null, { status: 200 });
+}
 
 async function setCheckoutSessionCompleted(checkoutSid: string) {
   return prisma.checkoutSession.update({
@@ -154,6 +176,7 @@ async function createOrder(event: Stripe.CheckoutSessionCompletedEvent) {
         user_id: profileId,
       },
     });
+    await updateInventory(order);
     console.log("Order created:", order.id);
     return order;
   } catch (error) {
@@ -161,18 +184,23 @@ async function createOrder(event: Stripe.CheckoutSessionCompletedEvent) {
   }
 }
 
-export async function handleSuccess(event: Stripe.CheckoutSessionCompletedEvent) {
-  const checkoutSessionId = event.data.object.id;
-  console.log("Checkout session completed:", checkoutSessionId);
-  setCheckoutSessionCompleted(checkoutSessionId);
-  const order = await createOrder(event);
-  if (!order) throw new Error("Order not created");
-  return new Response(JSON.stringify({ order_id: order.id }), { status: 200 });
-}
-
-export async function handleExpire(event: Stripe.CheckoutSessionExpiredEvent) {
-  const checkoutSid = event.data.object.id;
-  console.log("Checkout session expired:", checkoutSid);
-  await deleteCheckoutSessionInDB(checkoutSid);
-  return new Response(null, { status: 200 });
+// update the inventory of the materials and hardware based on the order's custom products
+async function updateInventory(order: ClientOrder) {
+  try {
+    if (!order) throw new Error("Order not found");
+    const { custom_products } = order;
+    for (const customProduct of custom_products as PrismaCustomProduct[]) {
+      const { material_id, hardware_id } = customProduct;
+      await prisma.material.update({
+        where: { id: material_id },
+        data: { quantity: { decrement: customProduct.quantity } },
+      });
+      await prisma.hardware.update({
+        where: { id: hardware_id },
+        data: { quantity: { decrement: customProduct.quantity } },
+      });
+    }
+  } catch (error) {
+    console.error(error);
+  }
 }
