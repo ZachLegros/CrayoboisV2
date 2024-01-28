@@ -1,4 +1,4 @@
-import { OrderStatus } from "@prisma/client";
+import { type ClientOrder, OrderStatus } from "@prisma/client";
 import { type ClassValue, clsx } from "clsx";
 import dayjslib from "dayjs";
 import "dayjs/locale/fr-ca";
@@ -69,4 +69,8 @@ export function orderStatus(status: OrderStatus) {
     default:
       return status;
   }
+}
+
+export function getNetAmount(order: ClientOrder) {
+  return order.amount - order.tax - order.shipping;
 }
