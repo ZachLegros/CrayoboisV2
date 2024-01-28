@@ -8,7 +8,7 @@ export default function Loading() {
     <div className="flex w-full h-full gap-4">
       <div className="flex flex-col w-full gap-4">
         <Breadcrumbs
-          className="hidden sm:flex"
+          className="hidden bg-card border h-8 px-3 rounded-md sm:flex sm:w-full sm:justify-between sm:items-center md:w-max"
           steps={["Choix du bois", "Choix du matériel", "Ajouter au panier"]}
           currentStep={0}
         />
