@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
+import UserOrdersTable from "./user-orders-table";
 
 export default async function OrdersPage() {
   const cookieStore = cookies();
@@ -13,5 +14,5 @@ export default async function OrdersPage() {
     },
   });
 
-  return <pre>{JSON.stringify(orders, null, 2)}</pre>;
+  return <UserOrdersTable orders={orders} />;
 }
