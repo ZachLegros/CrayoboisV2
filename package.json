@@ -5,7 +5,7 @@
     "build": "bun generate && next build",
     "start": "next start",
     "generate": "prisma generate",
-    "clean": "bun run clean.ts",
+    "clean": "rimraf .next/",
     "lint": "biome check --no-errors-on-unmatched --files-ignore-unknown=true --apply .",
     "migrate": "dotenv -e .env.development.local -- prisma migrate dev && bun seed-triggers",
     "seed": "bun --env-file=.env.development.local data/seed.ts",

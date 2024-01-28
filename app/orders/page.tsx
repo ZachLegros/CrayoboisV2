@@ -61,7 +61,7 @@ export default async function OrdersPage() {
           </TableCell>
           <TableCell>{dayjs(order.created_at).format("D MMM YYYY")}</TableCell>
           {isDesktop && (
-            <TableCell className="flex flex-col">
+            <TableCell>
               <ul>
                 {items.map((item, index) => (
                   <li
