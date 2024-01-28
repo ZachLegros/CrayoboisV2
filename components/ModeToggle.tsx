@@ -17,7 +17,11 @@ export function ModeToggle(props: { className?: string }) {
   };
 
   return (
-    <Button variant="outline" className={cn("p-2", className)} onClick={toggleTheme}>
+    <Button
+      variant="outline"
+      className={cn("p-2 bg-transparent", className)}
+      onClick={toggleTheme}
+    >
       {!isLargerScreen && (
         <span className="inline-flex mr-2 lg:hidden lg:mr-0">Thème</span>
       )}
@@ -27,6 +31,7 @@ export function ModeToggle(props: { className?: string }) {
       {resolvedTheme === "dark" && (
         <MoonIcon className="h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
       )}
+      {resolvedTheme === undefined && <span className="h-[1.2rem] w-[1.2rem]" />}
     </Button>
   );
 }
