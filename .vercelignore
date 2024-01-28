@@ -1,0 +1,6 @@
+data
+backup
+.github
+.husky
+prisma/migrations
+README.md
