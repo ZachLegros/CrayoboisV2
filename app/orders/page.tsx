@@ -32,7 +32,7 @@ export default async function OrdersPage() {
       const orders = await getUserOrders();
       setOrders(orders);
     };
-    if (countOrders() === 0) fetchOrders();
+    if (orders === null) fetchOrders();
   }, [orders]);
 
   const tableItems = useMemo(() => {
