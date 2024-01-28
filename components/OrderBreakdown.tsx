@@ -1,7 +1,7 @@
 import { ItemImages } from "@/app/cart/cart-item";
 import { cad } from "@/lib/currencyFormatter";
 import type { DbProduct } from "@/lib/productUtils";
-import { dayjs, getNetAmount, getTps, getTvq } from "@/lib/utils";
+import { dayjs, getNetAmount, getTps, getTvq, orderStatus } from "@/lib/utils";
 import type { ClientOrder } from "@prisma/client";
 import {
   Table,
@@ -57,12 +57,14 @@ export default function OrderBreakdown(props: { order: ClientOrder }) {
         </div>
       </div>
       <div>
-        <h2 className="text-xl font-semibold mb-2">Commande #{order.order_no}</h2>
+        <h2 className="text-xl font-semibold mb-2">
+          Commande #{order.order_no} - {orderStatus(order.status)}
+        </h2>
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead>Image</TableHead>
-              <TableHead>Nom</TableHead>
+              <TableHead className="min-w-[115px]">Nom</TableHead>
               <TableHead className="text-right">Quantité</TableHead>
               <TableHead className="text-right">Sous-total</TableHead>
             </TableRow>
