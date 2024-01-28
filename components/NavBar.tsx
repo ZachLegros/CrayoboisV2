@@ -20,7 +20,7 @@ const items = [
     link: "/products",
   },
   {
-    title: "Commande sur mesure",
+    title: "Commander sur mesure",
     link: "/custom-order",
   },
   {
