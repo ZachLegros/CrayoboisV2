@@ -76,7 +76,7 @@ export function UserMenu(props: {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-44">
-        <DropdownMenuLabel>{email?.split("@")[0]}</DropdownMenuLabel>
+        <DropdownMenuLabel>{email}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {items.map((item) => (
           <DropdownMenuItem onClick={() => router.push(item.href)} key={item.label}>
