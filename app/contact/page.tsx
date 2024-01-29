@@ -9,10 +9,12 @@ export default function ContactPage() {
       </h3>
       <div className="flex flex-col gap-5">
         <div>
-          <h4 className="text-left font-semibold mb-1">Questions ou soucis</h4>
+          <h4 className="text-left font-semibold mb-1">
+            Questions ou Problèmes liés aux Commandes
+          </h4>
           <p className="text-left">
-            Pour toute question concernant les commandes ou soucis, veuillez
-            contacter notre équipe à l'adresse suivante :{" "}
+            Pour toute question concernant vos commandes ou en cas de problème,
+            veuillez contacter notre équipe à l'adresse suivante :
           </p>
           <div className="flex items-center gap-1">
             <p className="text-primary font-semibold">dv.crayobois@gmail.com</p>
@@ -22,8 +24,8 @@ export default function ContactPage() {
         <div>
           <h4 className="text-left font-semibold mb-1">Problèmes techniques</h4>
           <p className="text-left">
-            Pour tout problème technique, veuillez contacter notre développeur à
-            l'adresse suivante :{" "}
+            Pour toute question technique, veuillez contacter notre développeur à
+            l'adresse suivante :
           </p>
           <div className="flex items-center gap-1">
             <p className="text-primary font-semibold">contact@zacharylegros.dev</p>
