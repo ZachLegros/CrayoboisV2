@@ -20,7 +20,7 @@ export default function UserOrderPage({ params }: { params: { id: string } }) {
     if (!order) {
       getUserOrders().then((orders) => {
         const ordersMap = setOrders(orders);
-        const currentOrderExists = !!ordersMap[id];
+        const currentOrderExists = !!ordersMap?.[id];
         if (!currentOrderExists) router.push("/orders");
       });
     }
