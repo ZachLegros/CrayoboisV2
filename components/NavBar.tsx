@@ -135,7 +135,7 @@ export function MobileNavLinks(props: {
           <Badge className="ml-2">{cartState.items.length}</Badge>
         )}
       </li>
-      {user && (
+      {user ? (
         <>
           <li className="flex items-center">
             <Link
@@ -160,6 +160,12 @@ export function MobileNavLinks(props: {
             </Link>
           </li>
         </>
+      ) : (
+        <li className="flex items-center">
+          <Link href={"/login"} className={linkStyle} onClick={onNavLinkClick}>
+            Connexion
+          </Link>
+        </li>
       )}
     </ul>
   );
