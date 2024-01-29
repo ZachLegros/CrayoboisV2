@@ -10,8 +10,9 @@ export type UserOrdersStore = {
 export const useUserOrdersStore = create<UserOrdersStore>((set, get) => ({
   orders: null,
   setOrders: (orders: ClientOrder[]) => {
+    const sortedOrders = orders.sort((a, b) => b.order_no - a.order_no);
     const ordersObj: { [orderId: string]: ClientOrder } = {};
-    for (const order of orders) {
+    for (const order of sortedOrders) {
       ordersObj[order.id] = order;
     }
     set({ orders: ordersObj });

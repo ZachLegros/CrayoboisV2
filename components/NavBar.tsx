@@ -1,6 +1,7 @@
 "use client";
 
 import { useCartStore } from "@/app/cart/store";
+import useUserStore from "@/app/user-store";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -91,9 +92,17 @@ export function MobileNavLinks(props: {
 }) {
   const pathname = usePathname();
   const { items, className, onNavLinkClick } = props;
-  const { cartState } = useCartStore();
+  const { cart, cartState } = useCartStore();
+  const { user, signOut } = useUserStore();
+
   const linkStyle =
     "transition-colors text-foreground/70 hover:text-foreground aria-[current]:font-sem aria-[current]:text-foreground";
+
+  const handleLogout = async () => {
+    await signOut();
+    cart.clear();
+  };
+
   return (
     <ul className={cn("text-lg font-medium pl-2 lg:pl-0", className)}>
       <li>
@@ -126,6 +135,32 @@ export function MobileNavLinks(props: {
           <Badge className="ml-2">{cartState.items.length}</Badge>
         )}
       </li>
+      {user && (
+        <>
+          <li className="flex items-center">
+            <Link
+              href={"/orders"}
+              className={linkStyle}
+              aria-current={pathname.startsWith("/orders") ? "page" : undefined}
+              onClick={onNavLinkClick}
+            >
+              Mes commandes
+            </Link>
+          </li>
+          <li className="flex items-center">
+            <Link
+              href={"/"}
+              className={linkStyle}
+              onClick={() => {
+                handleLogout();
+                onNavLinkClick?.();
+              }}
+            >
+              Déconnexion
+            </Link>
+          </li>
+        </>
+      )}
     </ul>
   );
 }
@@ -135,6 +170,7 @@ export function MobileMenu(props: {
   onOpenChange: (isOpen: boolean) => void;
 }) {
   const { isOpen, onOpenChange } = props;
+
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
       <SheetContent>
