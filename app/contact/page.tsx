@@ -27,7 +27,7 @@ export default function ContactPage() {
             Pour toute question technique, veuillez contacter notre développeur à
             l'adresse suivante :
           </p>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-2">
             <p className="text-primary font-semibold">contact@zacharylegros.dev</p>
             <CopyToClipboard text="contact@zacharylegros.dev" />
           </div>
