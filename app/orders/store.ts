@@ -3,13 +3,17 @@ import { create } from "zustand";
 
 export type UserOrdersStore = {
   orders: { [key: string]: ClientOrder } | null;
-  setOrders: (orders: ClientOrder[]) => { [key: string]: ClientOrder };
+  setOrders: (orders: ClientOrder[] | null) => { [key: string]: ClientOrder } | null;
   countOrders: () => number;
 };
 
 export const useUserOrdersStore = create<UserOrdersStore>((set, get) => ({
   orders: null,
-  setOrders: (orders: ClientOrder[]) => {
+  setOrders: (orders: ClientOrder[] | null) => {
+    if (orders === null) {
+      set({ orders: null });
+      return null;
+    }
     const sortedOrders = orders.sort((a, b) => b.order_no - a.order_no);
     const ordersObj: { [orderId: string]: ClientOrder } = {};
     for (const order of sortedOrders) {

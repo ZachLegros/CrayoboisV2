@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import useUserOrdersStore from "../orders/store";
 import useUserStore from "../user-store";
 import { sendOtp, verifyOtp } from "./actions";
 
@@ -29,6 +30,7 @@ const sanitizeOtp = (otp: string) => {
 export default function LoginPage() {
   const router = useRouter();
   const { getCurrentUser } = useUserStore();
+  const { setOrders } = useUserOrdersStore();
   const [isLoading, setIsLoading] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
@@ -57,6 +59,7 @@ export default function LoginPage() {
       setOtpSent(false);
       return;
     }
+    setOrders(null);
     getCurrentUser();
     setIsRedirecting(true);
     router.push("/orders");
