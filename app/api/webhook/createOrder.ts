@@ -44,6 +44,7 @@ export async function handleSuccess(event: Stripe.CheckoutSessionCompletedEvent)
   setCheckoutSessionCompleted(checkoutSessionId);
   const order = await createOrder(event);
   if (!order) throw new Error("Order not created");
+  revalidatePath("/admin");
   revalidatePath("/admin/orders");
   return new Response(JSON.stringify({ order_id: order.id }), { status: 200 });
 }
