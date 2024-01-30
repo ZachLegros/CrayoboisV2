@@ -122,16 +122,16 @@ export default function OrderBuilder(props: {
         </>
       )}
       {currentStep === 2 && (
-        <>
+        <div className="flex flex-col flex-auto items-center justify-center md:justify-start">
           <AddedToCart />
           {!isLargeScreen && (
             <Drawer open={true}>
-              <DrawerContent className="p-3 mb-8">
+              <DrawerContent className="min-h-max p-3 mb-6">
                 <AddedToCart />
               </DrawerContent>
             </Drawer>
           )}
-        </>
+        </div>
       )}
     </>
   );

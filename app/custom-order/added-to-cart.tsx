@@ -12,7 +12,7 @@ export default function AddedToCart() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-start w-full h-full mt-11">
+    <div className="mt-11">
       <div className="flex flex-col">
         <p className="text-2xl lg:text-3xl font-bold text-center">
           Votre produit a été ajouté au panier.

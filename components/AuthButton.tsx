@@ -1,6 +1,5 @@
 "use client";
 
-import { getUserMenuItems } from "@/app/actions";
 import { useCartStore } from "@/app/cart/store";
 import { useUserStore } from "@/app/user-store";
 import {
@@ -20,6 +19,13 @@ const defaultItems = [
   {
     label: "Mes commandes",
     href: "/orders",
+  },
+];
+
+const adminItems = [
+  {
+    label: "Admin",
+    href: "/admin",
   },
 ];
 
@@ -44,8 +50,8 @@ export default function AuthButton() {
   }, [user, getCurrentUser]);
 
   useEffect(() => {
-    if (user)
-      getUserMenuItems().then((items) => setItems((prev) => [...items, ...prev]));
+    if (user && user.user_metadata.role === "admin")
+      setItems([...adminItems, ...defaultItems]);
     else setItems(defaultItems);
   }, [user]);
 
@@ -76,7 +82,7 @@ export function UserMenu(props: {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-44">
-        <DropdownMenuLabel>{email?.split("@")[0]}</DropdownMenuLabel>
+        <DropdownMenuLabel>{email}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {items.map((item) => (
           <DropdownMenuItem onClick={() => router.push(item.href)} key={item.label}>

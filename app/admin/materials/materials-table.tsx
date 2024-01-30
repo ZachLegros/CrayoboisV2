@@ -36,14 +36,10 @@ export default function MaterialsTable(props: { materials: Material[] }) {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">Image</TableHead>
+          <TableHead className="min-w-[75px] sm:w-[100px]">Image</TableHead>
           <TableHead>Nom</TableHead>
-          <TableHead>Origine</TableHead>
-          <TableHead>Type</TableHead>
           <TableHead>Prix</TableHead>
-          <TableHead className="text-right max-w-[120px]">
-            Quantité disponible
-          </TableHead>
+          <TableHead className="text-right max-w-[120px]">Quantité dispo.</TableHead>
           <TableHead className="text-right">Activé</TableHead>
         </TableRow>
       </TableHeader>
@@ -93,9 +89,9 @@ function MaterialRow(props: { material: Material }) {
           className="rounded-md"
         />
       </TableCell>
-      <TableCell className={cellStyle}>{material.name}</TableCell>
-      <TableCell className={cellStyle}>{material.origin}</TableCell>
-      <TableCell className={cellStyle}>{material.type}</TableCell>
+      <TableCell className={cellStyle}>
+        <span className="line-clamp-3">{material.name}</span>
+      </TableCell>
       <TableCell className={cellStyle}>{cad(material.price)}</TableCell>
       <TableCell
         className={cn(

@@ -1,6 +1,7 @@
 "use client";
 
 import type { ClientOrder, Material, OrderStatus } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 import { create } from "zustand";
 import { updateMaterialInDb } from "./materials/actions";
 import { updateOrderStatusInDb } from "./orders/actions";
@@ -65,6 +66,8 @@ export const useAdminStore = create<AdminStore>((set, get) => ({
       if (!success) {
         set({ materials: originalMaterials });
       }
+      revalidatePath("/admin/materials");
+      revalidatePath("/custom-order");
       return success;
     });
   },
