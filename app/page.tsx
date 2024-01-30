@@ -88,7 +88,7 @@ export default function Index() {
         </Carousel>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 w-full rounded-lg md:rounded-2xl gap-5">
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col h-max gap-3">
           <h3 className="inline-flex items-center text-lg sm:text-xl md:text-2xl font-bold h-9">
             Fait à la main au Québec{" "}
             <Image
@@ -117,7 +117,7 @@ export default function Index() {
           width={542}
           height={363}
           alt="image de menuisier"
-          className="w-full h-full rounded-md"
+          className="w-full rounded-md"
           loading="eager"
         />
       </div>
