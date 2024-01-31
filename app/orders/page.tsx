@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import {
   Table,
   TableBody,
@@ -19,7 +20,6 @@ import type { Product } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo } from "react";
 import { getUserOrders } from "./actions";
-import Loading from "./loading";
 import useUserOrdersStore from "./store";
 
 export default async function OrdersPage() {
@@ -84,7 +84,15 @@ export default async function OrdersPage() {
     });
   }, [orders, isDesktop]);
 
-  if (orders === null) return <Loading />;
+  if (orders === null)
+    return (
+      <div className="animate-in flex flex-col justify-center items-center gap-3">
+        <h3 className="text-xl font-semibold text-center">
+          Chargement de vos commandes
+        </h3>
+        <Spinner className="text-primary w-10 h-10" />
+      </div>
+    );
 
   if (countOrders() === 0) {
     return (
