@@ -141,7 +141,7 @@ export default function MaterialsTable(props: { materials: Material[] }) {
     columns: tableDefinition.columns,
     data: tableDefinition.data,
     initialState: {
-      sorting: [{ id: "enabled", desc: true }],
+      sorting: [{ id: "name", desc: false }],
       columnVisibility: { id: false },
     },
     getCoreRowModel: getCoreRowModel(),
