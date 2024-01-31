@@ -36,10 +36,13 @@ export default function OrdersTable(props: { orders: ClientOrder[] }) {
       createColumnHelper<
         Pick<
           ClientOrder,
-          "order_no" | "created_at" | "payer_name" | "amount" | "status"
+          "order_no" | "created_at" | "payer_name" | "amount" | "status" | "id"
         >
       >();
     const columns = [
+      columnHelper.accessor("id", {
+        enableHiding: true,
+      }),
       columnHelper.accessor("order_no", {
         header: () => "#",
         cell: (props) => (
@@ -89,6 +92,7 @@ export default function OrdersTable(props: { orders: ClientOrder[] }) {
       payer_name: orders[orderId].payer_name,
       amount: orders[orderId].amount,
       status: orders[orderId].status,
+      id: orderId,
     }));
 
     return { columns, data: ordersArray };
@@ -99,6 +103,7 @@ export default function OrdersTable(props: { orders: ClientOrder[] }) {
     data: tableDefinition.data,
     initialState: {
       sorting: [{ id: "order_no", desc: true }],
+      columnVisibility: { id: false },
     },
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -153,7 +158,7 @@ export default function OrdersTable(props: { orders: ClientOrder[] }) {
             <TableRow
               className="h-12 cursor-pointer"
               key={row.id}
-              onClick={() => router.push(`/admin/orders/${row.id}`)}
+              onClick={() => router.push(`/admin/orders/${row.getValue("id")}`)}
             >
               {row
                 .getVisibleCells()
