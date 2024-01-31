@@ -13,7 +13,7 @@ type AdminStore = {
   setMaterial: (material: Material) => void;
   setMaterials: (materials: Material[]) => void;
   updateMaterial: <P extends keyof Material>(
-    material: Material,
+    materialId: string,
     property: P,
     value: Material[P],
   ) => Promise<boolean>;
@@ -53,13 +53,13 @@ export const useAdminStore = create<AdminStore>((set, get) => ({
     set({ materials: materialsObj });
   },
   updateMaterial: async <P extends keyof Material>(
-    material: Material,
+    materialId: string,
     property: P,
     value: Material[P],
   ) => {
     const originalMaterials = { ...get().materials };
-    const updatedMaterial = { ...material, [property]: value };
-    const newMaterials = { ...get().materials, [material.id]: updatedMaterial };
+    const updatedMaterial = { ...get().materials[materialId], [property]: value };
+    const newMaterials = { ...get().materials, [materialId]: updatedMaterial };
     set({ materials: newMaterials });
     return updateMaterialInDb(updatedMaterial).then((success) => {
       if (!success) {
