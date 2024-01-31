@@ -36,7 +36,7 @@ export default function MaterialDetails(props: { materialId: string }) {
       if (!material) {
         errorToast();
       }
-      const success = await updateMaterial(material, property, value);
+      const success = await updateMaterial(material.id, property, value);
       if (!success) {
         errorToast();
       }
