@@ -14,7 +14,7 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { cad } from "@/lib/currencyFormatter";
 import { cn } from "@/lib/utils";
-import type { Material } from "@prisma/client";
+import type { Hardware } from "@prisma/client";
 import {
   createColumnHelper,
   flexRender,
@@ -27,21 +27,24 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo } from "react";
 import useAdminStore from "../store";
 
-export default function MaterialsTable(props: { materials: Material[] }) {
-  const { materials: materialsFromDb } = props;
-  const { materials, setMaterials, updateMaterial } = useAdminStore();
+export default function HardwaresTable(props: { hardwares: Hardware[] }) {
+  const { hardwares: hardwaresFromDb } = props;
+  const { hardwares, setHardwares, updateHardware } = useAdminStore();
   const { toast } = useToast();
   const router = useRouter();
 
   useEffect(() => {
-    if (Object.keys(materials).length === 0) setMaterials(materialsFromDb);
-  }, [materialsFromDb]);
+    if (Object.keys(hardwares).length === 0) setHardwares(hardwaresFromDb);
+  }, [hardwaresFromDb]);
 
   const tableDefinition = useMemo(() => {
-    if (Object.keys(materials).length === 0) return { columns: [], data: [] };
+    if (Object.keys(hardwares).length === 0) return { columns: [], data: [] };
     const columnHelper =
       createColumnHelper<
-        Pick<Material, "id" | "name" | "price" | "quantity" | "enabled" | "image">
+        Pick<
+          Hardware,
+          "id" | "name" | "price" | "quantity" | "enabled" | "image" | "color"
+        >
       >();
     const columns = [
       columnHelper.accessor("id", {
@@ -73,6 +76,11 @@ export default function MaterialsTable(props: { materials: Material[] }) {
         ),
         enableSorting: true,
       }),
+      columnHelper.accessor("color", {
+        header: () => "Couleur",
+        cell: (props) => <TableCell>{props.cell.renderValue()}</TableCell>,
+        enableSorting: true,
+      }),
       columnHelper.accessor("price", {
         header: () => "Prix",
         cell: (props) => <TableCell>{cad(props.getValue())}</TableCell>,
@@ -102,7 +110,7 @@ export default function MaterialsTable(props: { materials: Material[] }) {
             <Switch
               checked={props.getValue()}
               onCheckedChange={(checked) => {
-                updateMaterial(props.row.getValue("id"), "enabled", checked).then(
+                updateHardware(props.row.getValue("id"), "enabled", checked).then(
                   (success) => {
                     if (!success) {
                       toast({
@@ -125,17 +133,18 @@ export default function MaterialsTable(props: { materials: Material[] }) {
       }),
     ];
 
-    const materialsArray = Object.keys(materials).map((materialId) => ({
-      image: materials[materialId].image,
-      name: materials[materialId].name,
-      price: materials[materialId].price,
-      quantity: materials[materialId].quantity,
-      enabled: materials[materialId].enabled,
+    const hardwaresArray = Object.keys(hardwares).map((materialId) => ({
+      image: hardwares[materialId].image,
+      name: hardwares[materialId].name,
+      color: hardwares[materialId].color,
+      price: hardwares[materialId].price,
+      quantity: hardwares[materialId].quantity,
+      enabled: hardwares[materialId].enabled,
       id: materialId,
     }));
 
-    return { columns, data: materialsArray };
-  }, [materials]);
+    return { columns, data: hardwaresArray };
+  }, [hardwares]);
 
   const table = useReactTable({
     columns: tableDefinition.columns,
@@ -180,7 +189,7 @@ export default function MaterialsTable(props: { materials: Material[] }) {
             <TableRow
               className="h-12 cursor-pointer"
               key={row.id}
-              onClick={() => router.push(`/admin/materials/${row.getValue("id")}`)}
+              onClick={() => router.push(`/admin/hardwares/${row.getValue("id")}`)}
             >
               {row
                 .getVisibleCells()

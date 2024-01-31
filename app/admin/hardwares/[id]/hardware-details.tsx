@@ -7,15 +7,15 @@ import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
 import { cad } from "@/lib/currencyFormatter";
 import { cn } from "@/lib/utils";
-import type { Material } from "@prisma/client";
+import type { Hardware } from "@prisma/client";
 import { useCallback, useEffect } from "react";
 import useAdminStore from "../../store";
-import { getMaterials } from "../actions";
+import { getHardwares } from "../actions";
 
-export default function MaterialDetails(props: { materialId: string }) {
-  const { materialId } = props;
-  const { materials, setMaterials, updateMaterial } = useAdminStore();
-  const material = materials[materialId] ?? null;
+export default function HardwareDetails(props: { hardwareId: string }) {
+  const { hardwareId } = props;
+  const { hardwares, setHardwares, updateHardware } = useAdminStore();
+  const hardware = hardwares[hardwareId] ?? null;
 
   const { toast } = useToast();
 
@@ -29,84 +29,79 @@ export default function MaterialDetails(props: { materialId: string }) {
   );
 
   const handleUpdate = useCallback(
-    async <P extends keyof Material>(
+    async <P extends keyof Hardware>(
       property: P,
-      value: Material[P],
+      value: Hardware[P],
     ): Promise<void> => {
-      if (!material) {
+      if (!hardware) {
         errorToast();
       }
-      const success = await updateMaterial(material.id, property, value);
+      const success = await updateHardware(hardware.id, property, value);
       if (!success) {
         errorToast();
       }
     },
-    [material, errorToast, updateMaterial],
+    [hardware, errorToast, updateHardware],
   );
 
   useEffect(() => {
-    if (!material) getMaterials().then((materials) => setMaterials(materials));
-  }, [material, setMaterials]);
+    if (!hardware) getHardwares().then((hardwares) => setHardwares(hardwares));
+  }, [hardware, setHardwares]);
 
-  if (!material) return null;
+  if (!hardware) return null;
 
   return (
     <div>
       <div className="text-lg md:text-xl mb-3">
         <Field label="Nom">
           <EditableField
-            value={material.name}
+            value={hardware.name}
             onChange={(value) => handleUpdate("name", value)}
           />
         </Field>
       </div>
       <div className="flex flex-col sm:flex-row gap-6">
         <ImageWithLoading
-          src={material.image}
+          src={hardware.image}
           width={250}
           height={250}
-          alt={material.name}
+          alt={hardware.name}
           quality={100}
           className="rounded-lg w-full object-contain sm:w-[200px] sm:h-[200px] md:w-[175px] md:h-[175px]"
         />
         <div className="flex-auto">
           <Field label="Activé">
             <Switch
-              checked={material.enabled}
+              checked={hardware.enabled}
               onCheckedChange={(checked) => handleUpdate("enabled", checked)}
               className="w-9"
             />
           </Field>
           <Field label="Prix">
             <EditableField
-              placeholder={cad(material.price)}
-              value={`${material.price}`}
+              placeholder={cad(hardware.price)}
+              value={`${hardware.price}`}
               onChange={(value) => handleUpdate("price", Number(value))}
               type="number"
             />
           </Field>
           <Field label="Quantité">
             <EditableField
-              placeholder={`${material.quantity}`}
-              value={`${material.quantity}`}
+              placeholder={`${hardware.quantity}`}
+              value={`${hardware.quantity}`}
               onChange={(value) => handleUpdate("quantity", Number(value))}
               type="number"
               className={cn(
                 "font-semibold",
-                material.quantity > 0 ? "text-green-500" : "text-red-500",
+                hardware.quantity > 0 ? "text-green-500" : "text-red-500",
               )}
             />
           </Field>
-          <Field label="Type">
+          <Field label="Couleur">
             <EditableField
-              value={material.type}
-              onChange={(value) => handleUpdate("type", value)}
-            />
-          </Field>
-          <Field label="Origine">
-            <EditableField
-              value={material.origin}
-              onChange={(value) => handleUpdate("origin", value)}
+              placeholder={`${hardware.color}`}
+              value={hardware.color}
+              onChange={(value) => handleUpdate("color", value)}
             />
           </Field>
         </div>
