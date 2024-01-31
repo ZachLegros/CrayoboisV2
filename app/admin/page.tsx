@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import prisma from "@/lib/prisma";
 import Metrics from "./metrics";
 import NetRevenueChart from "./net-revenue-chart";
