@@ -1,5 +1,6 @@
 "use client";
 
+import SortToggle from "@/components/SortToggle";
 import { Spinner } from "@/components/ui/spinner";
 import {
   Table,
@@ -22,7 +23,6 @@ import {
 } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo } from "react";
-import { TiArrowSortedDown, TiArrowSortedUp, TiArrowUnsorted } from "react-icons/ti";
 import useAdminStore from "../store";
 
 export default function OrdersTable(props: { orders: ClientOrder[] }) {
@@ -135,17 +135,7 @@ export default function OrdersTable(props: { orders: ClientOrder[] }) {
               >
                 {flexRender(header.column.columnDef.header, header.getContext())}
                 {header.column.columnDef.enableSorting && (
-                  <span className="ml-1">
-                    {header.column.getIsSorted() ? (
-                      header.column.getIsSorted() === "desc" ? (
-                        <TiArrowSortedDown className="inline-block" />
-                      ) : (
-                        <TiArrowSortedUp className="inline-block" />
-                      )
-                    ) : (
-                      <TiArrowUnsorted className="inline-block" />
-                    )}
-                  </span>
+                  <SortToggle sort={header.column.getIsSorted()} className="ml-1" />
                 )}
               </TableHead>
             ))}
