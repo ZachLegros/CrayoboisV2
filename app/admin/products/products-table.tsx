@@ -72,11 +72,6 @@ export default function ProductsTable(props: { products: Product[] }) {
         ),
         enableSorting: true,
       }),
-      columnHelper.accessor("price", {
-        header: () => "Prix",
-        cell: (props) => <TableCell>{cad(props.getValue())}</TableCell>,
-        enableSorting: true,
-      }),
       columnHelper.accessor("quantity", {
         header: () => "Quantité",
         cell: (props) => (
@@ -91,7 +86,17 @@ export default function ProductsTable(props: { products: Product[] }) {
         ),
         enableSorting: true,
         meta: {
-          columnStyle: "text-right max-w-[120px]",
+          columnStyle: "text-right",
+        },
+      }),
+      columnHelper.accessor("price", {
+        header: () => "Prix",
+        cell: (props) => (
+          <TableCell className="text-right">{cad(props.getValue())}</TableCell>
+        ),
+        enableSorting: true,
+        meta: {
+          columnStyle: "text-right",
         },
       }),
     ];
