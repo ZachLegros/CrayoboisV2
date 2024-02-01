@@ -1,10 +1,17 @@
 "use client";
 
-import type { ClientOrder, Hardware, Material, OrderStatus } from "@prisma/client";
+import type {
+  ClientOrder,
+  Hardware,
+  Material,
+  OrderStatus,
+  Product,
+} from "@prisma/client";
 import { create } from "zustand";
 import { updateHardwareInDb } from "./hardwares/actions";
 import { updateMaterialInDb } from "./materials/actions";
 import { updateOrderStatusInDb } from "./orders/actions";
+import { updateProductInDb } from "./products/actions";
 
 type AdminStore = {
   orders: { [key: string]: ClientOrder };
@@ -27,6 +34,15 @@ type AdminStore = {
     hardwareId: string,
     property: P,
     value: Hardware[P],
+  ) => Promise<boolean>;
+
+  products: { [key: string]: Product };
+  setProduct: (product: Product) => void;
+  setProducts: (products: Product[]) => void;
+  updateProduct: <P extends keyof Product>(
+    productId: string,
+    property: P,
+    value: Product[P],
   ) => Promise<boolean>;
 };
 
@@ -103,6 +119,34 @@ export const useAdminStore = create<AdminStore>((set, get) => ({
     return updateHardwareInDb(updatedHardware).then((success) => {
       if (!success) {
         set({ hardwares: originalHardwares });
+      }
+      return success;
+    });
+  },
+
+  products: {},
+  setProduct: (product: Product) => {
+    set({ products: { ...get().products, [product.id]: product } });
+  },
+  setProducts: (products: Product[]) => {
+    const productsObj: { [productId: string]: Product } = {};
+    for (const product of products) {
+      productsObj[product.id] = product;
+    }
+    set({ products: productsObj });
+  },
+  updateProduct: async <P extends keyof Product>(
+    productId: string,
+    property: P,
+    value: Product[P],
+  ) => {
+    const originalProducts = { ...get().products };
+    const updatedProduct = { ...get().products[productId], [property]: value };
+    const newProducts = { ...get().products, [productId]: updatedProduct };
+    set({ products: newProducts });
+    return updateProductInDb(updatedProduct).then((success) => {
+      if (!success) {
+        set({ products: originalProducts });
       }
       return success;
     });
