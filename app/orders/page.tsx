@@ -90,7 +90,7 @@ export default async function OrdersPage() {
         <h3 className="text-xl font-semibold text-center">
           Chargement de vos commandes
         </h3>
-        <Spinner className="text-primary w-10 h-10" />
+        <Spinner className="text-primary size-10" />
       </div>
     );
 

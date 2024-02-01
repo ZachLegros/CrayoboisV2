@@ -42,9 +42,9 @@ export default function EditableField(props: {
   };
 
   return (
-    <div>
+    <>
       {isEditing ? (
-        <div className="flex items-center">
+        <div className={cn("flex items-center", className)}>
           {multiline ? (
             <textarea
               value={inputValue}
@@ -89,6 +89,6 @@ export default function EditableField(props: {
           </Button>
         </div>
       )}
-    </div>
+    </>
   );
 }

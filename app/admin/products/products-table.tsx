@@ -1,7 +1,7 @@
 "use client";
 
+import ImageWithLoading from "@/components/ImageWithLoading";
 import SortToggle from "@/components/SortToggle";
-import { Spinner } from "@/components/ui/spinner";
 import {
   Table,
   TableBody,
@@ -10,9 +10,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useToast } from "@/components/ui/use-toast";
 import { cad } from "@/lib/currencyFormatter";
-import { cn, dayjs, orderStatus } from "@/lib/utils";
-import type { ClientOrder, OrderStatus } from "@prisma/client";
+import { cn } from "@/lib/utils";
+import type { Product } from "@prisma/client";
 import {
   createColumnHelper,
   flexRender,
@@ -25,97 +26,103 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo } from "react";
 import useAdminStore from "../store";
 
-export default function OrdersTable(props: { orders: ClientOrder[] }) {
-  const { orders: ordersFromDb } = props;
+export default function ProductsTable(props: { products: Product[] }) {
+  const { products: productsFromDb } = props;
+  const { products, setProducts, updateProduct } = useAdminStore();
+  const { toast } = useToast();
   const router = useRouter();
-  const { orders, setOrders } = useAdminStore();
+
+  useEffect(() => {
+    if (Object.keys(products).length === 0) setProducts(productsFromDb);
+  }, [productsFromDb]);
 
   const tableDefinition = useMemo(() => {
-    if (Object.keys(orders).length === 0) return { columns: [], data: [] };
+    if (Object.keys(products).length === 0) return { columns: [], data: [] };
     const columnHelper =
       createColumnHelper<
-        Pick<
-          ClientOrder,
-          "order_no" | "created_at" | "payer_name" | "amount" | "status" | "id"
-        >
+        Pick<Product, "id" | "name" | "price" | "quantity" | "image">
       >();
     const columns = [
       columnHelper.accessor("id", {
         enableHiding: true,
       }),
-      columnHelper.accessor("order_no", {
-        header: () => "#",
+      columnHelper.accessor("image", {
+        header: () => "Image",
         cell: (props) => (
-          <TableCell className="font-medium">#{props.cell.renderValue()}</TableCell>
-        ),
-        enableSorting: true,
-      }),
-      columnHelper.accessor("created_at", {
-        header: () => "Date",
-        cell: (props) => (
-          <TableCell>
-            <span className="line-clamp-2">
-              {dayjs(props.cell.renderValue()).format("D MMM YYYY")}
-            </span>
+          <TableCell className="font-medium">
+            <ImageWithLoading
+              width={100}
+              height={100}
+              src={props.cell.getContext().row.getValue("image")}
+              alt={props.cell.getContext().row.getValue("name")}
+              className="rounded-md w-[75px] sm:w-[100px]"
+            />
           </TableCell>
         ),
+        meta: {
+          columnStyle: "w-[75px] sm:w-[100px]",
+        },
       }),
-      columnHelper.accessor("payer_name", {
+      columnHelper.accessor("name", {
         header: () => "Nom",
         cell: (props) => (
-          <TableCell className="capitalize">
-            <span className="line-clamp-2">{props.getValue()}</span>
+          <TableCell>
+            <span className="line-clamp-3">{props.cell.renderValue()}</span>
           </TableCell>
         ),
-      }),
-      columnHelper.accessor("amount", {
-        header: () => "Total",
-        cell: (props) => <TableCell>{cad(props.getValue())}</TableCell>,
         enableSorting: true,
       }),
-      columnHelper.accessor("status", {
-        header: () => "Statut",
+      columnHelper.accessor("quantity", {
+        header: () => "Quantité",
         cell: (props) => (
-          <TableCell className="text-right">
-            {orderStatus(props.cell.renderValue() as OrderStatus)}
+          <TableCell
+            className={cn(
+              "text-right font-semibold",
+              props.getValue() > 0 ? "text-green-500" : "text-red-500",
+            )}
+          >
+            {props.getValue()}
           </TableCell>
         ),
+        enableSorting: true,
+        meta: {
+          columnStyle: "text-right",
+        },
+      }),
+      columnHelper.accessor("price", {
+        header: () => "Prix",
+        cell: (props) => (
+          <TableCell className="text-right">{cad(props.getValue())}</TableCell>
+        ),
+        enableSorting: true,
         meta: {
           columnStyle: "text-right",
         },
       }),
     ];
 
-    const ordersArray = Object.keys(orders).map((orderId) => ({
-      order_no: orders[orderId].order_no,
-      created_at: orders[orderId].created_at,
-      payer_name: orders[orderId].payer_name,
-      amount: orders[orderId].amount,
-      status: orders[orderId].status,
-      id: orderId,
+    const productsArray = Object.keys(products).map((productId) => ({
+      image: products[productId].image,
+      name: products[productId].name,
+      price: products[productId].price,
+      quantity: products[productId].quantity,
+      id: productId,
     }));
 
-    return { columns, data: ordersArray };
-  }, [orders]);
+    return { columns, data: productsArray };
+  }, [products]);
 
   const table = useReactTable({
     columns: tableDefinition.columns,
     data: tableDefinition.data,
     initialState: {
-      sorting: [{ id: "order_no", desc: true }],
+      sorting: [{ id: "name", desc: false }],
       columnVisibility: { id: false },
     },
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
   });
-
-  useEffect(() => {
-    if (Object.keys(orders).length === 0) setOrders(ordersFromDb);
-  }, [ordersFromDb]);
-
-  if (Object.keys(orders).length === 0)
-    return <Spinner className="text-primary size-10" />;
 
   return (
     <Table>
@@ -148,7 +155,7 @@ export default function OrdersTable(props: { orders: ClientOrder[] }) {
             <TableRow
               className="h-12 cursor-pointer"
               key={row.id}
-              onClick={() => router.push(`/admin/orders/${row.getValue("id")}`)}
+              onClick={() => router.push(`/admin/products/${row.getValue("id")}`)}
             >
               {row
                 .getVisibleCells()
