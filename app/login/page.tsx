@@ -70,7 +70,7 @@ export default function LoginPage() {
       {isRedirecting ? (
         <div className="animate-in flex flex-col justify-center items-center gap-3">
           <h3 className="text-xl font-semibold text-center">Redirection en cours</h3>
-          <Spinner className="text-primary w-10 h-10" />
+          <Spinner className="text-primary size-10" />
         </div>
       ) : (
         <form

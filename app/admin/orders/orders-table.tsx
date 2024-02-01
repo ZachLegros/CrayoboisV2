@@ -115,7 +115,7 @@ export default function OrdersTable(props: { orders: ClientOrder[] }) {
   }, [ordersFromDb]);
 
   if (Object.keys(orders).length === 0)
-    return <Spinner className="text-primary w-10 h-10" />;
+    return <Spinner className="text-primary size-10" />;
 
   return (
     <Table>

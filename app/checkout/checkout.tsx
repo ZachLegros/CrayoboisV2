@@ -160,7 +160,7 @@ export default function Checkout(props: { sessionId?: string }) {
               <FaExclamationCircle className="text-6xl text-primary mt-4" />
             </div>
           ) : (
-            <Spinner className="text-primary w-10 h-10" />
+            <Spinner className="text-primary size-10" />
           )
         ) : clientSecret ? (
           <EmbeddedCheckoutProvider
@@ -174,7 +174,7 @@ export default function Checkout(props: { sessionId?: string }) {
             <p className="text-xl md:text-2xl font-semibold text-center">
               Création d&apos;une session de paiement sécurisée...
             </p>
-            <Spinner className="text-primary w-10 h-10" />
+            <Spinner className="text-primary size-10" />
           </div>
         )}
       </div>
