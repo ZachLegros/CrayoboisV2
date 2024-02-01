@@ -93,12 +93,16 @@ export default function ProductDetails(props: { productId: string }) {
           </Field>
           <Field
             label="Description"
-            className="items-start h-max max-w-[450px] block"
+            className={cn(
+              "items-start h-max w-full",
+              product.description !== null ? "block" : "inline-flex",
+            )}
           >
             <EditableField
               value={product.description ?? ""}
               onChange={(value) => handleUpdate("description", value)}
-              inputClassName="min-h-9 max-h-[150px] w-full"
+              className="w-full max-w-[450px]"
+              inputClassName="min-h-20 max-w-[450px] w-full"
               multiline
             />
           </Field>
