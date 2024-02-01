@@ -140,8 +140,12 @@ export const useAdminStore = create<AdminStore>((set, get) => ({
     property: P,
     value: Product[P],
   ) => {
+    let newValue: Product[P] = value;
+    if (property === "description" && value === "")
+      (newValue as Product["description"]) = null;
+
     const originalProducts = { ...get().products };
-    const updatedProduct = { ...get().products[productId], [property]: value };
+    const updatedProduct = { ...get().products[productId], [property]: newValue };
     const newProducts = { ...get().products, [productId]: updatedProduct };
     set({ products: newProducts });
     return updateProductInDb(updatedProduct).then((success) => {
