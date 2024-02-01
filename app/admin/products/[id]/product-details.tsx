@@ -60,14 +60,16 @@ export default function ProductDetails(props: { productId: string }) {
         </Field>
       </div>
       <div className="flex flex-col sm:flex-row gap-6">
-        <ImageWithLoading
-          src={product.image}
-          width={250}
-          height={250}
-          alt={product.name}
-          quality={100}
-          className="rounded-lg w-full object-contain sm:w-[200px] sm:h-[200px] md:w-[250px] md:h-[250px]"
-        />
+        <div className="sm:size-[200px] md:size-[250px]">
+          <ImageWithLoading
+            src={product.image}
+            width={250}
+            height={250}
+            alt={product.name}
+            quality={100}
+            className="rounded-lg w-full object-contain sm:max-w-[200px] md:max-w-[250px]"
+          />
+        </div>
         <div className="flex-auto">
           <Field label="Prix">
             <EditableField
@@ -89,10 +91,15 @@ export default function ProductDetails(props: { productId: string }) {
               )}
             />
           </Field>
-          <Field label="Description">
+          <Field
+            label="Description"
+            className="items-start h-max max-w-[450px] block"
+          >
             <EditableField
               value={product.description ?? ""}
               onChange={(value) => handleUpdate("description", value)}
+              inputClassName="min-h-9 max-h-[150px] w-full"
+              multiline
             />
           </Field>
         </div>
