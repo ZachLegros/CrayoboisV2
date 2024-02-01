@@ -67,7 +67,7 @@ export default function MaterialDetails(props: { materialId: string }) {
           height={250}
           alt={material.name}
           quality={100}
-          className="rounded-lg w-full object-contain sm:w-[200px] sm:h-[200px] md:w-[175px] md:h-[175px]"
+          className="rounded-lg w-full object-contain sm:w-[200px] sm:h-[200px] md:w-[250px] md:h-[250px]"
         />
         <div className="flex-auto">
           <Field label="Activé">
