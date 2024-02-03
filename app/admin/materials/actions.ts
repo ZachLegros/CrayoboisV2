@@ -67,15 +67,13 @@ export async function addNewMaterial({
     const isAdmin = session?.user.user_metadata.role === "admin";
     if (!isAdmin) throw new Error("Not admin");
 
-    const data = await uploadImage(
+    const url = await uploadImage(
       image,
       "inventory",
       `materials/${snakeCase(name)}_${v4()}.jpg`,
       { width: 256, height: 256, fit: "cover" },
     );
-    if (!data) throw new Error("Error uploading image");
-
-    const url = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/inventory/${data.path}`;
+    if (!url) throw new Error("Error uploading image");
 
     console.log("New material image url:", url);
 

@@ -43,7 +43,8 @@ export async function uploadImage(
       throw error;
     }
 
-    return data;
+    const url = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${bucketId}/${data.path}`;
+    return url;
   } catch (error) {
     console.error("Error uploading image", error);
     return null;

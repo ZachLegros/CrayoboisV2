@@ -65,7 +65,7 @@ export async function addNewProduct({
     const isAdmin = session?.user.user_metadata.role === "admin";
     if (!isAdmin) throw new Error("Not admin");
 
-    const data = await uploadImage(
+    const url = await uploadImage(
       image,
       "products",
       `${snakeCase(name)}_${v4()}.jpg`,
@@ -75,9 +75,7 @@ export async function addNewProduct({
         fit: "cover",
       },
     );
-    if (!data) throw new Error("Error uploading image");
-
-    const url = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/products/${data.path}`;
+    if (!url) throw new Error("Error uploading image");
 
     console.log("New product image url:", url);
 
