@@ -2,13 +2,16 @@
 
 import EditableField from "@/components/EditableField";
 import Field from "@/components/Field";
-import ImageWithLoading from "@/components/ImageWithLoading";
+import ImageInput from "@/components/ImageInput";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
 import { cad } from "@/lib/currencyFormatter";
 import { cn } from "@/lib/utils";
 import type { Material } from "@prisma/client";
+import snakeCase from "lodash.snakecase";
 import { useCallback, useEffect } from "react";
+import { v4 } from "uuid";
+import { uploadImage } from "../../actions";
 import useAdminStore from "../../store";
 import { getMaterials } from "../actions";
 
@@ -22,8 +25,17 @@ export default function MaterialDetails(props: { materialId: string }) {
   const errorToast = useCallback(
     () =>
       toast({
-        title: "Une erreur est survenue",
+        title: "Une erreur est survenue.",
         variant: "destructive",
+      }),
+    [toast],
+  );
+
+  const successToast = useCallback(
+    () =>
+      toast({
+        title: "Le matériau a été mis à jour avec succès.",
+        variant: "success",
       }),
     [toast],
   );
@@ -40,6 +52,31 @@ export default function MaterialDetails(props: { materialId: string }) {
       if (!success) {
         errorToast();
       }
+    },
+    [material, errorToast, updateMaterial],
+  );
+
+  const handleUpdateImage = useCallback(
+    async (image: string) => {
+      if (!material) {
+        errorToast();
+      }
+      // upload image
+      const url = await uploadImage(
+        image,
+        "inventory",
+        `materials/${snakeCase(material.name)}_${v4()}.jpg`,
+        { width: 500, height: 500, fit: "cover" },
+      );
+      if (!url) {
+        errorToast();
+        return;
+      }
+      const success = await updateMaterial(material.id, "image", url);
+      if (!success) {
+        errorToast();
+      }
+      successToast();
     },
     [material, errorToast, updateMaterial],
   );
@@ -61,12 +98,9 @@ export default function MaterialDetails(props: { materialId: string }) {
         </Field>
       </div>
       <div className="flex flex-col sm:flex-row gap-6">
-        <ImageWithLoading
-          src={material.image}
-          width={250}
-          height={250}
-          alt={material.name}
-          quality={100}
+        <ImageInput
+          defaultImage={material.image}
+          onChange={handleUpdateImage}
           className="rounded-lg w-full object-contain sm:w-[200px] sm:h-[200px] md:w-[250px] md:h-[250px]"
         />
         <div className="flex-auto">

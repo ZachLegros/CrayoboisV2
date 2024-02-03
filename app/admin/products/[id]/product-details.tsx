@@ -2,12 +2,15 @@
 
 import EditableField from "@/components/EditableField";
 import Field from "@/components/Field";
-import ImageWithLoading from "@/components/ImageWithLoading";
+import ImageInput from "@/components/ImageInput";
 import { useToast } from "@/components/ui/use-toast";
 import { cad } from "@/lib/currencyFormatter";
 import { cn } from "@/lib/utils";
 import type { Product } from "@prisma/client";
+import snakeCase from "lodash.snakecase";
 import { useCallback, useEffect } from "react";
+import { v4 } from "uuid";
+import { uploadImage } from "../../actions";
 import useAdminStore from "../../store";
 import { getProducts } from "../actions";
 
@@ -21,8 +24,17 @@ export default function ProductDetails(props: { productId: string }) {
   const errorToast = useCallback(
     () =>
       toast({
-        title: "Une erreur est survenue",
+        title: "Une erreur est survenue.",
         variant: "destructive",
+      }),
+    [toast],
+  );
+
+  const successToast = useCallback(
+    () =>
+      toast({
+        title: "Le produit a été mis à jour avec succès.",
+        variant: "success",
       }),
     [toast],
   );
@@ -39,6 +51,31 @@ export default function ProductDetails(props: { productId: string }) {
       if (!success) {
         errorToast();
       }
+    },
+    [product, errorToast, updateProduct],
+  );
+
+  const handleUpdateImage = useCallback(
+    async (image: string) => {
+      if (!product) {
+        errorToast();
+      }
+      // upload image
+      const url = await uploadImage(
+        image,
+        "products",
+        `${snakeCase(product.name)}_${v4()}.jpg`,
+        { width: 500, height: 500, fit: "cover" },
+      );
+      if (!url) {
+        errorToast();
+        return;
+      }
+      const success = await updateProduct(product.id, "image", url);
+      if (!success) {
+        errorToast();
+      }
+      successToast();
     },
     [product, errorToast, updateProduct],
   );
@@ -61,13 +98,10 @@ export default function ProductDetails(props: { productId: string }) {
       </div>
       <div className="flex flex-col sm:flex-row gap-6">
         <div className="sm:size-[200px] md:size-[250px]">
-          <ImageWithLoading
-            src={product.image}
-            width={250}
-            height={250}
-            alt={product.name}
-            quality={100}
-            className="rounded-lg w-full object-contain sm:max-w-[200px] md:max-w-[250px]"
+          <ImageInput
+            defaultImage={product.image}
+            onChange={handleUpdateImage}
+            className="rounded-lg w-full object-contain sm:w-[200px] sm:h-[200px] md:w-[250px] md:h-[250px]"
           />
         </div>
         <div className="flex-auto">
