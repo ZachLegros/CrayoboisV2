@@ -87,6 +87,7 @@
 @layer base {
   * {
     @apply border-border;
+    scrollbar-color: hsl(var(--input)) hsl(var(--background));
   }
 }
 
