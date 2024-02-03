@@ -104,7 +104,7 @@ export function MobileNavLinks(props: {
   };
 
   return (
-    <ul className={cn("text-lg font-medium pl-2 lg:pl-0", className)}>
+    <ul className={cn("text-lg font-medium min-h-max pl-2 lg:pl-0", className)}>
       <li>
         <ModeToggle className="mb-4 -ml-2" />
       </li>
@@ -159,6 +159,71 @@ export function MobileNavLinks(props: {
               Déconnexion
             </Link>
           </li>
+          {user.user_metadata.role === "admin" && (
+            <>
+              <span className="w-full border" />
+              <li className="text-xl font-semibold">Admin</li>
+              <span className="w-full border" />
+              <li>
+                <Link
+                  href={"/admin"}
+                  className={linkStyle}
+                  aria-current={pathname === "/admin" ? "page" : undefined}
+                  onClick={onNavLinkClick}
+                >
+                  Tableau de bord
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href={"/admin/orders"}
+                  className={linkStyle}
+                  aria-current={
+                    pathname.startsWith("/admin/orders") ? "page" : undefined
+                  }
+                  onClick={onNavLinkClick}
+                >
+                  Commandes
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href={"/admin/materials"}
+                  className={linkStyle}
+                  aria-current={
+                    pathname.startsWith("/admin/materials") ? "page" : undefined
+                  }
+                  onClick={onNavLinkClick}
+                >
+                  Matériaux
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href={"/admin/hardwares"}
+                  className={linkStyle}
+                  aria-current={
+                    pathname.startsWith("/admin/hardwares") ? "page" : undefined
+                  }
+                  onClick={onNavLinkClick}
+                >
+                  Matériels
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href={"/admin/products"}
+                  className={linkStyle}
+                  aria-current={
+                    pathname.startsWith("/admin/products") ? "page" : undefined
+                  }
+                  onClick={onNavLinkClick}
+                >
+                  Produits
+                </Link>
+              </li>
+            </>
+          )}
         </>
       ) : (
         <li className="flex items-center">
@@ -179,7 +244,7 @@ export function MobileMenu(props: {
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
-      <SheetContent>
+      <SheetContent className="overflow-y-auto">
         <MobileNavLinks
           items={items}
           className="flex flex-col lg:hidden space-y-2 mt-12"
