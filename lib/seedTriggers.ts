@@ -1,6 +1,6 @@
 import postgres from "postgres";
 
-const dbUrl = process.env.DIRECT_URL;
+const dbUrl = process.env.DATABASE_URL;
 
 if (!dbUrl) {
   throw new Error("Couldn't find db url");
@@ -44,6 +44,14 @@ async function deleteUserTriggers() {
     create or replace trigger on_profile_user_deleted
       after delete on public.profile
       for each row execute procedure public.handle_user_delete()
+  `;
+}
+
+async function getUserRoleFunction() {
+  await sql`
+    create or replace function auth.user_role() returns text as $$
+      select nullif(current_setting('request.jwt.claim.raw_user_meta_data.role', true), '')::text;
+    $$ language sql stable;
   `;
 }
 
@@ -184,6 +192,7 @@ async function preventDeleteCompletedCheckoutSessions() {
 async function main() {
   await createUserTriggers();
   await deleteUserTriggers();
+  await getUserRoleFunction();
   await productAvailabilityTriggers();
   await productQuantityTriggers();
   await productDeleteTriggers();
