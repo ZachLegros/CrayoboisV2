@@ -70,7 +70,7 @@ export async function addNewProduct({
     // resize image
     const jpg = await sharp(binaryImage)
       .resize({ width: 1024, height: 1024, fit: "cover" })
-      .jpeg({ quality: 100 })
+      .jpeg({ quality: 75 })
       .toBuffer();
 
     // create client with service role
