@@ -75,13 +75,13 @@ export function getNetAmount(order: ClientOrder) {
   return order.amount - order.tax - order.shipping;
 }
 
-export async function getBase64(file: File): Promise<string | ArrayBuffer | null> {
+export async function getBase64(file: Blob): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
-      resolve((reader.result as string).split(";base64,").pop() as string);
+      resolve(reader.result as string);
     };
-    reader.onerror = reject;
+    reader.onerror = () => reject("");
   });
 }
