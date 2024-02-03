@@ -1,9 +1,8 @@
 "use client";
 
 import { Input, type InputProps } from "@/components/ui/input";
-import { cn, getBase64 } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { Cross1Icon } from "@radix-ui/react-icons";
-import reduce from "image-blob-reduce";
 import { useCallback, useState } from "react";
 import { FaFileImage } from "react-icons/fa";
 import ImageWithLoading from "./ImageWithLoading";
@@ -30,13 +29,19 @@ export default function ImageInput(
 
   const handleFileChange = useCallback(
     async (event: React.ChangeEvent<HTMLInputElement>) => {
-      if (reduce && event.target.files) {
-        const resizedImage = await reduce().toBlob(event.target.files[0], {
-          max: 1024,
-        });
-        const b64 = await getBase64(resizedImage);
-        setImage(b64);
-        props.onChange?.(b64);
+      if (event.target.files) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const dataURI = reader.result;
+          const img = new Image();
+          img.onload = async () => {
+            const resizedImageURI = resizeImage(img, 400);
+            props.onChange?.(resizedImageURI);
+            setImage(resizedImageURI);
+          };
+          img.src = dataURI as string;
+        };
+        reader.readAsDataURL(event.target.files[0]);
       }
     },
     [],
@@ -86,4 +91,17 @@ export default function ImageInput(
       )}
     </div>
   );
+}
+
+function resizeImage(imgEl: HTMLImageElement, width: number) {
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+
+  const aspect = imgEl.width / imgEl.height;
+
+  canvas.width = width;
+  canvas.height = width / aspect;
+
+  ctx.drawImage(imgEl, 0, 0, canvas.width, canvas.height);
+  return canvas.toDataURL();
 }
