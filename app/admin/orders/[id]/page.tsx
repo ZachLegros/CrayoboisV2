@@ -18,9 +18,9 @@ export default async function Order({ params }: { params: { id: string } }) {
   if (!order) return null;
 
   return (
-    <div className="flex flex-col gap-3 md:p-3 md:border rounded-xl">
+    <>
       <OrderHeader order={order} />
       <OrderBreakdown order={order} />
-    </div>
+    </>
   );
 }
