@@ -12,7 +12,7 @@ export default async function AdminPage() {
   ).sort((a, b) => a.order_no - b.order_no);
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col flex-auto gap-3">
       <Metrics orders={orders} />
       <NetRevenueChart orders={orders} />
     </div>

@@ -10,14 +10,16 @@ export default async function AdminMaterials() {
   const hardwares = await prisma.hardware.findMany();
 
   return (
-    <div className="flex flex-col md:p-3 md:border rounded-xl gap-3">
+    <div className="flex flex-col flex-auto max-w-full gap-3">
       <CreateHardware>
         <Button className="ml-auto">
           Ajouter du matériel
           <FaPlus className="ml-1" />
         </Button>
       </CreateHardware>
-      <HardwaresTable hardwares={hardwares} />
+      <div className="flex-auto h-0 overflow-auto">
+        <HardwaresTable hardwares={hardwares} />
+      </div>
     </div>
   );
 }

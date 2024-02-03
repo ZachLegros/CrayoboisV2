@@ -113,7 +113,7 @@ export default function NetRevenueChart(props: { orders: ClientOrder[] }) {
   }, [orders]);
 
   return (
-    <Card className="p-3 w-full shadow-none">
+    <Card className="flex flex-col h-0 flex-auto p-3 shadow-none">
       <div className="flex gap-4 flex-wrap">
         <Stat
           name="Revenu net"
@@ -123,8 +123,8 @@ export default function NetRevenueChart(props: { orders: ClientOrder[] }) {
         <Stat name="TPS" value={cad(tps)} />
         <Stat name="Livraison" value={cad(shipping)} />
       </div>
-      <div className="h-[425px] w-full">
-        <Chart options={options} series={series} type="area" height={425} />
+      <div className="flex-auto">
+        <Chart options={options} series={series} type="area" height="100%" />
       </div>
     </Card>
   );

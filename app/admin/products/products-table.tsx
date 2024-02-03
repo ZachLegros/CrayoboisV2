@@ -78,7 +78,7 @@ export default function ProductsTable(props: { products: Product[] }) {
           <TableCell
             className={cn(
               "text-right font-semibold",
-              props.getValue() > 0 ? "text-green-500" : "text-red-500",
+              props.getValue() > 0 ? "text-foreground" : "text-red-500",
             )}
           >
             {props.getValue()}

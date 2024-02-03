@@ -27,8 +27,11 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo } from "react";
 import useAdminStore from "../store";
 
-export default function MaterialsTable(props: { materials: Material[] }) {
-  const { materials: materialsFromDb } = props;
+export default function MaterialsTable(props: {
+  materials: Material[];
+  className?: string;
+}) {
+  const { materials: materialsFromDb, className } = props;
   const { materials, setMaterials, updateMaterial } = useAdminStore();
   const { toast } = useToast();
   const router = useRouter();
@@ -84,7 +87,7 @@ export default function MaterialsTable(props: { materials: Material[] }) {
           <TableCell
             className={cn(
               "text-right font-semibold",
-              props.getValue() > 0 ? "text-green-500" : "text-red-500",
+              props.getValue() > 0 ? "text-foreground" : "text-red-500",
             )}
           >
             {props.getValue()}
@@ -150,7 +153,7 @@ export default function MaterialsTable(props: { materials: Material[] }) {
   });
 
   return (
-    <Table>
+    <Table className={className}>
       <TableHeader>
         {table.getHeaderGroups().map((headerGroup) => (
           <TableRow key={headerGroup.id}>

@@ -1,46 +1,67 @@
 "use client";
 
 import { Input, type InputProps } from "@/components/ui/input";
+import { cn, getBase64 } from "@/lib/utils";
 import { Cross1Icon } from "@radix-ui/react-icons";
-import Image from "next/image";
-import { useState } from "react";
+import reduce from "image-blob-reduce";
+import { useCallback, useState } from "react";
 import { FaFileImage } from "react-icons/fa";
+import ImageWithLoading from "./ImageWithLoading";
 import { AspectRatio } from "./ui/aspect-ratio";
 import { Button } from "./ui/button";
 
 export default function ImageInput(
-  props: InputProps & { onClear?: () => void; aspectRatio?: number },
+  props: Omit<InputProps, "onChange"> & {
+    defaultImage?: string;
+    onChange?: (b64Image: string) => void;
+    onClear?: () => void;
+    aspectRatio?: number;
+    className?: string;
+  },
 ) {
-  const { onClear, aspectRatio = 1, ...otherProps } = props;
-  const [file, setFile] = useState<File | null>(null);
+  const {
+    onClear,
+    aspectRatio = 1,
+    defaultImage = null,
+    className,
+    ...otherProps
+  } = props;
+  const [image, setImage] = useState<string | null>(defaultImage);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files) {
-      setFile(event.target.files[0]);
-    }
-    props.onChange?.(event);
-  };
+  const handleFileChange = useCallback(
+    async (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (reduce && event.target.files) {
+        const resizedImage = await reduce().toBlob(event.target.files[0], {
+          max: 1024,
+        });
+        const b64 = await getBase64(resizedImage);
+        setImage(b64);
+        props.onChange?.(b64);
+      }
+    },
+    [],
+  );
 
   return (
-    <div className="flex">
-      {file ? (
+    <div className={cn("flex", className)}>
+      {image ? (
         <AspectRatio ratio={aspectRatio} className="relative">
           <Button
             size="icon"
             variant="secondary"
             className="absolute size-6 right-0 m-1 z-10 opacity-80"
             onClick={() => {
-              setFile(null);
+              setImage(null);
               onClear?.();
             }}
           >
             <Cross1Icon className="size-3" />
           </Button>
-          <Image
-            src={URL.createObjectURL(file)}
+          <ImageWithLoading
+            src={image}
             width={200}
             height={200}
-            alt="product image"
+            alt="Image from input"
             className="object-cover w-full h-full rounded-md"
           />
         </AspectRatio>

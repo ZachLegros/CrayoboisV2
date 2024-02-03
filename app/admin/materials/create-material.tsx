@@ -13,7 +13,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
-import { getBase64 } from "@/lib/utils";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import useAdminStore from "../store";
@@ -87,11 +86,8 @@ export default function CreateMaterial(props: { children: React.ReactNode }) {
                     <ImageInput
                       {...field}
                       onClear={() => resetField("image")}
-                      onChange={async (event) => {
-                        if (!event.target.files) return;
-                        const b64 = await getBase64(event.target.files[0]);
-                        if (typeof b64 === "string")
-                          setValue("image", b64, { shouldValidate: true });
+                      onChange={(image) => {
+                        setValue("image", image, { shouldValidate: true });
                       }}
                     />
                   )}
