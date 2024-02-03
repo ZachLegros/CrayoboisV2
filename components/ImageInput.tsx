@@ -1,24 +1,32 @@
 "use client";
 
 import { Input, type InputProps } from "@/components/ui/input";
-import { getBase64 } from "@/lib/utils";
+import { cn, getBase64 } from "@/lib/utils";
 import { Cross1Icon } from "@radix-ui/react-icons";
 import reduce from "image-blob-reduce";
-import Image from "next/image";
 import { useCallback, useState } from "react";
 import { FaFileImage } from "react-icons/fa";
+import ImageWithLoading from "./ImageWithLoading";
 import { AspectRatio } from "./ui/aspect-ratio";
 import { Button } from "./ui/button";
 
 export default function ImageInput(
   props: Omit<InputProps, "onChange"> & {
+    defaultImage?: string;
     onChange?: (b64Image: string) => void;
     onClear?: () => void;
     aspectRatio?: number;
+    className?: string;
   },
 ) {
-  const { onClear, aspectRatio = 1, ...otherProps } = props;
-  const [image, setImage] = useState<string | null>(null);
+  const {
+    onClear,
+    aspectRatio = 1,
+    defaultImage = null,
+    className,
+    ...otherProps
+  } = props;
+  const [image, setImage] = useState<string | null>(defaultImage);
 
   const handleFileChange = useCallback(
     async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,7 +43,7 @@ export default function ImageInput(
   );
 
   return (
-    <div className="flex">
+    <div className={cn("flex", className)}>
       {image ? (
         <AspectRatio ratio={aspectRatio} className="relative">
           <Button
@@ -49,11 +57,11 @@ export default function ImageInput(
           >
             <Cross1Icon className="size-3" />
           </Button>
-          <Image
+          <ImageWithLoading
             src={image}
             width={200}
             height={200}
-            alt="product image"
+            alt="Image from input"
             className="object-cover w-full h-full rounded-md"
           />
         </AspectRatio>
