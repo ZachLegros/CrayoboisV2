@@ -86,7 +86,7 @@ export default async function OrdersPage() {
 
   if (orders === null)
     return (
-      <div className="animate-in flex flex-col justify-center items-center gap-3">
+      <div className="animate-in flex flex-auto gap-3">
         <h3 className="text-xl font-semibold text-center">
           Chargement de vos commandes
         </h3>
