@@ -7,6 +7,7 @@ import type { Material } from "@prisma/client";
 import snakeCase from "lodash.snakecase";
 import { cookies } from "next/headers";
 import sharp from "sharp";
+import { v4 } from "uuid";
 
 export async function getMaterials(): Promise<Material[]> {
   const cookieStore = cookies();
@@ -79,7 +80,7 @@ export async function addNewMaterial({
     // upload image to supabase
     const { data, error } = await supabase.storage
       .from("inventory")
-      .upload(`materials/${snakeCase(name)}.jpg`, jpg, {
+      .upload(`materials/${snakeCase(name)}_${v4()}.jpg`, jpg, {
         upsert: true,
         contentType: "image/jpg",
       });
