@@ -2,12 +2,11 @@
 
 import prisma from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
-import { createNoCookiesClient } from "@/lib/supabase/serverNoCookies";
 import type { Product } from "@prisma/client";
 import snakeCase from "lodash.snakecase";
 import { cookies } from "next/headers";
-import sharp from "sharp";
 import { v4 } from "uuid";
+import { uploadImage } from "../actions";
 
 export async function getProducts(): Promise<Product[]> {
   const cookieStore = cookies();
@@ -58,7 +57,7 @@ export async function addNewProduct({
 }) {
   try {
     const cookieStore = cookies();
-    let supabase = createClient(cookieStore);
+    const supabase = createClient(cookieStore);
 
     const {
       data: { session },
@@ -66,26 +65,17 @@ export async function addNewProduct({
     const isAdmin = session?.user.user_metadata.role === "admin";
     if (!isAdmin) throw new Error("Not admin");
 
-    const binaryImage = Buffer.from(image, "base64");
-    // resize image
-    const jpg = await sharp(binaryImage)
-      .resize({ width: 1024, height: 1024, fit: "cover" })
-      .jpeg({ quality: 75 })
-      .toBuffer();
-
-    // create client with service role
-    supabase = createNoCookiesClient();
-    // upload image to supabase
-    const { data, error } = await supabase.storage
-      .from("products")
-      .upload(`${snakeCase(name)}_${v4()}.jpg`, jpg, {
-        upsert: true,
-        contentType: "image/jpg",
-      });
-
-    if (error) {
-      throw error;
-    }
+    const data = await uploadImage(
+      image,
+      "products",
+      `${snakeCase(name)}_${v4()}.jpg`,
+      {
+        width: 1024,
+        height: 1024,
+        fit: "cover",
+      },
+    );
+    if (!data) throw new Error("Error uploading image");
 
     const url = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/products/${data.path}`;
 
