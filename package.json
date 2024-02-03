@@ -10,7 +10,7 @@
     "migrate": "dotenv -e .env.development.local -- prisma migrate dev && bun seed-triggers",
     "seed": "bun --env-file=.env.development.local data/seed.ts",
     "seed-triggers": "bun --env-file=.env.development.local lib/seedTriggers.ts",
-    "migrate:prod": "dotenv -e .env.production.local -- prisma migrate deploy && bun seed-triggers-prod",
+    "migrate:prod": "dotenv -e .env.production.local -- prisma migrate deploy && bun seed-triggers:prod",
     "seed:prod": "bun --env-file=.env.production.local data/seed.ts",
     "seed-triggers:prod": "bun --env-file=.env.production.local lib/seedTriggers.ts",
     "studio": "dotenv -e .env.development.local -- prisma studio",
