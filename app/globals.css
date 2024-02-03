@@ -87,6 +87,7 @@
 @layer base {
   * {
     @apply border-border;
+    min-width: 0;
   }
 }
 
