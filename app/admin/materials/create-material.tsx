@@ -12,10 +12,12 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useToast } from "@/components/ui/use-toast";
 import { getBase64 } from "@/lib/utils";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { addNewMaterial } from "./actions";
+import useAdminStore from "../store";
+import { addNewMaterial, getMaterials } from "./actions";
 
 type FormValues = {
   name: string;
@@ -28,6 +30,8 @@ type FormValues = {
 
 export default function CreateMaterial(props: { children: React.ReactNode }) {
   const { children } = props;
+  const { toast } = useToast();
+  const { setMaterials } = useAdminStore();
   const { reset, resetField, setValue, control, handleSubmit, formState } =
     useForm<FormValues>({
       defaultValues: {
@@ -49,9 +53,17 @@ export default function CreateMaterial(props: { children: React.ReactNode }) {
       if (success) {
         setOpen(false);
         reset();
+        getMaterials().then((materials) => setMaterials(materials));
+        toast({ title: "Matériau ajouté avec succès.", variant: "success" });
+      } else {
+        throw new Error("Failed to add material");
       }
     } catch (error) {
       console.error(error);
+      toast({
+        title: "Erreur lors de l'ajout du matériau.",
+        variant: "destructive",
+      });
     }
     setLoading(false);
   });
@@ -122,18 +134,36 @@ export default function CreateMaterial(props: { children: React.ReactNode }) {
                 <Controller
                   name="price"
                   control={control}
-                  rules={{ required: true }}
+                  rules={{
+                    required: true,
+                    validate: (value) => value >= 0,
+                    onChange: (e) => {
+                      setValue("price", parseFloat(e.target.value));
+                    },
+                  }}
                   render={({ field }) => (
                     <div>
                       <Label htmlFor="price">Prix</Label>
-                      <Input {...field} type="number" placeholder="Prix" min={0} />
+                      <Input
+                        {...field}
+                        type="number"
+                        placeholder="Prix"
+                        min={0}
+                        step={0.01}
+                      />
                     </div>
                   )}
                 />
                 <Controller
                   name="quantity"
                   control={control}
-                  rules={{ required: true }}
+                  rules={{
+                    required: true,
+                    validate: (value) => value >= 0,
+                    onChange: (e) => {
+                      setValue("quantity", parseInt(e.target.value));
+                    },
+                  }}
                   render={({ field }) => (
                     <div>
                       <Label htmlFor="quantity">Quantité</Label>
@@ -142,6 +172,7 @@ export default function CreateMaterial(props: { children: React.ReactNode }) {
                         type="number"
                         placeholder="Quantité"
                         min={0}
+                        step={1}
                       />
                     </div>
                   )}
