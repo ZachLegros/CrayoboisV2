@@ -17,12 +17,7 @@ export default function SidePanel(props: { className?: string }) {
   const pathname = usePathname();
 
   return (
-    <div
-      className={cn(
-        "h-max sticky top-0 -mt-[calc(4rem+1.5rem+1px)] pt-[calc(4rem+1.5rem+1px)]",
-        className,
-      )}
-    >
+    <div className={cn("p-3", className)}>
       <ul className="flex flex-col w-full gap-1">
         {routes.map((route) => (
           <li
