@@ -93,7 +93,7 @@ export default function MaterialDetails(props: { materialId: string }) {
               type="number"
               className={cn(
                 "font-semibold",
-                material.quantity > 0 ? "text-green-500" : "text-red-500",
+                material.quantity > 0 ? "text-foreground" : "text-red-500",
               )}
             />
           </Field>

@@ -87,7 +87,7 @@ export default function ProductDetails(props: { productId: string }) {
               type="number"
               className={cn(
                 "font-semibold",
-                product.quantity > 0 ? "text-green-500" : "text-red-500",
+                product.quantity > 0 ? "text-foreground" : "text-red-500",
               )}
             />
           </Field>

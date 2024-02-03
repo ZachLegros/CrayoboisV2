@@ -93,7 +93,7 @@ export default function HardwareDetails(props: { hardwareId: string }) {
               type="number"
               className={cn(
                 "font-semibold",
-                hardware.quantity > 0 ? "text-green-500" : "text-red-500",
+                hardware.quantity > 0 ? "text-foreground" : "text-red-500",
               )}
             />
           </Field>
