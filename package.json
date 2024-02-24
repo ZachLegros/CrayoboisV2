@@ -50,7 +50,7 @@
     "embla-carousel-autoplay": "^8.0.0-rc19",
     "embla-carousel-react": "^8.0.0-rc19",
     "lodash.snakecase": "^4.1.1",
-    "next": "latest",
+    "next": "^14.1.0",
     "next-themes": "^0.2.1",
     "nextjs-toploader": "^1.6.4",
     "postcss": "^8.4.32",

@@ -104,13 +104,10 @@ async function createOrder(event: Stripe.CheckoutSessionCompletedEvent) {
     });
     if (profile[0]) profileId = profile[0].id;
 
-    const eventAmount = orZero(event.data.object.amount_total) / 100;
-    const totalTax = orZero(getTps(eventAmount)) + orZero(getTvq(eventAmount));
     const totalShipping = orZero(shipping?.price);
-    const totalAmount = orZero(eventAmount) - totalShipping - totalTax;
 
     const [products, customProducts]: [
-      Partial<OrderProduct>[],
+      Omit<OrderProduct, "quantity">[],
       CustomProductWithOrderComponents[],
     ] = await Promise.all([
       prisma.product.findMany({
@@ -152,12 +149,24 @@ async function createOrder(event: Stripe.CheckoutSessionCompletedEvent) {
         },
       }),
     ]);
+    const cartProducts = products as OrderProduct[];
     // map item quantity to products
-    for (const product of products) {
+    for (const product of cartProducts) {
       const item = items?.find((item) => item.productId === product.id);
       if (item) product.quantity = item.quantity;
       else product.quantity = 1;
     }
+
+    // calculate amount from products and custom products
+    const amount = cartProducts.reduce(
+      (acc, product) => acc + product.price * product.quantity,
+      0,
+    );
+    const customAmount = customProducts.reduce(
+      (acc, product) => acc + product.price * product.quantity,
+      0,
+    );
+    const totalTax = getTps(amount + customAmount) + getTvq(amount + customAmount);
 
     const order = await prisma.clientOrder.create({
       data: {
@@ -171,7 +180,7 @@ async function createOrder(event: Stripe.CheckoutSessionCompletedEvent) {
         address_zip: postal_code,
         address_state: state,
         shipping: totalShipping,
-        amount: totalAmount,
+        amount: amount + customAmount + totalShipping + totalTax,
         tax: totalTax,
         user_id: profileId,
       },
