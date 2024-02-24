@@ -104,10 +104,11 @@ async function createOrder(event: Stripe.CheckoutSessionCompletedEvent) {
     });
     if (profile[0]) profileId = profile[0].id;
 
-    const eventAmount = orZero(event.data.object.amount_total) / 100;
-    const totalTax = orZero(getTps(eventAmount)) + orZero(getTvq(eventAmount));
+    const total = orZero(event.data.object.amount_subtotal) / 100;
     const totalShipping = orZero(shipping?.price);
-    const totalAmount = orZero(eventAmount) - totalShipping - totalTax;
+    const amount = total - totalShipping;
+    const totalTax = orZero(getTps(amount)) + orZero(getTvq(amount));
+    console.log(total, totalTax, totalShipping, amount);
 
     const [products, customProducts]: [
       Partial<OrderProduct>[],
@@ -171,7 +172,7 @@ async function createOrder(event: Stripe.CheckoutSessionCompletedEvent) {
         address_zip: postal_code,
         address_state: state,
         shipping: totalShipping,
-        amount: totalAmount,
+        amount,
         tax: totalTax,
         user_id: profileId,
       },
