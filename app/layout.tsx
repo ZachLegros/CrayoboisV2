@@ -1,4 +1,4 @@
-// import NavBar from "@/components/NavBar";
+import NavBar from "@/components/NavBar";
 import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
 import { Analytics } from "@vercel/analytics/react";
@@ -62,14 +62,14 @@ export default function RootLayout({
           )}
           suppressHydrationWarning={true}
         >
-          {/* <NavBar /> */}
+          <NavBar />
           <main className="flex flex-col min-h-[calc(100vh-72px)] max-w-screen-xl mx-auto px-3 md:px-4 lg:px-6">
             <div className="flex flex-col flex-auto py-3 md:py-6">{children}</div>
-            {/* <footer className="w-full border-t p-8 mt-auto">
+            <footer className="w-full border-t p-8 mt-auto">
               <p className="text-center text-xs">
                 © {new Date().getFullYear()} Crayobois
               </p>
-            </footer> */}
+            </footer>
           </main>
           <Toaster />
           {process.env.VERCEL_ENV === "production" && <Analytics />}
