@@ -5,10 +5,11 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
+import useUserStore from "../../user-store";
 import useUserOrdersStore from "../orders/store";
-import useUserStore from "../user-store";
 import { sendOtp, verifyOtp } from "./actions";
 
 const validateEmail = (email: string) => {
@@ -31,6 +32,7 @@ export default function LoginPage() {
   const router = useRouter();
   const { getCurrentUser } = useUserStore();
   const { setOrders } = useUserOrdersStore();
+  const t = useTranslations("login");
   const [isLoading, setIsLoading] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
@@ -69,7 +71,7 @@ export default function LoginPage() {
     <Card className="animate-in p-5 dark:bg-background border w-[400px]  h-[400px] flex justify-center items-center">
       {isRedirecting ? (
         <div className="animate-in flex flex-col justify-center items-center gap-3">
-          <h3 className="text-xl font-semibold text-center">Redirection en cours</h3>
+          <h3 className="text-xl font-semibold text-center">{t("redirecting")}</h3>
           <Spinner className="text-primary size-10" />
         </div>
       ) : (
@@ -85,20 +87,17 @@ export default function LoginPage() {
             <>
               <div>
                 <h3 className="font-semibold text-2xl text-center mb-3">
-                  Connexion
+                  {t("title")}
                 </h3>
-                <p>
-                  Connectez-vous à Crayobois pour suivre une commande ou consulter
-                  l'historique de toutes vos commandes.
-                </p>
+                <p>{t("description")}</p>
               </div>
               <div className="grid w-full max-w-sm items-center gap-1.5">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t("emailLabel")}</Label>
                 <Input
                   type="email"
                   name="email"
                   id="email"
-                  placeholder="vous@example.com"
+                  placeholder={t("emailPlaceholder")}
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -109,14 +108,14 @@ export default function LoginPage() {
           ) : (
             <>
               <p className="font-semibold text-lg text-center">
-                Un code à 6 chiffres a été envoyé à {email}
+                {t("otpSent", { email })}
               </p>
               <div className="grid w-full max-w-sm items-center gap-1.5">
-                <Label htmlFor="email">Code à 6 chiffres</Label>
+                <Label htmlFor="email">{t("otpLabel")}</Label>
                 <Input
                   id="otp"
                   type="text"
-                  placeholder="******"
+                  placeholder={t("otpPlaceholder")}
                   inputMode="decimal"
                   pattern="\d*"
                   maxLength={6}
@@ -134,7 +133,7 @@ export default function LoginPage() {
               className="w-full font-medium"
               type="submit"
             >
-              {!otpSent ? "Connexion" : "Vérifier le code"}
+              {!otpSent ? t("loginButton") : t("verifyButton")}
             </Button>
             {error && (
               <div className="text-sm text-center">

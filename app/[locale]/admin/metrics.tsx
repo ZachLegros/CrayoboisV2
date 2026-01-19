@@ -3,6 +3,7 @@
 import { cad, cadPrecision } from "@/lib/currencyFormatter";
 import { dayjs } from "@/lib/utils";
 import type { ClientOrder } from "@prisma/client";
+import { useTranslations } from "next-intl";
 import { useEffect, useMemo } from "react";
 import Metric from "./metric";
 import useAdminStore from "./store";
@@ -10,6 +11,7 @@ import useAdminStore from "./store";
 export default function Metrics(props: { orders: ClientOrder[] }) {
   const { orders } = props;
   const { setOrders } = useAdminStore();
+  const t = useTranslations("admin");
 
   const metrics = useMemo(() => {
     const x = orders.map((order) => dayjs(order.created_at).valueOf());
@@ -37,22 +39,22 @@ export default function Metrics(props: { orders: ClientOrder[] }) {
 
     return {
       revenue: {
-        name: "Revenu brut",
+        name: t("grossRevenue"),
         data: x.map((x, i) => ({ x, y: revenueY[i] })),
         currentValue: `${cad(revenueY[revenueY.length - 1])}`,
       },
       ordersAmount: {
-        name: "Commandes",
+        name: t("orders"),
         data: x.map((x, i) => ({ x, y: ordersAmountY[i] })),
         currentValue: `${orders.length}`,
       },
       clients: {
-        name: "Clients",
+        name: t("clients"),
         data: x.map((x, i) => ({ x, y: clientsY[i] })),
         currentValue: `${clientsY[clientsY.length - 1]}`,
       },
     };
-  }, [orders]);
+  }, [orders, t]);
 
   useEffect(() => {
     setOrders(orders);
