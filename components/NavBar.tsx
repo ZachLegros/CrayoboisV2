@@ -1,37 +1,39 @@
 "use client";
 
-import { useCartStore } from "@/app/cart/store";
+import { useCartStore } from "@/app/[locale]/cart/store";
 import useUserStore from "@/app/user-store";
+import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Suspense, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import AuthButton from "./AuthButton";
 import CartButton from "./CartButton";
+import { LanguageToggle } from "./LanguageToggle";
 import Logo from "./Logo";
 import { ModeToggle } from "./ModeToggle";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Sheet, SheetContent } from "./ui/sheet";
 
-const items = [
-  {
-    title: "Produits",
-    link: "/products",
-  },
-  {
-    title: "Commander sur mesure",
-    link: "/custom-order",
-  },
-  {
-    title: "Contact",
-    link: "/contact",
-  },
-];
-
 export default function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const t = useTranslations("nav");
+
+  const items = [
+    {
+      title: t("products"),
+      link: "/products",
+    },
+    {
+      title: t("customOrder"),
+      link: "/custom-order",
+    },
+    {
+      title: t("contact"),
+      link: "/contact",
+    },
+  ];
 
   return (
     <header className="flex items-center sticky top-0 w-full h-16 z-50 border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/90">
@@ -42,6 +44,7 @@ export default function NavBar() {
         </div>
         <div className="hidden lg:flex gap-2 items-center">
           <CartButton />
+          <LanguageToggle />
           <ModeToggle />
           <Suspense>
             <AuthButton />
@@ -94,6 +97,7 @@ export function MobileNavLinks(props: {
   const { items, className, onNavLinkClick } = props;
   const { cart, cartState } = useCartStore();
   const { user, signOut } = useUserStore();
+  const t = useTranslations("nav");
 
   const linkStyle =
     "transition-colors text-foreground/70 hover:text-foreground aria-[current]:font-sem aria-[current]:text-foreground";
@@ -105,8 +109,9 @@ export function MobileNavLinks(props: {
 
   return (
     <ul className={cn("text-lg font-medium min-h-max pl-2 lg:pl-0", className)}>
-      <li>
-        <ModeToggle className="mb-4 -ml-2" />
+      <li className="flex gap-2 mb-4 -ml-2">
+        <LanguageToggle />
+        <ModeToggle />
       </li>
       {items.map((item) => {
         return (
@@ -129,7 +134,7 @@ export function MobileNavLinks(props: {
           aria-current={pathname.startsWith("/cart") ? "page" : undefined}
           onClick={onNavLinkClick}
         >
-          Mon panier
+          {t("myCart")}
         </Link>
         {cartState.items.length > 0 && (
           <Badge className="ml-2">{cartState.items.length}</Badge>
@@ -144,7 +149,7 @@ export function MobileNavLinks(props: {
               aria-current={pathname.startsWith("/orders") ? "page" : undefined}
               onClick={onNavLinkClick}
             >
-              Mes commandes
+              {t("myOrders")}
             </Link>
           </li>
           <li className="flex items-center">
@@ -156,13 +161,13 @@ export function MobileNavLinks(props: {
                 onNavLinkClick?.();
               }}
             >
-              Déconnexion
+              {t("logout")}
             </Link>
           </li>
           {user.user_metadata.role === "admin" && (
             <>
               <span className="w-full border" />
-              <li className="text-xl font-semibold">Admin</li>
+              <li className="text-xl font-semibold">{t("admin")}</li>
               <span className="w-full border" />
               <li>
                 <Link
@@ -171,7 +176,7 @@ export function MobileNavLinks(props: {
                   aria-current={pathname === "/admin" ? "page" : undefined}
                   onClick={onNavLinkClick}
                 >
-                  Tableau de bord
+                  {t("dashboard")}
                 </Link>
               </li>
               <li>
@@ -183,7 +188,7 @@ export function MobileNavLinks(props: {
                   }
                   onClick={onNavLinkClick}
                 >
-                  Commandes
+                  {t("orders")}
                 </Link>
               </li>
               <li>
@@ -195,7 +200,7 @@ export function MobileNavLinks(props: {
                   }
                   onClick={onNavLinkClick}
                 >
-                  Matériaux
+                  {t("materials")}
                 </Link>
               </li>
               <li>
@@ -207,7 +212,7 @@ export function MobileNavLinks(props: {
                   }
                   onClick={onNavLinkClick}
                 >
-                  Matériels
+                  {t("hardwares")}
                 </Link>
               </li>
               <li>
@@ -219,7 +224,7 @@ export function MobileNavLinks(props: {
                   }
                   onClick={onNavLinkClick}
                 >
-                  Produits
+                  {t("adminProducts")}
                 </Link>
               </li>
             </>
@@ -228,7 +233,7 @@ export function MobileNavLinks(props: {
       ) : (
         <li className="flex items-center">
           <Link href={"/login"} className={linkStyle} onClick={onNavLinkClick}>
-            Connexion
+            {t("login")}
           </Link>
         </li>
       )}
@@ -241,6 +246,22 @@ export function MobileMenu(props: {
   onOpenChange: (isOpen: boolean) => void;
 }) {
   const { isOpen, onOpenChange } = props;
+  const t = useTranslations("nav");
+
+  const items = [
+    {
+      title: t("products"),
+      link: "/products",
+    },
+    {
+      title: t("customOrder"),
+      link: "/custom-order",
+    },
+    {
+      title: t("contact"),
+      link: "/contact",
+    },
+  ];
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>

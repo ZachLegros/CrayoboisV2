@@ -1,10 +1,11 @@
 "use client";
 
-import { useCartStore } from "@/app/cart/store";
+import { useCartStore } from "@/app/[locale]/cart/store";
 import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "@/i18n/navigation";
 import { cad } from "@/lib/currencyFormatter";
 import type { Product } from "@prisma/client";
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { FaExpandAlt } from "react-icons/fa";
 import ImageWithLoading from "./ImageWithLoading";
@@ -27,6 +28,7 @@ export default function ProductCard(props: {
   const router = useRouter();
   const { toast } = useToast();
   const { cart } = useCartStore();
+  const t = useTranslations("products");
   const [isInCart, setIsInCart] = useState(cart.has(product.id));
   const [isOpen, setIsOpen] = useState(false);
 
@@ -34,10 +36,10 @@ export default function ProductCard(props: {
     cart.addItem(product);
     setIsInCart(true);
     toast({
-      title: `"${product.name}" a été ajouté à votre panier.`,
+      title: t("addedToCart", { name: product.name }),
       action: (
-        <ToastAction altText="Aller au panier" onClick={() => router.push("/cart")}>
-          Aller au panier
+        <ToastAction altText={t("goToCart")} onClick={() => router.push("/cart")}>
+          {t("goToCart")}
         </ToastAction>
       ),
     });
@@ -70,7 +72,7 @@ export default function ProductCard(props: {
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent className="bg-foreground text-background">
-                  Agrandir
+                  {t("enlarge")}
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -83,11 +85,11 @@ export default function ProductCard(props: {
           </div>
           {!isInCart ? (
             <Button color="primary" className="mt-auto" onClick={handleaddItem}>
-              Ajouter au Panier
+              {t("addToCart")}
             </Button>
           ) : (
             <Button variant="outline" className="mt-auto" disabled>
-              Dans le Panier
+              {t("inCart")}
             </Button>
           )}
         </div>
