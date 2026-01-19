@@ -1,4 +1,4 @@
-import { ItemImages } from "@/app/cart/cart-item";
+import { ItemImages } from "@/app/[locale]/cart/cart-item";
 import { cad } from "@/lib/currencyFormatter";
 import type { DbProduct } from "@/lib/productUtils";
 import { dayjs, getNetAmount, getTps, getTvq, orderStatus } from "@/lib/utils";

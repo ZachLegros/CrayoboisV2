@@ -1,5 +1,6 @@
 "use client";
 
+import useUserStore from "@/app/user-store";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
@@ -13,7 +14,6 @@ import { useEffect, useState } from "react";
 import { FaExclamationCircle } from "react-icons/fa";
 import { FaCircleCheck } from "react-icons/fa6";
 import { useCartStore } from "../cart/store";
-import useUserStore from "../user-store";
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string,
