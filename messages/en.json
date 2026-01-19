@@ -77,7 +77,10 @@
     "tvq": "QST",
     "shipping": "Shipping",
     "total": "Total",
-    "order": "Order"
+    "order": "Order",
+    "shippingFree": "Free",
+    "shippingNoTracking": "Without package tracking",
+    "shippingWithTracking": "With package tracking"
   },
   "checkout": {
     "thankYou": "Thank you for supporting Crayobois!",

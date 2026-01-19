@@ -77,7 +77,10 @@
     "tvq": "TVQ",
     "shipping": "Livraison",
     "total": "Total",
-    "order": "Commander"
+    "order": "Commander",
+    "shippingFree": "Gratuit",
+    "shippingNoTracking": "Sans suivi du colis",
+    "shippingWithTracking": "Avec suivi du colis"
   },
   "checkout": {
     "thankYou": "Merci de supporter Crayobois!",
