@@ -11,12 +11,24 @@ import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
 import { useCartStore } from "./store";
 
+// Map database shipping method names to translation keys
+const shippingNameToKey: Record<string, string> = {
+  Gratuit: "shippingFree",
+  "Sans suivi du colis": "shippingNoTracking",
+  "Avec suivi du colis": "shippingWithTracking",
+};
+
 export default function CartBreakdown(props: { hasAction?: boolean }) {
   const { hasAction = true } = props;
   const router = useRouter();
   const { cart, cartState } = useCartStore();
   const t = useTranslations("cart");
   const [isButtonLoading, setIsButtonLoading] = useState(false);
+
+  const getShippingMethodName = (name: string) => {
+    const key = shippingNameToKey[name];
+    return key ? t(key) : name;
+  };
 
   const nonFreeShippingMethods = useMemo(() => {
     return cartState.shippingMethods.filter((method) => method.price !== 0);
@@ -51,7 +63,7 @@ export default function CartBreakdown(props: { hasAction?: boolean }) {
                       id={method.id}
                     />
                     <Label htmlFor={method.id} className="cursor-pointer">
-                      {method.name} ({cad(method.price)})
+                      {getShippingMethodName(method.name)} ({cad(method.price)})
                     </Label>
                   </div>
                 ))}

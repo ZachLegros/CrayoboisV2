@@ -4,6 +4,7 @@ import FloatingBar from "@/components/FloatingBar";
 import FloatingFilterTrigger from "@/components/FloatingFilterTrigger";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 import { ResetButton } from "../custom-order/material-filter-panel";
 import ProductFilters from "./products-filters";
 import { useProductsStore } from "./store";
@@ -12,6 +13,7 @@ export default function SidePanel(props: { className?: string }) {
   const { className } = props;
   const { products, priceFilter } = useProductsStore();
   const isDisabled = products.length === 0;
+  const t = useTranslations("filters");
 
   const handleReset = () => {
     priceFilter.setEnabled(false);
@@ -20,14 +22,14 @@ export default function SidePanel(props: { className?: string }) {
   const panelContent = (
     <>
       <div className="flex w-full justify-between items-center pl-2">
-        <p className="text-xl font-bold">Filtrer</p>
+        <p className="text-xl font-bold">{t("filter")}</p>
         <ResetButton
           className={`font-semibold ${
             priceFilter.enabled && !isDisabled ? "visible" : "invisible"
           }`}
           onClick={handleReset}
         >
-          Réinitialiser
+          {t("reset")}
         </ResetButton>
       </div>
       <ProductFilters />
