@@ -17,6 +17,7 @@ import {
   isProduct,
 } from "@/lib/productUtils";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useCallback, useMemo, useState } from "react";
 import { useCartStore } from "./store";
@@ -31,6 +32,7 @@ export default function CartItem(props: {
 }) {
   const { item, product, hasSeparator } = props;
   const { cart } = useCartStore();
+  const t = useTranslations("cart");
 
   const [selectedQuantity, setSelectedQuantity] = useState(item.quantity);
 
@@ -66,14 +68,14 @@ export default function CartItem(props: {
           <span>{cad(product.price)}</span>
           {/* Mobile quantity */}
           <div className="flex flex-col gap-2 mt-auto md:hidden">
-            <p className="font-semibold">Quantité</p>
+            <p className="font-semibold">{t("quantity")}</p>
             {quantityContent}
           </div>
         </Section>
-        <Section title="Quantité" className="hidden md:flex">
+        <Section title={t("quantity")} className="hidden md:flex">
           {quantityContent}
         </Section>
-        <Section title="Sous-total" className="hidden md:flex w-full items-end">
+        <Section title={t("subtotal")} className="hidden md:flex w-full items-end">
           <span className="h-8">{cad(product.price * item.quantity)}</span>
           <Button
             size="sm"
@@ -81,7 +83,7 @@ export default function CartItem(props: {
             onClick={handleremoveItem}
             className="w-max ml-auto mt-auto"
           >
-            Retirer
+            {t("remove")}
           </Button>
         </Section>
         {/* Mobile remove */}
@@ -92,7 +94,7 @@ export default function CartItem(props: {
             onClick={handleremoveItem}
             className="w-max ml-auto mt-auto"
           >
-            Retirer
+            {t("remove")}
           </Button>
         </Section>
       </div>
@@ -164,6 +166,7 @@ const QuantityContent = (props: {
   onQuantityChange: (value: string) => void;
 }) => {
   const { product, selectedQuantity, quantityRange, onQuantityChange } = props;
+  const t = useTranslations("cart");
 
   if (isCustomProductWithComponents(product) || product.quantity > 1) {
     return (
@@ -183,7 +186,8 @@ const QuantityContent = (props: {
   }
   return (
     <Badge variant="secondary" className="gap-1 h-8">
-      <span className="w-2 h-2 bg-primary rounded-full" />1 en stock
+      <span className="w-2 h-2 bg-primary rounded-full" />
+      {t("inStock")}
     </Badge>
   );
 };
