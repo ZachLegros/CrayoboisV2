@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { Separator } from "@/components/ui/separator";
 import { cad } from "@/lib/currencyFormatter";
+import { useTranslations } from "next-intl";
 import { type ReactNode, useEffect, useMemo } from "react";
 import CartBreakdown from "./cart-breakdown";
 import CartItem from "./cart-item";
@@ -14,6 +15,7 @@ import { useCartStore } from "./store";
 
 export default function Cart() {
   const { cart, cartState } = useCartStore();
+  const t = useTranslations("cart");
 
   const cartItems = useMemo(() => {
     const items: ReactNode[] = [];
@@ -55,7 +57,7 @@ export default function Cart() {
         {cartItems}
         <Separator className="flex md:hidden" />
         <div className="flex md:hidden justify-between text-xl py-4">
-          <span>Sous-total</span>
+          <span>{t("subtotal")}</span>
           <span>{cad(cartState.breakdown.subtotal)}</span>
         </div>
       </Card>
@@ -68,7 +70,7 @@ export default function Cart() {
         <Drawer>
           <DrawerTrigger className="w-full m-3 mb-6" asChild>
             <Button size="lg" className="w-full pointer-events-auto">
-              Passer une commande
+              {t("placeOrder")}
             </Button>
           </DrawerTrigger>
           <DrawerContent className="mb-3">
