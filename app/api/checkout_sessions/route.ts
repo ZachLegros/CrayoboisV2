@@ -1,6 +1,6 @@
-import { syncCartWithComponents } from "@/app/cart/actions";
-import type { CartItems } from "@/app/cart/types";
-import { isShippingFree } from "@/app/cart/utils";
+import { syncCartWithComponents } from "@/app/[locale]/cart/actions";
+import type { CartItems } from "@/app/[locale]/cart/types";
+import { isShippingFree } from "@/app/[locale]/cart/utils";
 import prisma from "@/lib/prisma";
 import { isCustomProductWithComponents, isProduct } from "@/lib/productUtils";
 import Stripe from "stripe";

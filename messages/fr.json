@@ -1,0 +1,163 @@
+{
+  "metadata": {
+    "title": "Crayobois - Le stylo qu'il vous faut",
+    "description": "Crayobois est une microentreprise de menuiserie québécoise spécialisée dans la fabrication de stylos en bois divers de haute qualité."
+  },
+  "nav": {
+    "products": "Produits",
+    "customOrder": "Commander sur mesure",
+    "contact": "Contact",
+    "myCart": "Mon panier",
+    "myOrders": "Mes commandes",
+    "login": "Connexion",
+    "logout": "Déconnexion",
+    "admin": "Admin",
+    "dashboard": "Tableau de bord",
+    "orders": "Commandes",
+    "materials": "Matériaux",
+    "hardwares": "Matériels",
+    "adminProducts": "Produits"
+  },
+  "home": {
+    "hero": "Le stylo qu'il vous faut.",
+    "createYourPen": "Créez votre stylo",
+    "ourProducts": "Nos produits",
+    "ourProductsDescription": "Explorez notre séléction de produits préfabriqués de <bold>qualité supérieure</bold>, comprenant des <bold>éditions spéciales</bold>. Parmi notre gamme, retrouvez des stylos, des rasoirs, des porte-clés, des porte-mines, et bien d'autres articles.",
+    "exploreProducts": "Explorer les produits",
+    "handmadeInQuebec": "Fait à la main au Québec",
+    "handmadeDescription": "Découvrez nos stylos uniques, façonnés avec soin par <bold>Vincent Legros</bold> et fièrement assemblés en <bold>Outaouais, au Québec</bold>. Personnalisez-les selon vos préférences - bois, style, matériaux. Exprimez votre style avec élégance."
+  },
+  "products": {
+    "allSold": "Tous nos produits préfabriqués sont vendus!",
+    "orderCustom": "Commander un produit sur mesure",
+    "filter": "Filtrer",
+    "reset": "Réinitialiser",
+    "addToCart": "Ajouter au Panier",
+    "inCart": "Dans le Panier",
+    "addedToCart": "\"{name}\" a été ajouté à votre panier.",
+    "goToCart": "Aller au panier",
+    "enlarge": "Agrandir"
+  },
+  "customOrder": {
+    "woodChoice": "Choix du bois",
+    "hardwareChoice": "Choix du matériel",
+    "addToCartStep": "Ajouter au panier",
+    "back": "Retour",
+    "productAdded": "Votre produit a été ajouté au panier.",
+    "createAnother": "Créer un autre produit",
+    "goToCart": "Aller au panier",
+    "noFilterResult": "Aucun item satisfait les critères de filtrage.",
+    "resetFilters": "Reinitialiser les filtres"
+  },
+  "filters": {
+    "filter": "Filtrer",
+    "reset": "Réinitialiser",
+    "byType": "Par type",
+    "byPrice": "Par prix",
+    "byOrigin": "Par origine",
+    "allTypes": "Tous les types",
+    "allOrigins": "Toutes les origines",
+    "priceDescending": "Prix descendant",
+    "priceAscending": "Prix ascendant"
+  },
+  "cart": {
+    "title": "Mon panier",
+    "empty": "Votre panier est vide.",
+    "orderCustom": "Commander sur mesure",
+    "viewProducts": "Voir les produits",
+    "placeOrder": "Passer une commande",
+    "subtotal": "Sous-total",
+    "quantity": "Quantité",
+    "remove": "Retirer",
+    "inStock": "1 en stock",
+    "shippingMethod": "Méthode de livraison",
+    "freeShippingMessage": "La livraison est gratuite pour toutes commandes ayant un sous-total {amount} et plus ou l'achat d'au moins 4 produits.",
+    "freeShipping": "Livraison gratuite!",
+    "tps": "TPS",
+    "tvq": "TVQ",
+    "shipping": "Livraison",
+    "total": "Total",
+    "order": "Commander"
+  },
+  "checkout": {
+    "thankYou": "Merci de supporter Crayobois!",
+    "confirmationEmail": "Vous recevrez un email de confirmation à l'adresse courriel fournie.",
+    "error": "Une erreur est survenue.",
+    "errorMessage": "Veuillez réessayer ou nous <contactLink>contacter</contactLink> afin de nous faire part du problème rencontré.",
+    "creatingSession": "Création d'une session de paiement sécurisée..."
+  },
+  "orders": {
+    "title": "Mes commandes",
+    "loading": "Chargement de vos commandes",
+    "noOrders": "Vous n'avez pas encore passé de commandes.",
+    "orderNumber": "Num. de commande",
+    "date": "Date",
+    "items": "Items",
+    "total": "Total",
+    "status": "Statut",
+    "generalInfo": "Informations génerales",
+    "name": "Nom",
+    "email": "Email",
+    "shippingAddress": "Addresse de livraison",
+    "address": "Addresse",
+    "city": "Ville",
+    "postalCode": "Code postal",
+    "orderTitle": "Commande #{orderNo} - {status}",
+    "image": "Image",
+    "productName": "Nom"
+  },
+  "orderStatus": {
+    "pending": "En attente",
+    "shipped": "Livrée",
+    "cancelled": "Annulée"
+  },
+  "login": {
+    "title": "Connexion",
+    "description": "Connectez-vous à Crayobois pour suivre une commande ou consulter l'historique de toutes vos commandes.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "vous@example.com",
+    "otpSent": "Un code à 6 chiffres a été envoyé à {email}",
+    "otpLabel": "Code à 6 chiffres",
+    "otpPlaceholder": "******",
+    "loginButton": "Connexion",
+    "verifyButton": "Vérifier le code",
+    "redirecting": "Redirection en cours"
+  },
+  "contact": {
+    "title": "Contacter notre équipe",
+    "orderQuestions": "Questions ou Problèmes liés aux Commandes",
+    "orderQuestionsDescription": "Pour toute question concernant vos commandes ou en cas de problème, veuillez contacter notre équipe à l'adresse suivante :",
+    "technicalIssues": "Problèmes techniques",
+    "technicalIssuesDescription": "Pour toute question technique, veuillez contacter notre développeur à l'adresse suivante :"
+  },
+  "admin": {
+    "dashboard": "Tableau de bord",
+    "orders": "Commandes",
+    "materials": "Matériaux",
+    "hardwares": "Matériels",
+    "products": "Produits",
+    "grossRevenue": "Revenu brut",
+    "netRevenue": "Revenu net",
+    "clients": "Clients",
+    "tps": "TPS",
+    "tvq": "TVQ",
+    "shipping": "Livraison"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "create": "Créer",
+    "search": "Rechercher",
+    "noResults": "Aucun résultat",
+    "copyright": "© {year} Crayobois"
+  },
+  "toast": {
+    "cartEmpty": "Votre panier est vide.",
+    "productsUnavailable": "Un ou plusieurs produits de votre panier ne sont plus disponibles.",
+    "unexpectedError": "Une erreur inattendu est survenue. Veuillez réessayer ou nous contacter."
+  }
+}

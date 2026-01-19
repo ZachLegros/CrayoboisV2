@@ -9,6 +9,7 @@ import { dayjs, getNetAmount, getTps } from "@/lib/utils";
 import { getTvq } from "@/lib/utils";
 import type { ClientOrder } from "@prisma/client";
 import type { ApexOptions } from "apexcharts";
+import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import { useEffect, useMemo } from "react";
 import Chart from "./chart";
@@ -20,6 +21,7 @@ export default function NetRevenueChart(props: { orders: ClientOrder[] }) {
   const { setOrders } = useAdminStore();
   const { resolvedTheme } = useTheme();
   const showChartLabels = useMediaQuery(gtMd);
+  const t = useTranslations("admin");
 
   const revenueSeries = useMemo(() => {
     const x = orders.map((order) => dayjs(order.created_at).valueOf());
@@ -101,12 +103,12 @@ export default function NetRevenueChart(props: { orders: ClientOrder[] }) {
   const series: ApexAxisChartSeries = useMemo(() => {
     return [
       {
-        name: "Revenu net",
+        name: t("netRevenue"),
         data: revenueSeries.x.map((x, i) => ({ x, y: revenueSeries.y[i] })),
         color: chartPrimary,
       },
     ];
-  }, [revenueSeries]);
+  }, [revenueSeries, t]);
 
   useEffect(() => {
     setOrders(orders);
@@ -116,12 +118,12 @@ export default function NetRevenueChart(props: { orders: ClientOrder[] }) {
     <Card className="flex flex-col h-0 flex-auto p-3 shadow-none">
       <div className="flex gap-4 flex-wrap">
         <Stat
-          name="Revenu net"
+          name={t("netRevenue")}
           value={cad(revenueSeries.y[revenueSeries.y.length - 1])}
         />
-        <Stat name="TVQ" value={cad(tvq)} />
-        <Stat name="TPS" value={cad(tps)} />
-        <Stat name="Livraison" value={cad(shipping)} />
+        <Stat name={t("tvq")} value={cad(tvq)} />
+        <Stat name={t("tps")} value={cad(tps)} />
+        <Stat name={t("shipping")} value={cad(shipping)} />
       </div>
       <div className="flex-auto">
         <Chart options={options} series={series} type="area" height="100%" />

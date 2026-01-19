@@ -1,19 +1,19 @@
 "use client";
 
+import useUserStore from "@/app/user-store";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 import { useToast } from "@/components/ui/use-toast";
+import { Link, useRouter } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { EmbeddedCheckout, EmbeddedCheckoutProvider } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import NextLink from "next/link";
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { FaExclamationCircle } from "react-icons/fa";
 import { FaCircleCheck } from "react-icons/fa6";
 import { useCartStore } from "../cart/store";
-import useUserStore from "../user-store";
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string,
@@ -38,6 +38,8 @@ export default function Checkout(props: { sessionId?: string }) {
   const [clientSecret, setClientSecret] = useState("");
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
+  const t = useTranslations("checkout");
+  const tToast = useTranslations("toast");
 
   const containerStyle =
     "animate-in flex flex-col w-full h-full justify-center items-center gap-2";
@@ -45,18 +47,16 @@ export default function Checkout(props: { sessionId?: string }) {
   useEffect(() => {
     const handleErrors = (error: string) => {
       if (error === "cart_is_empty") {
-        toast({ title: "Votre panier est vide." });
+        toast({ title: tToast("cartEmpty") });
       } else if (error === "cart_out_of_sync") {
         cart.sync();
         toast({
-          title:
-            "Un ou plusieurs produits de votre panier ne sont plus disponibles.",
+          title: tToast("productsUnavailable"),
           variant: "destructive",
         });
       } else {
         toast({
-          title:
-            "Une erreur inattendu est survenue. Veuillez réessayer ou nous contacter.",
+          title: tToast("unexpectedError"),
           variant: "destructive",
         });
         console.error(error);
@@ -134,28 +134,30 @@ export default function Checkout(props: { sessionId?: string }) {
           success ? (
             <div className={cn(containerStyle, "p-0 gap-2")}>
               <p className="text-xl md:text-2xl font-semibold text-center">
-                Merci de supporter Crayobois!
+                {t("thankYou")}
               </p>
               <p className="text-lg md:text-xl text-foreground/60 font-semibold text-center">
-                Vous recevrez un email de confirmation à l&apos;adresse courriel
-                fournie.
+                {t("confirmationEmail")}
               </p>
               <FaCircleCheck className="text-6xl text-green-500 mt-4" />
             </div>
           ) : error ? (
             <div className={cn(containerStyle, "p-0 gap-2")}>
               <p className="text-xl md:text-2xl font-semibold text-center">
-                Une erreur est survenue.
+                {t("error")}
               </p>
               <p className="text-lg md:text-xl text-foreground/60 font-semibold text-center">
-                Veuillez réessayer ou nous{" "}
-                <Button
-                  variant="link"
-                  className="text-lg md:text-xl font-semibold p-0 underline"
-                >
-                  <NextLink href="/contact">contacter</NextLink>
-                </Button>{" "}
-                afin de nous faire part du problème rencontré.
+                {t.rich("errorMessage", {
+                  contactLink: (chunks) => (
+                    <Button
+                      variant="link"
+                      className="text-lg md:text-xl font-semibold p-0 underline"
+                      asChild
+                    >
+                      <Link href="/contact">{chunks}</Link>
+                    </Button>
+                  ),
+                })}
               </p>
               <FaExclamationCircle className="text-6xl text-primary mt-4" />
             </div>
@@ -172,7 +174,7 @@ export default function Checkout(props: { sessionId?: string }) {
         ) : (
           <div className={cn(containerStyle, "p-0 gap-4")}>
             <p className="text-xl md:text-2xl font-semibold text-center">
-              Création d&apos;une session de paiement sécurisée...
+              {t("creatingSession")}
             </p>
             <Spinner className="text-primary size-10" />
           </div>

@@ -9,6 +9,7 @@ import { useMediaQuery } from "@/lib/hooks";
 import { gtMd } from "@/lib/mediaQueries";
 import { customProductFactory } from "@/lib/productUtils";
 import type { Hardware, Material } from "@prisma/client";
+import { useTranslations } from "next-intl";
 import { useEffect, useLayoutEffect } from "react";
 import { FaChevronLeft } from "react-icons/fa";
 import { useCartStore } from "../cart/store";
@@ -36,6 +37,7 @@ export default function OrderBuilder(props: {
     selectedMaterial,
   } = useCustomOrderStore();
   const isLargeScreen = useMediaQuery(gtMd);
+  const t = useTranslations("customOrder");
 
   const handleaddItem = (material: Material, hardware: Hardware) => {
     const customProduct = customProductFactory(material, hardware);
@@ -57,7 +59,7 @@ export default function OrderBuilder(props: {
       {currentStep < 2 && (
         <Breadcrumbs
           className="hidden bg-card border h-8 px-3 rounded-md sm:flex sm:w-full sm:justify-between sm:items-center md:w-max"
-          steps={["Choix du bois", "Choix du matériel", "Ajouter au panier"]}
+          steps={[t("woodChoice"), t("hardwareChoice"), t("addToCartStep")]}
           currentStep={currentStep}
           onAction={(stepIndex) => {
             if (stepIndex === 0) {
@@ -73,7 +75,7 @@ export default function OrderBuilder(props: {
       )}
       {currentStep === 0 && (
         <>
-          <p className="flex sm:hidden text-xl font-semibold">Choix du bois</p>
+          <p className="flex sm:hidden text-xl font-semibold">{t("woodChoice")}</p>
           <Materials
             onSelect={(material) => {
               setCurrentStep(currentStep + 1);
@@ -94,7 +96,9 @@ export default function OrderBuilder(props: {
       )}
       {currentStep === 1 && (
         <>
-          <p className="flex sm:hidden text-xl font-semibold">Choix du matériel</p>
+          <p className="flex sm:hidden text-xl font-semibold">
+            {t("hardwareChoice")}
+          </p>
           <Hardwares
             onSelect={(hardware) => {
               if (!selectedMaterial || !hardware) return; // error
@@ -108,7 +112,7 @@ export default function OrderBuilder(props: {
               onClick={() => setCurrentStep(currentStep - 1)}
             >
               <FaChevronLeft className="mr-1 text-sm" />
-              Retour
+              {t("back")}
             </Button>
             <Drawer>
               <DrawerTrigger className="ml-auto" asChild>

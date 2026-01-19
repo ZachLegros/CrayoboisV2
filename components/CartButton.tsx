@@ -1,7 +1,8 @@
 "use client";
 
-import { useCartStore } from "@/app/cart/store";
-import { useRouter } from "next/navigation";
+import { useCartStore } from "@/app/[locale]/cart/store";
+import { useRouter } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { FaShoppingCart } from "react-icons/fa";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
@@ -9,6 +10,7 @@ import { Button } from "./ui/button";
 export default function Cart() {
   const router = useRouter();
   const { cartState } = useCartStore();
+  const t = useTranslations("nav");
 
   return (
     <Button
@@ -17,7 +19,7 @@ export default function Cart() {
       aria-label="cart"
       onClick={() => router.push("/cart")}
     >
-      <p className="hidden sm:flex sm:mr-1">Mon panier</p>
+      <p className="hidden sm:flex sm:mr-1">{t("myCart")}</p>
       <div className="relative">
         <FaShoppingCart className="text-xl" />
         {cartState.items.length > 0 && (

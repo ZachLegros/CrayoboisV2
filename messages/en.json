@@ -1,0 +1,163 @@
+{
+  "metadata": {
+    "title": "Crayobois - The pen you need",
+    "description": "Crayobois is a Quebec-based woodworking microenterprise specializing in crafting high-quality wooden pens from various woods."
+  },
+  "nav": {
+    "products": "Products",
+    "customOrder": "Custom order",
+    "contact": "Contact",
+    "myCart": "My cart",
+    "myOrders": "My orders",
+    "login": "Login",
+    "logout": "Logout",
+    "admin": "Admin",
+    "dashboard": "Dashboard",
+    "orders": "Orders",
+    "materials": "Materials",
+    "hardwares": "Hardware",
+    "adminProducts": "Products"
+  },
+  "home": {
+    "hero": "The pen you need.",
+    "createYourPen": "Create your pen",
+    "ourProducts": "Our products",
+    "ourProductsDescription": "Explore our selection of <bold>premium quality</bold> prefabricated products, including <bold>special editions</bold>. Our range includes pens, razors, keychains, mechanical pencils, and many other items.",
+    "exploreProducts": "Explore products",
+    "handmadeInQuebec": "Handmade in Quebec",
+    "handmadeDescription": "Discover our unique pens, carefully crafted by <bold>Vincent Legros</bold> and proudly assembled in <bold>Outaouais, Quebec</bold>. Customize them to your preferences - wood, style, materials. Express your style with elegance."
+  },
+  "products": {
+    "allSold": "All our prefabricated products are sold out!",
+    "orderCustom": "Order a custom product",
+    "filter": "Filter",
+    "reset": "Reset",
+    "addToCart": "Add to Cart",
+    "inCart": "In Cart",
+    "addedToCart": "\"{name}\" has been added to your cart.",
+    "goToCart": "Go to cart",
+    "enlarge": "Enlarge"
+  },
+  "customOrder": {
+    "woodChoice": "Wood selection",
+    "hardwareChoice": "Hardware selection",
+    "addToCartStep": "Add to cart",
+    "back": "Back",
+    "productAdded": "Your product has been added to the cart.",
+    "createAnother": "Create another product",
+    "goToCart": "Go to cart",
+    "noFilterResult": "No items match the filter criteria.",
+    "resetFilters": "Reset filters"
+  },
+  "filters": {
+    "filter": "Filter",
+    "reset": "Reset",
+    "byType": "By type",
+    "byPrice": "By price",
+    "byOrigin": "By origin",
+    "allTypes": "All types",
+    "allOrigins": "All origins",
+    "priceDescending": "Price descending",
+    "priceAscending": "Price ascending"
+  },
+  "cart": {
+    "title": "My cart",
+    "empty": "Your cart is empty.",
+    "orderCustom": "Custom order",
+    "viewProducts": "View products",
+    "placeOrder": "Place an order",
+    "subtotal": "Subtotal",
+    "quantity": "Quantity",
+    "remove": "Remove",
+    "inStock": "1 in stock",
+    "shippingMethod": "Shipping method",
+    "freeShippingMessage": "Shipping is free for all orders with a subtotal of {amount} or more, or the purchase of at least 4 products.",
+    "freeShipping": "Free shipping!",
+    "tps": "GST",
+    "tvq": "QST",
+    "shipping": "Shipping",
+    "total": "Total",
+    "order": "Order"
+  },
+  "checkout": {
+    "thankYou": "Thank you for supporting Crayobois!",
+    "confirmationEmail": "You will receive a confirmation email at the email address provided.",
+    "error": "An error occurred.",
+    "errorMessage": "Please try again or <contactLink>contact us</contactLink> to report the issue.",
+    "creatingSession": "Creating a secure payment session..."
+  },
+  "orders": {
+    "title": "My orders",
+    "loading": "Loading your orders",
+    "noOrders": "You haven't placed any orders yet.",
+    "orderNumber": "Order number",
+    "date": "Date",
+    "items": "Items",
+    "total": "Total",
+    "status": "Status",
+    "generalInfo": "General information",
+    "name": "Name",
+    "email": "Email",
+    "shippingAddress": "Shipping address",
+    "address": "Address",
+    "city": "City",
+    "postalCode": "Postal code",
+    "orderTitle": "Order #{orderNo} - {status}",
+    "image": "Image",
+    "productName": "Name"
+  },
+  "orderStatus": {
+    "pending": "Pending",
+    "shipped": "Shipped",
+    "cancelled": "Cancelled"
+  },
+  "login": {
+    "title": "Login",
+    "description": "Log in to Crayobois to track an order or view your order history.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@example.com",
+    "otpSent": "A 6-digit code has been sent to {email}",
+    "otpLabel": "6-digit code",
+    "otpPlaceholder": "******",
+    "loginButton": "Login",
+    "verifyButton": "Verify code",
+    "redirecting": "Redirecting"
+  },
+  "contact": {
+    "title": "Contact our team",
+    "orderQuestions": "Order Questions or Issues",
+    "orderQuestionsDescription": "For any questions about your orders or if you have a problem, please contact our team at the following address:",
+    "technicalIssues": "Technical issues",
+    "technicalIssuesDescription": "For any technical questions, please contact our developer at the following address:"
+  },
+  "admin": {
+    "dashboard": "Dashboard",
+    "orders": "Orders",
+    "materials": "Materials",
+    "hardwares": "Hardware",
+    "products": "Products",
+    "grossRevenue": "Gross revenue",
+    "netRevenue": "Net revenue",
+    "clients": "Clients",
+    "tps": "GST",
+    "tvq": "QST",
+    "shipping": "Shipping"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search",
+    "noResults": "No results",
+    "copyright": "© {year} Crayobois"
+  },
+  "toast": {
+    "cartEmpty": "Your cart is empty.",
+    "productsUnavailable": "One or more products in your cart are no longer available.",
+    "unexpectedError": "An unexpected error occurred. Please try again or contact us."
+  }
+}

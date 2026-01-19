@@ -3,8 +3,9 @@
 import ItemsGrid from "@/components/ItemsGrid";
 import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "@/i18n/navigation";
 import type { Product } from "@prisma/client";
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useEffect, useMemo } from "react";
 import { useProductsStore } from "./store";
 
@@ -12,6 +13,7 @@ export default function ProductsGrid(props: { products: Product[] }) {
   const { products: productsFromDb } = props;
   const router = useRouter();
   const { priceFilter, products, setProducts } = useProductsStore();
+  const t = useTranslations("products");
 
   useEffect(() => {
     if (products.length === 0) setProducts(productsFromDb);
@@ -33,14 +35,12 @@ export default function ProductsGrid(props: { products: Product[] }) {
   if (filteredProducts.length === 0)
     return (
       <div className="flex flex-col items-center justify-start w-full h-full mt-8">
-        <p className="text-3xl text-center font-bold p-3">
-          Tous nos produits préfabriqués sont vendus!
-        </p>
+        <p className="text-3xl text-center font-bold p-3">{t("allSold")}</p>
         <Button
           className="mt-8 font-semibold"
           onClick={() => router.push("/custom-order")}
         >
-          Commander un produit sur mesure
+          {t("orderCustom")}
         </Button>
       </div>
     );

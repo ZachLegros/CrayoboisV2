@@ -1,6 +1,6 @@
 "use client";
 
-import { useCartStore } from "@/app/cart/store";
+import { useCartStore } from "@/app/[locale]/cart/store";
 import { useUserStore } from "@/app/user-store";
 import {
   DropdownMenu,
@@ -10,29 +10,32 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { FaUser } from "react-icons/fa";
 import { Button } from "./ui/button";
-
-const defaultItems = [
-  {
-    label: "Mes commandes",
-    href: "/orders",
-  },
-];
-
-const adminItems = [
-  {
-    label: "Admin",
-    href: "/admin",
-  },
-];
 
 export default function AuthButton() {
   const router = useRouter();
   const { user, signOut, getCurrentUser } = useUserStore();
   const { cart } = useCartStore();
+  const t = useTranslations("nav");
+
+  const defaultItems = [
+    {
+      label: t("myOrders"),
+      href: "/orders",
+    },
+  ];
+
+  const adminItems = [
+    {
+      label: t("admin"),
+      href: "/admin",
+    },
+  ];
+
   const [items, setItems] = useState(defaultItems);
 
   const handleLogin = () => {
@@ -53,14 +56,14 @@ export default function AuthButton() {
     if (user && user.user_metadata.role === "admin")
       setItems([...adminItems, ...defaultItems]);
     else setItems(defaultItems);
-  }, [user]);
+  }, [user, t]);
 
   return (
     <div className="flex gap-2">
       {user ? (
         <UserMenu items={items} onLogout={handleLogout} />
       ) : (
-        <Button onClick={handleLogin}>Connexion</Button>
+        <Button onClick={handleLogin}>{t("login")}</Button>
       )}
     </div>
   );
@@ -73,6 +76,7 @@ export function UserMenu(props: {
   const { items, onLogout } = props;
   const { email } = useUserStore();
   const router = useRouter();
+  const t = useTranslations("nav");
 
   return (
     <DropdownMenu>
@@ -89,7 +93,7 @@ export function UserMenu(props: {
             {item.label}
           </DropdownMenuItem>
         ))}
-        <DropdownMenuItem onClick={onLogout}>Déconnexion</DropdownMenuItem>
+        <DropdownMenuItem onClick={onLogout}>{t("logout")}</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

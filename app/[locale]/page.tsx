@@ -4,11 +4,12 @@ import ImageWithLoading from "@/components/ImageWithLoading";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
+import { useRouter } from "@/i18n/navigation";
 import { useMediaQuery } from "@/lib/hooks";
 import { gtSm } from "@/lib/mediaQueries";
 import Autoplay from "embla-carousel-autoplay";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaChevronRight } from "react-icons/fa";
 import { getProductImages } from "./actions";
@@ -17,6 +18,7 @@ export default function Index() {
   const router = useRouter();
   const isNotMobile = useMediaQuery(gtSm);
   const [productImages, setProductImages] = useState<string[]>([]);
+  const t = useTranslations("home");
 
   useEffect(() => {
     const getImages = async () => {
@@ -34,14 +36,14 @@ export default function Index() {
       >
         <div className="flex flex-col w-full h-full items-center justify-center absolute z-20 bg-black/50 gap-4 md:gap-8 p-5">
           <h1 className="text-2xl md:text-4xl lg:text-6xl font-black drop-shadow-2xl text-center">
-            Le stylo qu&apos;il vous faut.
+            {t("hero")}
           </h1>
           <Button
             size={isNotMobile ? "lg" : "default"}
             className="flex items-center gap-1"
             onClick={() => router.push("/custom-order")}
           >
-            Créez votre stylo
+            {t("createYourPen")}
             <FaChevronRight />
           </Button>
         </div>
@@ -58,16 +60,15 @@ export default function Index() {
       <div className="grid grid-cols-1 md:grid-cols-2 w-full rounded-lg md:rounded-2xl gap-5">
         <div className="flex flex-col gap-3">
           <h3 className="inline-flex items-center text-lg sm:text-xl md:text-2xl font-bold h-9">
-            Nos produits
+            {t("ourProducts")}
           </h3>
           <p className="text-lg p-0 md:pr-5">
-            Explorez notre séléction de produits préfabriqués de{" "}
-            <b>qualité supérieure</b>, comprenant des <b>éditions spéciales</b>.
-            Parmi notre gamme, retrouvez des stylos, des rasoirs, des porte-clés, des
-            porte-mines, et bien d&apos;autres articles.
+            {t.rich("ourProductsDescription", {
+              bold: (chunks) => <b>{chunks}</b>,
+            })}
           </p>
           <Button className="w-max mt-4" onClick={() => router.push("/products")}>
-            Explorer les produits
+            {t("exploreProducts")}
           </Button>
         </div>
         <Carousel plugins={[Autoplay({ delay: 2000 })]} className="w-full">
@@ -90,7 +91,7 @@ export default function Index() {
       <div className="grid grid-cols-1 md:grid-cols-2 w-full rounded-lg md:rounded-2xl gap-5">
         <div className="flex flex-col h-max gap-3">
           <h3 className="inline-flex items-center text-lg sm:text-xl md:text-2xl font-bold h-9">
-            Fait à la main au Québec{" "}
+            {t("handmadeInQuebec")}{" "}
             <Image
               src="/quebec.jpg"
               width={50}
@@ -100,16 +101,15 @@ export default function Index() {
             />
           </h3>
           <p className="text-lg p-0 md:pr-5">
-            Découvrez nos stylos uniques, façonnés avec soin par{" "}
-            <b>Vincent Legros</b> et fièrement assemblés en{" "}
-            <b>Outaouais, au Québec</b>. Personnalisez-les selon vos préférences -
-            bois, style, matériaux. Exprimez votre style avec élégance.
+            {t.rich("handmadeDescription", {
+              bold: (chunks) => <b>{chunks}</b>,
+            })}
           </p>
           <Button
             className="w-max mt-4"
             onClick={() => router.push("/custom-order")}
           >
-            Créez votre stylo
+            {t("createYourPen")}
           </Button>
         </div>
         <Image

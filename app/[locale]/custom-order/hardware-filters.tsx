@@ -1,11 +1,13 @@
 import Filter from "@/components/Filter";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 import { useEffect, useMemo } from "react";
 import { type PriceFilterValue, useCustomOrderStore } from "./store";
 
 export default function HardwareFilters(props: { className?: string }) {
   const { className } = props;
   const { hardwares, typeFilter, priceFilter } = useCustomOrderStore();
+  const t = useTranslations("filters");
 
   const hardwareTypes: { [type: string]: number } = useMemo(() => {
     return hardwares.reduce(
@@ -24,9 +26,9 @@ export default function HardwareFilters(props: { className?: string }) {
   return (
     <div className={cn("flex flex-col gap-2 overflow-y-auto", className)}>
       <Filter
-        filterName="Par type"
+        filterName={t("byType")}
         filterValues={[
-          { value: "all", label: "Tous les types", amount: hardwares.length },
+          { value: "all", label: t("allTypes"), amount: hardwares.length },
           ...Object.keys(hardwareTypes).map((type) => ({
             value: type,
             label: type,
@@ -39,10 +41,10 @@ export default function HardwareFilters(props: { className?: string }) {
         setFilterEnabled={typeFilter.setEnabled}
       />
       <Filter
-        filterName="Par prix"
+        filterName={t("byPrice")}
         filterValues={[
-          { value: "desc", label: "Prix descendant" },
-          { value: "asc", label: "Prix ascendant" },
+          { value: "desc", label: t("priceDescending") },
+          { value: "asc", label: t("priceAscending") },
         ]}
         currentValue={priceFilter.value}
         setValue={(value) => priceFilter.setValue(value as PriceFilterValue)}
