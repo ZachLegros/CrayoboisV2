@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import HardwareFilters from "./hardware-filters";
 import { ResetButton } from "./material-filter-panel";
 import { useCustomOrderStore } from "./store";
@@ -7,6 +8,7 @@ import { useCustomOrderStore } from "./store";
 export default function HardwareFilterPanel(props: { isDisabled?: boolean }) {
   const { isDisabled } = props;
   const { typeFilter, priceFilter } = useCustomOrderStore();
+  const t = useTranslations("filters");
 
   const handleReset = () => {
     typeFilter.setEnabled(true);
@@ -19,7 +21,7 @@ export default function HardwareFilterPanel(props: { isDisabled?: boolean }) {
       aria-disabled={isDisabled}
     >
       <div className="flex w-full justify-between items-center pl-2">
-        <p className="text-xl font-bold">Filtrer</p>
+        <p className="text-xl font-bold">{t("filter")}</p>
         <ResetButton
           className={`${
             typeFilter.enabled || priceFilter.enabled ? "visible" : "invisible"
